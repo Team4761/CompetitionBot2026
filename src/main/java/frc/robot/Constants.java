@@ -19,7 +19,9 @@ public class Constants {
 
         public static final double DISTANCE_CONVERSION_FACTOR = 0.333; // 1/3
     }
-
+    public class Climber {
+        public static final int CLIMBER_MOTOR_PORT = 0;
+    }    
     public class Turret {
         public static final int KICKER_MOTOR_PORT = 0;
         public static final int SHOOTER_MOTOR_PORT = 0;
