@@ -40,7 +40,7 @@ public class ImageCompressor
         int[][][] compressedImage = new int[height][width][3]; // makes a new array
         for (double i = 0; i < image.getHeight(); i += image.getHeight()/(double) height)
         {
-            for (double g = 0; g < image.getWidth(); g += image.getWidth()/(double)width)
+            for (double g = 0; g < image.getWidth(); g += image.getWidth()/(double) width)
             {
                 int averageR = 0; // makes an empty average for this area of the image
                 int averageG = 0; // makes an empty average for this area of the image
@@ -153,10 +153,23 @@ public class ImageCompressor
                 {
                     averageB = 0;
                 }
+
+                int i4 = (int) (i/(image.getHeight()/height)), g4 = (int) (g/(image.getWidth()/width));
                 
-                compressedImage[(int) (i/(image.getHeight()/height))][(int) (g/(image.getWidth()/width))][0] = averageR;//stes the "pixle" int the 2d array to the rgb values
-                compressedImage[(int) (i/(image.getHeight()/height))][(int) (g/(image.getWidth()/width))][1] = averageG;//stes the "pixle" int the 2d array to the rgb values
-                compressedImage[(int) (i/(image.getHeight()/height))][(int) (g/(image.getWidth()/width))][2] = averageB;//stes the "pixle" int the 2d array to the rgb values
+                if (i4 >= height)
+                {
+                    i4 = height - 1;
+                }
+                if (g4 >= width)
+                {
+                    g4 = width - 1;
+                }
+                
+                compressedImage[i4][g4][0] = averageR;//stes the "pixle" int the 2d array to the rgb values
+                compressedImage[i4][g4][1] = averageG;//stes the "pixle" int the 2d array to the rgb values
+                compressedImage[i4][g4][2] = averageB;//stes the "pixle" int the 2d array to the rgb values
+                
+                
             }
 
 
@@ -205,7 +218,7 @@ public class ImageCompressor
         
         //example1
 
-        int[][][] testImageAsCompressed3dArrayComingToThearterMarch32_2111 = compressImage(loadImage("/Users/dragomirmateev/Downloads/compressor test image.png"), 4, 5);
+        int[][][] testImageAsCompressed3dArrayComingToThearterMarch32_2111 = compressImage(loadImage("/Users/dragomirmateev/Downloads/compressor test image.png"), 4, 7);
         for (int i = 0; i < testImageAsCompressed3dArrayComingToThearterMarch32_2111.length; i++)
         {
             for (int f = 0; f < testImageAsCompressed3dArrayComingToThearterMarch32_2111[i].length; f++)
@@ -220,7 +233,7 @@ public class ImageCompressor
         
         //example2
 
-        int[][][][] testVideoAsCompressedArrayComingToTheatersMarch32_2111 = compressVideo(loadVideoAsMultipleImages("/Users/dragomirmateev/Downloads/test vid/frame.png", 0, 9),32,8);
+        int[][][][] testVideoAsCompressedArrayComingToTheatersMarch32_2111 = compressVideo(loadVideoAsMultipleImages("/Users/dragomirmateev/Downloads/test vid/frame.png", 0, 9),10,8);
         for (int i = 0; i < testVideoAsCompressedArrayComingToTheatersMarch32_2111.length; i++)
         {
             for (int g = 0; g < testVideoAsCompressedArrayComingToTheatersMarch32_2111[i].length; g++)
