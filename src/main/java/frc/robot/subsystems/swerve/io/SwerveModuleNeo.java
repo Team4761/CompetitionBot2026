@@ -28,7 +28,7 @@ public class SwerveModuleNeo implements SwerveModuleIO {
     private static final double TURN_UNITS_PER_ROTATION = (Math.PI * 2) * 1.04333495;
 
     // Ideally, this should just be the circumference / ENCODER_UNITS_PER_ROTATION (for neos, it's 42)
-    // However, I manually spun the wheel fully 32 times (which should drive about 10 meters), and the code recorded 13.5 meters driven.
+    // However, I manually spun the wheel full dsy 32 times (which should drive about 10 meters), and the code recorded 13.5 meters driven.
     // Hence, I added a *0.755 which is approximately equal to 10/13.5
     private static final double DRIVE_UNITS_PER_METER = (Math.PI * 2 * Constants.WHEEL_RADIUS) / (Constants.SWERVE_DRIVE_MOTOR_GEAR_RATIO) / 42.0 * 0.755;
     // This determines if the motor should be trying to get to the desired state.
