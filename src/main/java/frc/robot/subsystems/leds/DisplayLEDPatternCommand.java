@@ -8,7 +8,7 @@ public class DisplayLEDPatternCommand extends Command {
     
     //unsure if we need this class, as there seems to be much of the code here re-used in LEDSubsystem
     //Don't remove this, I will figure out what to do with it
-
+    /**
     private LEDPattern pattern;
     private LEDPattern previousPattern = RobocketsLEDPatterns.OFF;
     
@@ -43,5 +43,5 @@ public class DisplayLEDPatternCommand extends Command {
     @Override
     public void end(boolean isInterrupted) {
         Robot.map.leds.setPattern(previousPattern);
-    }
+    }*/
 }
