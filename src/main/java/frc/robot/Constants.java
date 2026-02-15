@@ -4,6 +4,12 @@ public class Constants {
     // Controller
     public static final int CONTROLLER_PORT = 0; // Port on the Driverstation
 
+    //LEDs
+    public static final int LEDS_PORT = 0;                 // PWM Port.
+    public static final int LEDS_NUMBER_OF_LEDS = 50;      // 10x5 as a test for rick roll, real size is 32x8
+    public static final int LEDS_WIDTH = 10;               // change to 32 when the compressor is fixed
+    public static final int LEDS_HEIGHT = 5;               // change to 8 when the compressor is fixed
+
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
     }
