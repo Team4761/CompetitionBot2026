@@ -1,14 +1,31 @@
 package frc.robot;
 
 public class Constants {
-    public static final double SWERVE_MAX_ANGULAR_ACCELERATION = -1; // placeholder value (in rad/s^2)
-    public static final double SWERVE_MAX_ANGULAR_VELOCITY = -1; // placeholder value (in rad/s)
-    public static final double WHEEL_RADIUS = 0.04955; // from 2025 Competition Bot Code (in meters)
-    public static final double SWERVE_DRIVE_MOTOR_GEAR_RATIO = 6.12; // from 2025 Competition Bot Code (in i don't know)
+    // Controller
+    public static final int CONTROLLER_PORT = 0; // Port on the Driverstation
 
-    //LEDS
-    public static final int LEDS_PORT = 0;                 // PWM Port.
-    public static final int LEDS_NUMBER_OF_LEDS = 50;      // 10x5 as a test for rick roll, real size is 32x8
-    public static final int LEDS_WIDTH = 10;               // change to 32 when the compressor is fixed
-    public static final int LEDS_HEIGHT = 5;               // change to 8 when the compressor is fixed
+    public class Swerve {
+        public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
+    }
+
+    public class Vision {
+        public static final String DEFAULT_CAM = "good cam";
+        
+        public static final double ANGLE_DEADBAND = 2.00; // Degrees
+        public static final double ANGLE_CONVERSION_FACTOR = .04; // 1/25
+        
+        public static final double FOLLOW_SPEED = 0.5; // Meters :P
+        public static final double BACKUP_DIST = .7; // Meters
+
+        public static final double DISTANCE_CONVERSION_FACTOR = 0.333; // 1/3
+    }
+    public class Climber {
+        public static final int CLIMBER_MOTOR_PORT = 0;
+    }    
+    public class Turret {
+        public static final int KICKER_MOTOR_PORT = 0;
+        public static final int SHOOTER_MOTOR_PORT = 0;
+        public static final int PITCH_MOTOR_PORT = 0;
+        public static final int YAW_MOTOR_PORT = 0;
+    }
 }

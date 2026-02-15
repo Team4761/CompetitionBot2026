@@ -1,0 +1,36 @@
+{
+  "coordinate_frame": {
+    "origin": "robot_center",
+    "axes": {
+      "x": "forward",
+      "y": "left",
+      "z": "up"
+    }
+  },
+  "units": {
+    "position": "meters",
+    "rotation": "degrees"
+  },
+  "cameras": [
+    {
+      "name": "front",
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "rotation_rpy": { "roll": 0.0, "pitch": 0.0, "yaw": 0.0 }
+    },
+    {
+      "name": "back",
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "rotation_rpy": { "roll": 0.0, "pitch": 0.0, "yaw": 180.0 }
+    },
+    {
+      "name": "left",
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "rotation_rpy": { "roll": 0.0, "pitch": 0.0, "yaw": 90.0 }
+    },
+    {
+      "name": "right",
+      "position": { "x": 0.0, "y": 0.0, "z": 0.0 },
+      "rotation_rpy": { "roll": 0.0, "pitch": 0.0, "yaw": -90.0 }
+    }
+  ]
+}
