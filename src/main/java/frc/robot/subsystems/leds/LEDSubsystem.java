@@ -58,7 +58,7 @@ public class LEDSubsystem extends SubsystemBase {
         // this might unfourtunately not be run at competitions due to uncertainties regarding processing power
         //pattern.applyTo(buffer);
         //leds.setData(buffer);
-        int[][][] testImageAsCompressed3dArrayComingToThearterMarch32_2111 = compressImage(loadImage("/C:/Users/alex/Pictures/wtf.png", true), 4, 5);{
+        int[][][] testImageAsCompressed3dArrayComingToThearterMarch32_2111 = compressImage(loadImage("/C:/Users/alex/Pictures/wtf.png", false), 4, 5);{
         for (int i = 0; i < testImageAsCompressed3dArrayComingToThearterMarch32_2111.length; i++)
             {
                 for (int f = 0; f < testImageAsCompressed3dArrayComingToThearterMarch32_2111[i].length; f++)
