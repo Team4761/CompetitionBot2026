@@ -15,6 +15,8 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.*;
 
+import frc.robot.subsystems.turret.*;
+
 public class RobotContainer {
     // Subsystems
     private final CommandXboxController controller;
@@ -57,6 +59,10 @@ public class RobotContainer {
         if (vision != null) {
             // Tracking
             controller.b().onTrue(new DisenableTrackerCommand(vision));
+        }
+
+        if (turret != null) {
+            controller.y().whileTrue(new SpindexSpinCommand(turret, .2));
         }
     }
 
