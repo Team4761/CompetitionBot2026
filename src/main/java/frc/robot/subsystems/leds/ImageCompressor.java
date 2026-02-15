@@ -1,7 +1,6 @@
 package frc.robot.subsystems.leds;
 
 //Dr.Agomir Image compressor
-import java.awt.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -10,7 +9,7 @@ import java.awt.Color;
 
 public class ImageCompressor 
 {
-    public static BufferedImage loadImage(String path) // loads an image to the bufgfered image so it can be read
+    public static BufferedImage loadImage(String path, boolean ysNo) // loads an image to the bufgfered image so it can be read
     {
         BufferedImage image = null; // creates new buffered image
         try
@@ -18,14 +17,16 @@ public class ImageCompressor
             File file = new File(path); // turns the path into a readable file
 
             image = ImageIO.read(file); // reads that file
-
-            if (image != null)
+            if(ysNo)
             {
-            System.out.println(path + " Loaded!"); // shows that the image was loaded if it works
-            }
-            else
-            {
-            System.out.println("failed!"); // tells us it was failed
+                if (image != null)
+                {
+                    System.out.println(path + " Loaded!"); // shows that the image was loaded if it works
+                }
+                else
+                {
+                    System.out.println("failed!"); // tells us it was failed
+                }
             }
 
         }
@@ -181,24 +182,25 @@ public class ImageCompressor
     public static BufferedImage[] loadVideoAsMultipleImages(String motherPath, int startingNum, int numberOfFiles)
     {
         BufferedImage[] videoRoll = new BufferedImage[numberOfFiles];
-        for (int i = startingNum; i < videoRoll.length; i++)
+        for (int i = 0; i < videoRoll.length; i++)
         {
             String filePath = motherPath.substring(0, motherPath.indexOf("frame") + 5);
+            int g = i + startingNum;
             int x = 0;
-            if (i >= 10)
+            if (g >= 10)
             {x++;}
-            if (i >= 100)
+            if (g >= 100)
             {x++;}
-            if (i >= 1000)
+            if (g >= 1000)
             {x++;}
-            if (i >= 10000)
+            if (g >= 10000)
             {x++;}
-            for (int g = x; g < 4; g++)
+            for (int b = x; b < 4; b++)
             {
                 filePath = filePath + 0;
             }
-            System.out.println(filePath + i + motherPath.substring(motherPath.indexOf("frame") + 5));
-            videoRoll[i] = loadImage(filePath + i + motherPath.substring(motherPath.indexOf("frame") + 5));
+            //System.out.println(filePath + g + motherPath.substring(motherPath.indexOf("frame") + 5));
+            videoRoll[i] = loadImage(filePath + g + motherPath.substring(motherPath.indexOf("frame") + 5), false);
         }
         return videoRoll;
     }
@@ -216,7 +218,7 @@ public class ImageCompressor
     public static void main(String[] args)
     {
         
-        //example1
+        /**example1
 
         int[][][] testImageAsCompressed3dArrayComingToThearterMarch32_2111 = compressImage(loadImage("/Users/dragomirmateev/Downloads/compressor test image.png"), 4, 7);
         for (int i = 0; i < testImageAsCompressed3dArrayComingToThearterMarch32_2111.length; i++)
@@ -229,11 +231,11 @@ public class ImageCompressor
                 }
                 System.out.println();
             }
-        }
+        }*/
         
         //example2
 
-        int[][][][] testVideoAsCompressedArrayComingToTheatersMarch32_2111 = compressVideo(loadVideoAsMultipleImages("/Users/dragomirmateev/Downloads/test vid/frame.png", 0, 9),10,8);
+        int[][][][] testVideoAsCompressedArrayComingToTheatersMarch32_2111 = compressVideo(loadVideoAsMultipleImages("C:/Users/alex/Documents/CODINF/RickrollFragments/frame.png", 1, 100),10,8);
         for (int i = 0; i < testVideoAsCompressedArrayComingToTheatersMarch32_2111.length; i++)
         {
             for (int g = 0; g < testVideoAsCompressedArrayComingToTheatersMarch32_2111[i].length; g++)
