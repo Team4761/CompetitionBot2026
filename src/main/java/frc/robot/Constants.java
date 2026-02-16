@@ -19,13 +19,19 @@ public class Constants {
 
         public static final double DISTANCE_CONVERSION_FACTOR = 0.333; // 1/3
     }
+
     public class Climber {
-        public static final int CLIMBER_MOTOR_PORT = 0;
-    }    
+        public static final int CLIMBER_MOTOR_PORT = 0; 
+    }
+
     public class Turret {
-        public static final int KICKER_MOTOR_PORT = 0;
-        public static final int SHOOTER_MOTOR_PORT = 0;
-        public static final int PITCH_MOTOR_PORT = 0;
-        public static final int YAW_MOTOR_PORT = 0;
+        public static final int SPITTER_MOTOR_PORT = 0; // Type: kraken
+        public static final int HORIZONTAL_MOTOR_PORT = 0; // Type: kraken
+        public static final int VERTICAL_MOTOR_PORT = 0; // Type: kraken
+
+        public static final int YAW_CONVERSION_Factor = 0;
+
+        public static final int SPINDEXER_MOTOR_PORT = 20; // Type: flex/vortex
+        public static final int KICKER_MOTOR_PORT = 19; // Type: flex/vortex
     }
 }
