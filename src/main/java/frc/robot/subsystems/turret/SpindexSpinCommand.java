@@ -9,11 +9,17 @@ public class SpindexSpinCommand extends Command{
     public SpindexSpinCommand(TurretSubsystem sub, double speed) {
         this.spinSpeed = speed;
         this.turretSubsystem = sub;
+        addRequirements(sub);
+    }
+
+    @Override
+    public void initialize() {
+        this.turretSubsystem.setSpindexerMotorSpeed(this.spinSpeed);
     }
 
     @Override
     public void execute() {
-        this.turretSubsystem.setSpindexerMotorSpeed(this.spinSpeed);
+        // Keep command instance open to allow it to cleanly end
     }
 
     @Override
