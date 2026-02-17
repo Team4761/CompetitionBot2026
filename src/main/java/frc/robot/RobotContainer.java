@@ -1,28 +1,23 @@
 package frc.robot;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
-
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.subsystems.turret.SpindexSpinCommand;
+import frc.robot.subsystems.turret.TurretTrackCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.*;
-
-import frc.robot.subsystems.turret.*;
+import frc.robot.util.SmartCameraNetwork;
 
 public class RobotContainer {
-    // Subsystems
     private final CommandXboxController controller;
-
     private final SlewRateLimiter xlimiter;
     private final SlewRateLimiter ylimiter;
+    private final SmartCameraNetwork cameraNetwork;
 
     private static final ClimberSubsystem climber = new ClimberSubsystem();
     private static final IntakeSubsystem intake = new IntakeSubsystem();
@@ -34,6 +29,7 @@ public class RobotContainer {
         controller = new CommandXboxController(Constants.CONTROLLER_PORT);
         xlimiter = new SlewRateLimiter(10);
         ylimiter = new SlewRateLimiter(10);
+        cameraNetwork = SmartCameraNetwork.Builder.newInstance().build();
 
         configBindings();
         configDefaultCmds();
@@ -52,17 +48,17 @@ public class RobotContainer {
 
     private void configBindings() {
         if (swerve != null) {
-            // Reset 'forwards' direction of robot when in operator relative mode
             controller.x().onTrue(swerve.reZeroCommand());
         }
 
         if (vision != null) {
-            // Tracking
             controller.b().onTrue(new DisenableTrackerCommand(vision));
         }
 
         if (turret != null) {
             controller.y().whileTrue(new SpindexSpinCommand(turret, .2));
+            controller.rightBumper()
+                .whileTrue(new TurretTrackCommand(turret, cameraNetwork, Constants.Vision.TRACKED_TAG_ID));
         }
     }
 

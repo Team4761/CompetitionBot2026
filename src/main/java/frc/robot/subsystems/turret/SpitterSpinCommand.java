@@ -2,11 +2,11 @@ package frc.robot.subsystems.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class SpindexSpinCommand extends Command{
+public class SpitterSpinCommand extends Command{
     private double spinSpeed;
     private TurretSubsystem turretSubsystem;
 
-    public SpindexSpinCommand(TurretSubsystem sub, double speed) {
+    public SpitterSpinCommand(TurretSubsystem sub, double speed) {
         this.spinSpeed = speed;
         this.turretSubsystem = sub;
         addRequirements(sub);
@@ -14,7 +14,7 @@ public class SpindexSpinCommand extends Command{
 
     @Override
     public void initialize() {
-        this.turretSubsystem.setSpindexerMotorSpeed(this.spinSpeed);
+        this.turretSubsystem.setSpitterMotorSpeed(spinSpeed);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class SpindexSpinCommand extends Command{
 
     @Override
     public void end(boolean isInterrupted) {
-        turretSubsystem.stopSpindexer();
+        turretSubsystem.stopSpitter();
     }
 }
