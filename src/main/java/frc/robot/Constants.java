@@ -55,4 +55,9 @@ public class Constants {
             public static final double ANGLE_LIM_RIGHT = 0; // Units: degrees
         }
     }
+
+    public class Intake {
+        public static final int INTAKE_EXTENDER_MOTOR_PORT = 0;
+        public static final int MAIN_INTAKE_MOTOR_PORT = 0;
+    }
 }
