@@ -67,8 +67,8 @@ public class Constants {
 
         public class Offset {
             public static final double X = 0.0; // Units: meters [FIXME]
-            public static final double y = 0.0; // Units: meters [FIXME]
-            public static final double z = 0.0; // Units: meters [FIXME]
+            public static final double Y = 0.0; // Units: meters [FIXME]
+            public static final double Z = 0.0; // Units: meters [FIXME]
         }
     }
 

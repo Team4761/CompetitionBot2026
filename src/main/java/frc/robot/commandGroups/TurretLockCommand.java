@@ -72,6 +72,10 @@ public class TurretLockCommand extends Command {
             new Translation3d(xOffset, yOffset, zOffset),
             new Rotation3d()
         ));
+        Transform3d turretToOpening = robotToOpening.plus(new Transform3d(
+            new Translation3d(Constants.Turret.Offset.X, Constants.Turret.Offset.Y, Constants.Turret.Offset.Z ),
+            new Rotation3d()
+        ));
 
         // Calculate angle and speed at which to shoot the ball at
         double xAcc = this.gyroSubsystem.getXAcc();
