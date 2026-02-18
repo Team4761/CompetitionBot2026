@@ -64,6 +64,12 @@ public class Constants {
             public static final double ANGLE_LIM_LEFT = 25; // Units: degrees
             public static final double ANGLE_LIM_RIGHT = 0; // Units: degrees
         }
+
+        public class Offset {
+            public static final double X = 0.0; // Units: meters [FIXME]
+            public static final double y = 0.0; // Units: meters [FIXME]
+            public static final double z = 0.0; // Units: meters [FIXME]
+        }
     }
 
     public class Intake {
