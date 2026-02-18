@@ -23,13 +23,13 @@ public class Constants {
     }
 
     public class Climber {
-        public static final int CLIMBER_MOTOR_PORT = 0; 
+        public static final int CLIMBER_MOTOR_PORT = -1; // Type: kraken [FIXME]
     }
 
     public class Turret {
-        public static final int SPITTER_MOTOR_PORT = 0; // Type: kraken
-        public static final int HORIZONTAL_MOTOR_PORT = 0; // Type: kraken
-        public static final int VERTICAL_MOTOR_PORT = 0; // Type: kraken
+        public static final int SPITTER_MOTOR_PORT = -1; // Type: kraken [FIXME]
+        public static final int HORIZONTAL_MOTOR_PORT = -1; // Type: kraken [FIXME]
+        public static final int VERTICAL_MOTOR_PORT = -1; // Type: kraken [FIXME]
 
         public static final int SPINDEXER_MOTOR_PORT = 20; // Type: flex/vortex
         public static final int KICKER_MOTOR_PORT = 19; // Type: flex/vortex
@@ -57,7 +57,7 @@ public class Constants {
     }
 
     public class Intake {
-        public static final int INTAKE_EXTENDER_MOTOR_PORT = 0;
-        public static final int MAIN_INTAKE_MOTOR_PORT = 0;
+        public static final int INTAKE_EXTENDER_MOTOR_PORT = -1; // Type: kraken [FIXME]
+        public static final int MAIN_INTAKE_MOTOR_PORT = -1; // Type: kraken [FIXME]
     }
 }
