@@ -1,9 +1,10 @@
-package frc.robot.subsystems.turret;
+package frc.robot.commandGroups;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.turret.*;
 import frc.robot.util.SmartCameraNetwork;
 import frc.robot.util.SmartCameraNetwork.TargetObservation;
 import java.util.Optional;
@@ -32,7 +33,7 @@ public class TurretTrackCommand extends Command {
         Optional<TargetObservation> observation = cameraNetwork.getBestObservation(fiducialId);
 
         if (observation.isEmpty()) {
-            turretSubsystem.stopHorizontal();
+            turretSubsystem.setHorizontalMotor(0.0);
             angleStepLimiter.reset(0.0);
             return;
         }

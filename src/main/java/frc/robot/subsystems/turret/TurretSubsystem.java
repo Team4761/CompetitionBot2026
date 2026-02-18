@@ -60,6 +60,7 @@ public class TurretSubsystem extends SubsystemBase {
             horizontalMotor.set(0);
         } 
     }
+    public void setHorizontalMotor(double degrees) { horizontalMotor.set(degrees); }
     public void turnVerticalMotor(double degrees) { verticalMotor.turn(degrees); }
     public void setVerticalMotor(double degrees) { verticalMotor.set(degrees); }
 

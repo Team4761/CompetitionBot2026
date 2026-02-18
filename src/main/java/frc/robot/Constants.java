@@ -1,21 +1,31 @@
 package frc.robot;
 
+import org.javatuples.Pair;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
     // Controller
     public static final int CONTROLLER_PORT = 0; // Port on the Driverstation
+
+    public static final String TEAM = "BLUE"; // Type: enum("BLUE", "RED")
 
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
     }
 
+    public class Gyro {
+        public static final int PIGEON_ID = -1; // Type: pigeon2 [FIXME]
+    }
+
     public class Vision {
         public static final String DEFAULT_CAM = "good cam";
         
-        public static final double ANGLE_DEADBAND = 2.00; // Degrees
+        public static final double ANGLE_DEADBAND = 2.00; // Type: Degrees
         public static final double ANGLE_CONVERSION_FACTOR = .04; // 1/25
         
-        public static final double FOLLOW_SPEED = 0.5; // Meters :P
-        public static final double BACKUP_DIST = .7; // Meters
+        public static final double FOLLOW_SPEED = 0.5; // Type: Meters
+        public static final double BACKUP_DIST = .7; // Type: Meters
 
         public static final double DISTANCE_CONVERSION_FACTOR = 0.333; // 1/3
 
@@ -65,5 +75,38 @@ public class Constants {
         public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
         public static final double KICKER_SPEED = 0.2; // Units: percent (0-1)
         public static final double SPITTER_SPEED = 0.2; // Units: percent (0-1)
+    }
+
+    public class RelativeHubLocation {
+        // Assuming +x is away from driver station, and +y is to the right
+        // Units: in.
+        public static final Map<Integer, Pair<Double, Double>> BLUE_APRIL_POS = Map.of(
+            18, new Pair<>(0.0, 23.5),
+            27, new Pair<>(-17.5, 23.5),
+            26, new Pair<>(-23.5, 0.0),
+            25, new Pair<>(-23.5, -17.5),
+            24, new Pair<>(-17.5, -23.5),
+            21, new Pair<>(0.0, -23.5),
+            19, new Pair<>(23.5, 0.0),
+            20, new Pair<>(23.5, -17.5)
+        );
+
+        // Units: in.
+        public static final Map<Integer, Pair<Double, Double>> RED_APRIL_POS = Map.of(
+            5, new Pair<>(0.0, 23.5),
+            8, new Pair<>(-17.5, 23.5),
+            10, new Pair<>(-23.5, 17.5),
+            9, new Pair<>(-23.5, 0.0),
+            11, new Pair<>(-17.5, -23.5),
+            2, new Pair<>(0.0, -23.5),
+            3, new Pair<>(23.5, 17.5),
+            4, new Pair<>(23.5, 0.0)
+        );
+
+        // [TODO]: make init for it use Elastic dashboard instead of constant
+        public static final Map<Integer, Pair<Double, Double>> MY_APRIL_POS = (TEAM == "BLUE") ? BLUE_APRIL_POS : RED_APRIL_POS;
+
+        public static final double Z_POS = 48.6; // Units: in.
+        public static final double CENTER_OFFSET_MARGIN = 20.85; // Units: in.
     }
 }

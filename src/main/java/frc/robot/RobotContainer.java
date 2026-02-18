@@ -9,13 +9,15 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
+import frc.robot.Constants.Gyro;
 import frc.robot.autos.DriveFwd2s;
 import frc.robot.commandGroups.FireFromSpindexer;
+import frc.robot.commandGroups.TurretTrackCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
-import frc.robot.subsystems.turret.TurretTrackCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.SmartCameraNetwork;
 
@@ -27,6 +29,7 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser;
 
     private static final ClimberSubsystem climber = new ClimberSubsystem();
+    private static final GyroSubsystem gyro = new GyroSubsystem();
     private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final SwerveSubsystem swerve = new SwerveSubsystem();
     private static final VisionSubsystem vision = new VisionSubsystem();
@@ -86,6 +89,7 @@ public class RobotContainer {
     }
 
     public static ClimberSubsystem getClimberSubsystem() { return climber; }
+    public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
     public static SwerveSubsystem getSwerveSubsystem() { return swerve; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }
