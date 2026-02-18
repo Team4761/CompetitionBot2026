@@ -60,4 +60,10 @@ public class Constants {
         public static final int INTAKE_EXTENDER_MOTOR_PORT = -1; // Type: kraken [FIXME]
         public static final int MAIN_INTAKE_MOTOR_PORT = -1; // Type: kraken [FIXME]
     }
+
+    public class ShootConfig {
+        public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
+        public static final double KICKER_SPEED = 0.2; // Units: percent (0-1)
+        public static final double SPITTER_SPEED = 0.2; // Units: percent (0-1)
+    }
 }

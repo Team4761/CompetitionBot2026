@@ -2,9 +2,15 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
+import frc.robot.autos.DriveFwd2s;
+import frc.robot.commandGroups.FireFromSpindexer;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
@@ -18,6 +24,7 @@ public class RobotContainer {
     private final SlewRateLimiter xlimiter;
     private final SlewRateLimiter ylimiter;
     private final SmartCameraNetwork cameraNetwork;
+    private final SendableChooser<Command> autoChooser;
 
     private static final ClimberSubsystem climber = new ClimberSubsystem();
     private static final IntakeSubsystem intake = new IntakeSubsystem();
@@ -30,9 +37,11 @@ public class RobotContainer {
         xlimiter = new SlewRateLimiter(10);
         ylimiter = new SlewRateLimiter(10);
         cameraNetwork = SmartCameraNetwork.Builder.newInstance().build();
+        autoChooser = new SendableChooser<>();
 
         configBindings();
         configDefaultCmds();
+        configAutos();
     }
 
     public void configDefaultCmds() {
@@ -56,10 +65,24 @@ public class RobotContainer {
         }
 
         if (turret != null) {
-            controller.y().whileTrue(new SpindexSpinCommand(turret, .2));
+            controller.y().whileTrue(new FireFromSpindexer(turret));
             controller.rightBumper()
                 .whileTrue(new TurretTrackCommand(turret, cameraNetwork, Constants.Vision.TRACKED_TAG_ID));
         }
+    }
+
+    private void configAutos() {
+        autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        autoChooser.addOption(
+            "Drive Forward (2s)",
+            new DriveFwd2s(swerve)
+        );
+
+        SmartDashboard.putData("Auto Chooser", autoChooser);
+    }
+
+    public Command getAutonomousCommand() {
+        return autoChooser.getSelected();
     }
 
     public static ClimberSubsystem getClimberSubsystem() { return climber; }
