@@ -12,7 +12,6 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import swervelib.SwerveDrive;
-import swervelib.math.SwerveMath;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -46,6 +45,9 @@ public class SwerveSubsystem extends SubsystemBase {
     public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
     {
         return run(() -> {
+        System.out.println(translationX.getAsDouble());
+        System.out.println(translationY.getAsDouble());
+        System.out.println(angularRotationX.getAsDouble());
             swerveDrive.drive(new Translation2d(
                 translationX.getAsDouble() * swerveDrive.getMaximumChassisVelocity(),
                 translationY.getAsDouble() * swerveDrive.getMaximumChassisVelocity()),

@@ -23,8 +23,8 @@ public class RetractCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        intakeSubsystem.stopExtenderMotor();
-        return true;
+        //intakeSubsystem.stopExtenderMotor();
+        return false;
     }
 
     @Override

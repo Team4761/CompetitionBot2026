@@ -25,8 +25,8 @@ public class ExtendCommand extends Command{
     //stop the motor when its done idk if neccesary
     @Override
     public boolean isFinished() {
-        intakeSubsystem.stopExtenderMotor();
-        return true;
+        //intakeSubsystem.stopExtenderMotor();
+        return false;
     }
 
     //stop the motor if it is interrupted idk if neccesary

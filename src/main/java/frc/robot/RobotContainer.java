@@ -11,6 +11,7 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.Constants.Gyro;
 import frc.robot.autos.DriveFwd2s;
+import frc.robot.autos.TurnMotors;
 import frc.robot.commandGroups.FireFromSpindexer;
 import frc.robot.commandGroups.TurretTrackCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
@@ -48,6 +49,9 @@ public class RobotContainer {
     }
 
     public void configDefaultCmds() {
+        System.out.println(xlimiter.calculate(MathUtil.applyDeadband(controller.getLeftY(), 0.08)));
+        System.out.println(ylimiter.calculate(MathUtil.applyDeadband(controller.getLeftX(), 0.08)));
+        System.out.println(MathUtil.applyDeadband(controller.getRightX(), 0.08));
         int multiplier = 2;
         swerve.setDefaultCommand(
                 swerve.driveCommand(
@@ -77,8 +81,12 @@ public class RobotContainer {
     private void configAutos() {
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.addOption(
-            "Drive Forward (2s)",
-            new DriveFwd2s(swerve)
+            "Drive Turn Forward (2s)",
+            new TurnMotors(swerve)
+        );
+        autoChooser.addOption(
+            "Turn Motors (2s)",
+            new TurnMotors(swerve)
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);

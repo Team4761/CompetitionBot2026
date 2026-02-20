@@ -27,8 +27,8 @@ public class OuttakeCommand extends Command{
 
     @Override
     public boolean isFinished() {
-        intakeSubsystem.stopIntakeMotor();
-        return true;
+        //intakeSubsystem.stopIntakeMotor();
+        return false;
     }
 
     @Override
