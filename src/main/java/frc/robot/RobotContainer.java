@@ -11,7 +11,6 @@ import frc.robot.subsystems.swerve.SwerveSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.Constants.Gyro;
 import frc.robot.autos.DriveFwd2s;
-import frc.robot.autos.TurnMotors;
 import frc.robot.commandGroups.FireFromSpindexer;
 import frc.robot.commandGroups.TurretTrackCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
@@ -21,6 +20,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.SmartCameraNetwork;
+import frc.robot.util.SmartKrakenMotor;
 
 public class RobotContainer {
     private final CommandXboxController controller;
@@ -29,9 +29,9 @@ public class RobotContainer {
     private final SmartCameraNetwork cameraNetwork;
     private final SendableChooser<Command> autoChooser;
 
-    private static final ClimberSubsystem climber = new ClimberSubsystem();
-    private static final GyroSubsystem gyro = new GyroSubsystem();
-    private static final IntakeSubsystem intake = new IntakeSubsystem();
+    //private static final ClimberSubsystem climber = new ClimberSubsystem();
+    //private static final GyroSubsystem gyro = new GyroSubsystem();
+    //private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final SwerveSubsystem swerve = new SwerveSubsystem();
     private static final VisionSubsystem vision = new VisionSubsystem();
     private static final TurretSubsystem turret = new TurretSubsystem();
@@ -81,12 +81,8 @@ public class RobotContainer {
     private void configAutos() {
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.addOption(
-            "Drive Turn Forward (2s)",
-            new TurnMotors(swerve)
-        );
-        autoChooser.addOption(
-            "Turn Motors (2s)",
-            new TurnMotors(swerve)
+            "Test move",
+            new DriveFwd2s(swerve)
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -96,9 +92,9 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
-    public static ClimberSubsystem getClimberSubsystem() { return climber; }
-    public static GyroSubsystem getGyroSubsystem() { return gyro; }
-    public static IntakeSubsystem getIntakeSubsystem() { return intake; }
+    //public static ClimberSubsystem getClimberSubsystem() { return climber; }
+    //public static GyroSubsystem getGyroSubsystem() { return gyro; }
+    //public static IntakeSubsystem getIntakeSubsystem() { return intake; }
     public static SwerveSubsystem getSwerveSubsystem() { return swerve; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }
     public static TurretSubsystem getTurretSubsystem() { return turret; }

@@ -27,7 +27,6 @@ public class SwerveSubsystem extends SubsystemBase {
             SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
             // TODO: Remove duplicate ID values, stored in both json and constants file
             swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.Swerve.MAX_DRIVE_SPEED);
-            swerveDrive.useExternalFeedbackSensor();
         } catch (Exception e)
         {
             throw new RuntimeException(e);

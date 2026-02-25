@@ -12,6 +12,24 @@ public class Constants {
 
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
+
+        // Unneeded, but used for documentation purposes and a source of truth:
+        public class FrontLeft {
+            public static final int TURN_MOTOR_PORT = -1;
+            public static final int DRIVE_MOTOR_PORT = -1;
+        }
+        public class FrontRight {
+            public static final int TURN_MOTOR_PORT = -1;
+            public static final int DRIVE_MOTOR_PORT = -1;
+        }
+        public class BackLeft {
+            public static final int TURN_MOTOR_PORT = -1;
+            public static final int DRIVE_MOTOR_PORT = -1;
+        }
+        public class BackRight {
+            public static final int TURN_MOTOR_PORT = 11;
+            public static final int DRIVE_MOTOR_PORT = -1;
+        }
     }
 
     public class Gyro {
