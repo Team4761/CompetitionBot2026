@@ -2,12 +2,11 @@ package frc.robot.commandGroups;
 
 import java.util.HashMap;
 import java.util.Optional;
-import org.javatuples.Pair;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -50,9 +49,9 @@ public class TurretLockCommand extends Command {
         // Find nearest april tag (usually best?) for calculating aprox center of HUB
         HashMap<Integer, TargetObservation> observations = optionalObservations.get();
         double bestDist = 999999.0;
-        int bestID = 0;
+        int bestID = -1;
         for (Integer key : observations.keySet()) {
-            if (Constants.RelativeHubLocation.BLUE_APRIL_POS.containsKey(key)) {
+            if (Constants.RelativeHubLocation.MY_APRIL_POS.containsKey(key)) {
                 TargetObservation aprilTagObservation = observations.get(key);
                 if (aprilTagObservation.getDistanceMeters() < bestDist) {
                     bestDist = aprilTagObservation.getDistanceMeters();
@@ -60,11 +59,17 @@ public class TurretLockCommand extends Command {
                 }
             }
         }
+        if (bestID == -1) {
+            turretSubsystem.setHorizontalMotor(0.0);
+            angleStepLimiter.reset(0.0);
+            return;
+        }
 
         // Calcualte center of HUB
         TargetObservation bestObservation = observations.get(bestID);
-        double xOffset = Constants.RelativeHubLocation.MY_APRIL_POS.get(bestID).getValue0();
-        double yOffset = Constants.RelativeHubLocation.MY_APRIL_POS.get(bestID).getValue1();
+        Translation2d hubOffset = Constants.RelativeHubLocation.MY_APRIL_POS.get(bestID);
+        double xOffset = hubOffset.getX();
+        double yOffset = hubOffset.getY();
         double zOffset = Constants.RelativeHubLocation.Z_POS;
 
         Transform3d robotToTarget = bestObservation.getRobotToTarget();
