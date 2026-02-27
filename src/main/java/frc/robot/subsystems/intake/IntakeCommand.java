@@ -18,19 +18,18 @@ public class IntakeCommand extends Command{
 
     @Override
     public void initialize() {
-        
+        intakeSubsystem.turnIntakeMotor(intakeSpeed);
     }
 
     //run the motor contiunously so that you can intake
     @Override
     public void execute() {
-        intakeSubsystem.turnIntakeMotor(intakeSpeed);
+        
     }
 
     //stop the motor when it is done idk if necceary
     @Override
     public boolean isFinished() {
-        intakeSubsystem.stopIntakeMotor();
         return false;
     }
 
