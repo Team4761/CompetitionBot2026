@@ -18,50 +18,48 @@ import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
-import frc.robot.subsystems.turret.TurretManualAimCommand;
-import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.SmartCameraNetwork;
 import frc.robot.util.SmartKrakenMotor;
 
 public class RobotContainer {
-    private final CommandXboxController controller = new CommandXboxController(Constants.CONTROLLER_PORT);
-    // NEW: Operator controller for specialized turret/shooter control
-    private final CommandXboxController operatorController = new CommandXboxController(Constants.OPERATOR_CONTROLLER_PORT);
+    private final CommandXboxController controller;
+    private final SlewRateLimiter xlimiter;
+    private final SlewRateLimiter ylimiter;
+    private final SmartCameraNetwork cameraNetwork;
+    private final SendableChooser<Command> autoChooser;
 
-    private final SwerveSubsystem swerve = new SwerveSubsystem();
-    private final VisionSubsystem vision = new VisionSubsystem();
-    private final TurretSubsystem turret = new TurretSubsystem();
-    private final SmartCameraNetwork cameraNetwork = new SmartCameraNetwork();
-    
-    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    //private static final ClimberSubsystem climber = new ClimberSubsystem();
+    //private static final GyroSubsystem gyro = new GyroSubsystem();
+    //private static final IntakeSubsystem intake = new IntakeSubsystem();
+    private static final SwerveSubsystem swerve = new SwerveSubsystem();
+    private static final VisionSubsystem vision = new VisionSubsystem();
+    private static final TurretSubsystem turret = new TurretSubsystem();
 
     public RobotContainer() {
-        configDefaultCommands();
+        controller = new CommandXboxController(Constants.CONTROLLER_PORT);
+        xlimiter = new SlewRateLimiter(10);
+        ylimiter = new SlewRateLimiter(10);
+        cameraNetwork = SmartCameraNetwork.Builder.newInstance().build();
+        autoChooser = new SendableChooser<>();
+
         configBindings();
         configDefaultCmds();
         configAutos();
     }
 
-    private void configDefaultCommands() {
-        // Set the default command for the turret to allow manual aiming via operator joysticks
-        if (turret != null) {
-            turret.setDefaultCommand(new TurretManualAimCommand(
-                turret,
-                () -> MathUtil.applyDeadband(operatorController.getLeftY(), 0.08),  // Left Y: AOA
-                () -> MathUtil.applyDeadband(operatorController.getRightX(), 0.08)  // Right X: Turn
-            ));
-        }
-
-        /* swerve.setDefaultCommand(
-                new SwerveDriveCommand(
-                        swerve,
-                        () -> MathUtil.applyDeadband(controller.getLeftX() * multiplier, 0.08),
-                        () -> MathUtil.applyDeadband(controller.getLeftY() * multiplier, 0.08),
+    public void configDefaultCmds() {
+        System.out.println(xlimiter.calculate(MathUtil.applyDeadband(controller.getLeftY(), 0.08)));
+        System.out.println(ylimiter.calculate(MathUtil.applyDeadband(controller.getLeftX(), 0.08)));
+        System.out.println(MathUtil.applyDeadband(controller.getRightX(), 0.08));
+        int multiplier = 2;
+        swerve.setDefaultCommand(
+                swerve.driveCommand(
+                        () -> xlimiter.calculate(MathUtil.applyDeadband(controller.getLeftY(), 0.08) * multiplier),
+                        () -> ylimiter.calculate(MathUtil.applyDeadband(controller.getLeftX(), 0.08) * multiplier),
                         () -> MathUtil.applyDeadband(controller.getRightX(), 0.08)
                 )
         );
-        */
     }
 
     private void configBindings() {
@@ -77,10 +75,6 @@ public class RobotContainer {
             controller.y().whileTrue(new FireFromSpindexer(turret));
             controller.rightBumper()
                 .whileTrue(new TurretTrackCommand(turret, cameraNetwork, Constants.Vision.TRACKED_TAG_ID));
-            
-            // NEW: Operator command to shoot (Spitter + Kicker)
-            operatorController.rightTrigger()
-                .whileTrue(new ShootCommand(turret, Constants.Turret.SPITTER_SPEED, Constants.Turret.KICKER_SPEED));
         }
     }
 
@@ -104,6 +98,4 @@ public class RobotContainer {
     public static SwerveSubsystem getSwerveSubsystem() { return swerve; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }
     public static TurretSubsystem getTurretSubsystem() { return turret; }
-    public static SwerveSubsystem getSwerveSubsystem() { return null; /* Add reference */ }
-
 }
