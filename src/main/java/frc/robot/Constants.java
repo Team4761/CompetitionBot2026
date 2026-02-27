@@ -7,13 +7,15 @@ import java.util.Map;
 public class Constants {
     // Controller
     public static final int CONTROLLER_PORT = 0; // Port on the Driverstation
+    // Port for the weapons/operator controller
+    public static final int OPERATOR_CONTROLLER_PORT = 1;
 
     public static final String TEAM = "BLUE"; // Type: enum("BLUE", "RED")
 
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
 
-        // Unneeded, but used for documentation purposes and a source of truth:
+        // Unneeded, but here for documentation
         public class FrontLeft {
             public static final int TURN_MOTOR_PORT = -1;
             public static final int DRIVE_MOTOR_PORT = -1;
@@ -37,68 +39,30 @@ public class Constants {
     }
 
     public class Vision {
-        public static final String DEFAULT_CAM = "good cam";
-        
-        public static final double ANGLE_DEADBAND = 2.00; // Type: Degrees
-        public static final double ANGLE_CONVERSION_FACTOR = .04; // 1/25
-        
-        public static final double FOLLOW_SPEED = 0.5; // Type: Meters
-        public static final double BACKUP_DIST = .7; // Type: Meters
-
-        public static final double DISTANCE_CONVERSION_FACTOR = 0.333; // 1/3
-
-        public static final int TRACKED_TAG_ID = 0; 
-    }
-
-    public class Climber {
-        public static final int CLIMBER_MOTOR_PORT = -1; // Type: kraken [FIXME]
+        public static final int TRACKED_TAG_ID = 7;
     }
 
     public class Turret {
-        public static final int SPITTER_MOTOR_PORT = 56; // Type: kraken [FIXME]
-        public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken [FIXME]
-        public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken [FIXME]
+        public static final int SPINDEXER_MOTOR_PORT = 15;
+        public static final int KICKER_MOTOR_PORT = 16;
+        public static final int SPITTER_MOTOR_PORT = 17;
+        public static final int HORIZONTAL_MOTOR_PORT = 18;
+        public static final int VERTICAL_MOTOR_PORT = 19;
 
-        public static final int SPINDEXER_MOTOR_PORT = 18; // Type: flex/vortex
-        public static final int KICKER_MOTOR_PORT = 19; // Type: flex/vortex
-
-        public class Horizontal {
-            public static final double ANGLE_TURN_THRESHOLD = 2; // Units: degrees
-            public static final double ANGLE_TURN_PERCENTAGE = 0.9; // Units: percent (0-1)
-            public static final double MAX_TRACK_STEP_DEGREES = 4.0; // Units: degrees
-            public static final double MAX_TRACK_RATE_DEGREES_PER_SEC = 120.0; // Units: degrees/seconds
-
-            public static final double CONVERSION_FACTOR_MtoT = 185 / 28; // Motor rotations -> turret rotations
-            public static final double CONVERSION_FACTOR_TtoM = 28 / 185; // Turret rotations -> motor rotations
-
-            public static final double ANGLE_LIM_LEFT = -80.0; // Units: degrees
-            public static final double ANGLE_LIM_RIGHT = 80.0; // Units: degrees
-        }
+        // NEW: Default speed for the kicker feeding the shooter
+        public static final double KICKER_SPEED = 0.5;
+        public static final double SPITTER_SPEED = 0.2; // Units - percent (0-1)
 
         public class Vertical {
-            public static final double CONVERSION_FACTOR_MtoH = 325 / 18; // Motor rotations -> hood rotations
-            public static final double CONVERSION_FACTOR_HtoM = 18 / 325; // Hood rotations -> motor rotations
-
-            public static final double ANGLE_LIM_LEFT = 25; // Units: degrees
-            public static final double ANGLE_LIM_RIGHT = 0; // Units: degrees
-        }
-
-        public class Offset {
-            public static final double X = 0.0; // Units: meters [FIXME]
-            public static final double Y = 0.0; // Units: meters [FIXME]
-            public static final double Z = 0.0; // Units: meters [FIXME]
+            public static final double ANGLE_LIM_LEFT = -45.0;
+            public static final double ANGLE_LIM_RIGHT = 45.0;
+            public static final double CONVERSION_FACTOR_HtoM = 1.0;
         }
     }
 
     public class Intake {
-        public static final int INTAKE_EXTENDER_MOTOR_PORT = -1; // Type: kraken [FIXME]
-        public static final int MAIN_INTAKE_MOTOR_PORT = -1; // Type: kraken [FIXME]
-    }
-
-    public class ShootConfig {
-        public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
-        public static final double KICKER_SPEED = 0.2; // Units: percent (0-1)
-        public static final double SPITTER_SPEED = 0.2; // Units: percent (0-1)
+        public static final int INTAKE_EXTENDER_MOTOR_PORT = 20;
+        public static final int MAIN_INTAKE_MOTOR_PORT = 21;
     }
 
     public class RelativeHubLocation {

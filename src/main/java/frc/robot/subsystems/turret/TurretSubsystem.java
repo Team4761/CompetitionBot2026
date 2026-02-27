@@ -33,9 +33,8 @@ public class TurretSubsystem extends SubsystemBase {
             .port(Constants.Turret.HORIZONTAL_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
             .outputRange(-1, 1)
-            .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM, 
-                        Constants.Turret.Horizontal.ANGLE_LIM_RIGHT * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM)
-            .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
+            .angleLimits(-1, -1)
+            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
         this.verticalMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.VERTICAL_MOTOR_PORT)
@@ -62,8 +61,7 @@ public class TurretSubsystem extends SubsystemBase {
     }
     public void setHorizontalMotor(double degrees) { horizontalMotor.set(degrees); }
     public void turnVerticalMotor(double degrees) { verticalMotor.turn(degrees); }
-    public void setVerticalMotor(double degrees) { verticalMotor.set(degrees); }
-
-    public void stopHorizontal() { horizontalMotor.stopTurning(); }
-    public void stopVertical() { verticalMotor.stopTurning(); }
+    
+    // Set motor speed for vertical turret movement (AOA)
+    public void setVerticalMotor(double speed) { verticalMotor.set(speed); }
 }
