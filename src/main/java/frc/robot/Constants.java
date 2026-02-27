@@ -1,7 +1,6 @@
 package frc.robot;
 
-import org.javatuples.Pair;
-import java.util.HashMap;
+import edu.wpi.first.math.geometry.Translation2d;
 import java.util.Map;
 
 public class Constants {
@@ -104,31 +103,32 @@ public class Constants {
     public class RelativeHubLocation {
         // Assuming +x is away from driver station, and +y is to the right
         // Units: in.
-        public static final Map<Integer, Pair<Double, Double>> BLUE_APRIL_POS = Map.of(
-            18, new Pair<>(0.0, 23.5),
-            27, new Pair<>(-17.5, 23.5),
-            26, new Pair<>(-23.5, 0.0),
-            25, new Pair<>(-23.5, -17.5),
-            24, new Pair<>(-17.5, -23.5),
-            21, new Pair<>(0.0, -23.5),
-            19, new Pair<>(23.5, 0.0),
-            20, new Pair<>(23.5, -17.5)
+        public static final Map<Integer, Translation2d> BLUE_APRIL_POS = Map.of(
+            18, new Translation2d(0.0, 23.5),
+            27, new Translation2d(-17.5, 23.5),
+            26, new Translation2d(-23.5, 0.0),
+            25, new Translation2d(-23.5, -17.5),
+            24, new Translation2d(-17.5, -23.5),
+            21, new Translation2d(0.0, -23.5),
+            19, new Translation2d(23.5, 0.0),
+            20, new Translation2d(23.5, -17.5)
         );
 
         // Units: in.
-        public static final Map<Integer, Pair<Double, Double>> RED_APRIL_POS = Map.of(
-            5, new Pair<>(0.0, 23.5),
-            8, new Pair<>(-17.5, 23.5),
-            10, new Pair<>(-23.5, 17.5),
-            9, new Pair<>(-23.5, 0.0),
-            11, new Pair<>(-17.5, -23.5),
-            2, new Pair<>(0.0, -23.5),
-            3, new Pair<>(23.5, 17.5),
-            4, new Pair<>(23.5, 0.0)
+        public static final Map<Integer, Translation2d> RED_APRIL_POS = Map.of(
+            5, new Translation2d(0.0, 23.5),
+            8, new Translation2d(-17.5, 23.5),
+            10, new Translation2d(-23.5, 17.5),
+            9, new Translation2d(-23.5, 0.0),
+            11, new Translation2d(-17.5, -23.5),
+            2, new Translation2d(0.0, -23.5),
+            3, new Translation2d(23.5, 17.5),
+            4, new Translation2d(23.5, 0.0)
         );
 
         // [TODO]: make init for it use Elastic dashboard instead of constant
-        public static final Map<Integer, Pair<Double, Double>> MY_APRIL_POS = (TEAM == "BLUE") ? BLUE_APRIL_POS : RED_APRIL_POS;
+        public static final Map<Integer, Translation2d> MY_APRIL_POS =
+            "BLUE".equals(TEAM) ? BLUE_APRIL_POS : RED_APRIL_POS;
 
         public static final double Z_POS = 48.6; // Units: in.
         public static final double CENTER_OFFSET_MARGIN = 20.85; // Units: in.
