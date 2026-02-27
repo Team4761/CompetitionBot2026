@@ -30,7 +30,7 @@ public class IntakeCommand extends Command{
     //stop the motor when it is done idk if necceary
     @Override
     public boolean isFinished() {
-        //intakeSubsystem.stopIntakeMotor();
+        intakeSubsystem.stopIntakeMotor();
         return false;
     }
 

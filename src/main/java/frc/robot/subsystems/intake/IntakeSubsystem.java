@@ -16,12 +16,14 @@ public class IntakeSubsystem extends SubsystemBase{
             .PID(0.1, 0.0, 0.0) // Temp Values
             .outputRange(0, 360) // Temp Values
             .angleLimits(-1, -1) // Temp Values
+            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
         this.intakeMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Intake.MAIN_INTAKE_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0) // Temp Values
             .outputRange(0, 360) // Temp Values
             .angleLimits(-1, -1) // Temp Values
+            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
     }
 
@@ -35,12 +37,12 @@ public class IntakeSubsystem extends SubsystemBase{
         intakeExtenderMotor.stopTurning();
     }
 
-    //stes the speed of the intake moto so it can be used in the intake and outake commands
+    //sets the speed of the intake motor so it can be used in the intake and outake commands
     public void turnIntakeMotor(double speed) {
         intakeMotor.setSpeed(speed);
     }
 
-    //stops the outtake command so that it can be use dintn intatke and outtake commands
+    //stops the intake motor so that it can be use in intake and outtake commands
     public void stopIntakeMotor() {
         intakeMotor.stopTurning();
     }
