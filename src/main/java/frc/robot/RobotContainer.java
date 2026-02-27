@@ -21,10 +21,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.util.SmartKrakenMotor;
+import frc.robot.util.SmartVortexMotor;
 
 public class RobotContainer {
     private static final double ROTATION_INPUT_DEADBAND = 0.12;
     private static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 3.0;
+    private static final double TEST_VORTEX_OUTPUT = 0.20;
+    private static final double TEST_KRAKEN_OUTPUT = 0.20;
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
@@ -41,6 +45,16 @@ public class RobotContainer {
 
     private final CommandXboxController joystick = new CommandXboxController(0);
     private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
+    private final SmartVortexMotor testVortexMotor = SmartVortexMotor.Builder.newInstance()
+        .canId(25)
+        .build();
+    private final SmartKrakenMotor testKrakenMotor = SmartKrakenMotor.Builder.newInstance()
+        .port(56)
+        .PID(0.0, 0.0, 0.0)
+        .outputRange(-1.0, 1.0)
+        .angleLimits(-1.0, -1.0)
+        .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
+        .build();
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -73,6 +87,19 @@ public class RobotContainer {
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))
         ));
+        joystick.y()
+            .and(joystick.back().negate())
+            .and(joystick.start().negate())
+            .whileTrue(Commands.startEnd(
+                () -> {
+                    testVortexMotor.setSpeed(TEST_VORTEX_OUTPUT);
+                    testKrakenMotor.setSpeed(TEST_KRAKEN_OUTPUT);
+                },
+                () -> {
+                    testVortexMotor.stopTurning();
+                    testKrakenMotor.stopTurning();
+                }
+            ));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
