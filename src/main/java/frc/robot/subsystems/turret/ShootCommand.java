@@ -1,6 +1,8 @@
 package frc.robot.subsystems.turret;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 
 public class ShootCommand extends Command {
     private final TurretSubsystem turretSubsystem;
@@ -24,8 +26,9 @@ public class ShootCommand extends Command {
 
     @Override
     public void initialize() {
-        turretSubsystem.setSpitterMotorSpeed(spitterSpeed);
-        turretSubsystem.setKickerMotorSpeed(kickerSpeed);
+        this.turretSubsystem.setSpitterMotorSpeed(this.spitterSpeed);
+        Timer.delay(Constants.Turret.KICKER_INIT_DELAY);
+        this.turretSubsystem.setKickerMotorSpeed(this.kickerSpeed);
     }
 
     @Override
@@ -40,7 +43,7 @@ public class ShootCommand extends Command {
 
     @Override
     public void end(boolean isInterrupted) {
-        turretSubsystem.stopSpitter();
-        turretSubsystem.stopKicker();
+        this.turretSubsystem.stopSpitter();
+        this.turretSubsystem.stopKicker();
     }
 }

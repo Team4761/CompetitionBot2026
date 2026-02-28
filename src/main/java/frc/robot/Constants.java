@@ -63,6 +63,7 @@ public class Constants {
 
         public static final double KICKER_SPEED = 0.5;
         public static final double SPITTER_SPEED = 0.2; // Units: percent (0-1)
+        public static final double KICKER_INIT_DELAY = 0.5; // Units: seconds
 
         public class Horizontal {
             public static final double ANGLE_TURN_THRESHOLD = 2; // Units: degrees
