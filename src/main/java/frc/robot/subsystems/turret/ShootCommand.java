@@ -6,18 +6,14 @@ import frc.robot.Constants;
 
 public class ShootCommand extends Command {
     private final TurretSubsystem turretSubsystem;
-    private final double spitterSpeed;
-    private final double kickerSpeed;
 
     /**
      * @param sub The turret subsystem holding the shooter components
      * @param spitterSpeed Speed for the main flywheel/shooter
      * @param kickerSpeed Speed for the feed mechanism (kicker)
      */
-    public ShootCommand(TurretSubsystem sub, double spitterSpeed, double kickerSpeed) {
+    public ShootCommand(TurretSubsystem sub) {
         this.turretSubsystem = sub;
-        this.spitterSpeed = spitterSpeed;
-        this.kickerSpeed = kickerSpeed;
         
         // IMPORTANT: Intentionally NOT use addRequirements(sub) here.
         // If require the TurretSubsystem, will interrupt the TurretManualAimCommand,
@@ -26,9 +22,10 @@ public class ShootCommand extends Command {
 
     @Override
     public void initialize() {
-        this.turretSubsystem.setSpitterMotorSpeed(this.spitterSpeed);
+        this.turretSubsystem.setSpitterMotorSpeed(Constants.Turret.SPITTER_SPEED);
         Timer.delay(Constants.Turret.KICKER_INIT_DELAY);
-        this.turretSubsystem.setKickerMotorSpeed(this.kickerSpeed);
+        this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.SPINDEXER_SPEED); // [FIXME]: Make this a constant or passed in arg
+        this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.KICKER_SPEED);
     }
 
     @Override
@@ -44,6 +41,7 @@ public class ShootCommand extends Command {
     @Override
     public void end(boolean isInterrupted) {
         this.turretSubsystem.stopSpitter();
+        this.turretSubsystem.stopSpindexer();
         this.turretSubsystem.stopKicker();
     }
 }

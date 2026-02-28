@@ -11,24 +11,6 @@ public class Constants {
 
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
-
-        // Unneeded, but used for documentation purposes and a source of truth:
-        public class FrontLeft {
-            public static final int TURN_MOTOR_PORT = -1;
-            public static final int DRIVE_MOTOR_PORT = -1;
-        }
-        public class FrontRight {
-            public static final int TURN_MOTOR_PORT = -1;
-            public static final int DRIVE_MOTOR_PORT = -1;
-        }
-        public class BackLeft {
-            public static final int TURN_MOTOR_PORT = -1;
-            public static final int DRIVE_MOTOR_PORT = -1;
-        }
-        public class BackRight {
-            public static final int TURN_MOTOR_PORT = 11;
-            public static final int DRIVE_MOTOR_PORT = -1;
-        }
     }
 
     public class Gyro {
@@ -54,16 +36,17 @@ public class Constants {
     }
 
     public class Turret {
-        public static final int SPITTER_MOTOR_PORT = 56; // Type: kraken [FIXME]
+        public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken [FIXME]
         public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken [FIXME]
         public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken [FIXME]
 
-        public static final int SPINDEXER_MOTOR_PORT = 18; // Type: flex/vortex
-        public static final int KICKER_MOTOR_PORT = 25; // Type: flex/vortex
+        public static final int SPINDEXER_MOTOR_PORT = 43; // Type: flex/vortex
+        public static final int KICKER_MOTOR_PORT = 44; // Type: flex/vortex
 
-        public static final double KICKER_SPEED = 0.5;
-        public static final double SPITTER_SPEED = 0.2; // Units: percent (0-1)
-        public static final double KICKER_INIT_DELAY = 0.5; // Units: seconds
+        public static final double KICKER_SPEED = 0.2;
+        public static final double SPITTER_SPEED = 0.15; // Units: percent (0-1)
+        public static final double SPINDEXER_SPEED = 0.1; // Units: percent (0-1)
+        public static final double KICKER_INIT_DELAY = 0.3; // Units: seconds
 
         public class Horizontal {
             public static final double ANGLE_TURN_THRESHOLD = 2; // Units: degrees

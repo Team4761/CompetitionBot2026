@@ -61,7 +61,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController controller_drive = new CommandXboxController(0);
-    private final CommandXboxController controller_operator = new CommandXboxController(1);
+    //private final CommandXboxController controller_operator = new CommandXboxController(1);
     private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -102,8 +102,7 @@ public class RobotContainer {
         controller_drive.y().whileTrue(new IntakeCommand(intake, 0.4));
 
         // Operator controller bindings
-        controller_operator.rightTrigger()
-                .whileTrue(new ShootCommand(turret, Constants.Turret.SPITTER_SPEED, Constants.Turret.KICKER_SPEED));
+        controller_drive.rightTrigger().whileTrue(new ShootCommand(turret));
 
         // [FIXME]: Do we need these?
         // Run SysId routines when holding back/start and X/Y.
