@@ -41,8 +41,8 @@ public class TurretSubsystem extends SubsystemBase {
             .port(Constants.Turret.VERTICAL_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
             .outputRange(-1, 1)
-            .angleLimits(Constants.Turret.Vertical.ANGLE_LIM_LEFT * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM, 
-                        Constants.Turret.Vertical.ANGLE_LIM_RIGHT * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM)
+            .angleLimits(Constants.Turret.Vertical.ANGLE_LIM_LEFT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH,
+                        Constants.Turret.Vertical.ANGLE_LIM_RIGHT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH)
             .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
     }
