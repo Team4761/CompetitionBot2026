@@ -47,9 +47,9 @@ public class TurretSubsystem extends SubsystemBase {
             .build();
     }
 
-    public void setKickerMotorSpeed(double speed) { kickerMotor.setSpeed(speed); }
-    public void setSpitterMotorSpeed(double speed) { spitterMotor.setSpeed(speed); }
-    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setSpeed(speed); }
+    public void setKickerMotorSpeed(double speed) { kickerMotor.setSpeedPercent(speed); }
+    public void setSpitterMotorSpeed(double speed) { spitterMotor.setSpeedPercent(speed); }
+    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setSpeedPercent(speed); }
 
     public void stopKicker() { kickerMotor.stopTurning(); }
     public void stopSpitter() { spitterMotor.stopTurning(); }
