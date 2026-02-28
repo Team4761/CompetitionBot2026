@@ -9,6 +9,15 @@ public class Constants {
 
     public static final String TEAM = "BLUE"; // Type: enum("BLUE", "RED")
 
+    public class Controller {
+        public static final double TRANSLATION_INPUT_DEADBAND = 0.10;
+        public static final double ROTATION_INPUT_DEADBAND = 0.12;
+        public static final double TURRET_INPUT_DEADBAND = 0.10;
+        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 3.0;
+        public static final double TEST_VORTEX_OUTPUT = 0.20;
+        public static final double TEST_KRAKEN_OUTPUT = 0.20;
+    }
+
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
     }
@@ -69,8 +78,8 @@ public class Constants {
             public static final double CONVERSION_FACTOR_MtoH = 325.0 / 18.0; // Motor rotations -> hood rotations
             public static final double CONVERSION_FACTOR_HtoM = 18.0 / 325.0; // Hood rotations -> motor rotations
 
-            public static final double ANGLE_LIM_LEFT = 25.0; // Units: degrees
-            public static final double ANGLE_LIM_RIGHT = 0.0; // Units: degrees
+            public static final double ANGLE_LIM_LEFT = 0.0; // Units: degrees
+            public static final double ANGLE_LIM_RIGHT = 25.0; // Units: degrees
         }
 
         public class Offset {
