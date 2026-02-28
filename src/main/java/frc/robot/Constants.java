@@ -58,19 +58,19 @@ public class Constants {
             public static final double MAX_TRACK_STEP_DEGREES = 4.0; // Units: degrees
             public static final double MAX_TRACK_RATE_DEGREES_PER_SEC = 120.0; // Units: degrees/seconds
 
-            public static final double CONVERSION_FACTOR_MtoT = 185 / 28; // Motor rotations -> turret rotations
-            public static final double CONVERSION_FACTOR_TtoM = 28 / 185; // Turret rotations -> motor rotations
+            public static final double CONVERSION_FACTOR_MtoT = 185.0 / 28.0; // Motor rotations -> turret rotations
+            public static final double CONVERSION_FACTOR_TtoM = 28.0 / 185.0; // Turret rotations -> motor rotations
 
             public static final double ANGLE_LIM_LEFT = -80.0; // Units: degrees
             public static final double ANGLE_LIM_RIGHT = 80.0; // Units: degrees
         }
 
         public class Vertical {
-            public static final double CONVERSION_FACTOR_MtoH = 325 / 18; // Motor rotations -> hood rotations
-            public static final double CONVERSION_FACTOR_HtoM = 18 / 325; // Hood rotations -> motor rotations
+            public static final double CONVERSION_FACTOR_MtoH = 325.0 / 18.0; // Motor rotations -> hood rotations
+            public static final double CONVERSION_FACTOR_HtoM = 18.0 / 325.0; // Hood rotations -> motor rotations
 
-            public static final double ANGLE_LIM_LEFT = 25; // Units: degrees
-            public static final double ANGLE_LIM_RIGHT = 0; // Units: degrees
+            public static final double ANGLE_LIM_LEFT = 25.0; // Units: degrees
+            public static final double ANGLE_LIM_RIGHT = 0.0; // Units: degrees
         }
 
         public class Offset {

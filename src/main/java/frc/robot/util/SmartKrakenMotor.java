@@ -48,7 +48,7 @@ public class SmartKrakenMotor {
     }
 
     public void setSpeed(double speedRPM) {
-        this.motor.setControl(new VelocityDutyCycle(speedRPM / 60));
+        this.motor.setControl(new VelocityDutyCycle(speedRPM / 60.0));
     }
 
     public boolean turn(double degrees) {
