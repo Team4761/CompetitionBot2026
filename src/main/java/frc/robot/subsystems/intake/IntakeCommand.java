@@ -1,9 +1,9 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 
 public class IntakeCommand extends Command{
-    private double intakeSpeed;
     private IntakeSubsystem intakeSubsystem;
 
     /**
@@ -11,14 +11,13 @@ public class IntakeCommand extends Command{
      * @param sub is the subsystem the intake subsystem
      * @param speed speed sets the speed to the input
      */
-    public IntakeCommand(IntakeSubsystem sub, double speed) {
-        this.intakeSpeed = speed;
+    public IntakeCommand(IntakeSubsystem sub) {
         this.intakeSubsystem = sub;
     }
 
     @Override
     public void initialize() {
-        intakeSubsystem.turnIntakeMotor(intakeSpeed);
+        intakeSubsystem.turnIntakeMotor(Constants.Turret.ShootConfig.INTAKE_SPEED);
     }
 
     //run the motor contiunously so that you can intake

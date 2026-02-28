@@ -99,7 +99,7 @@ public class RobotContainer {
         controller_drive.b().whileTrue(drivetrain.applyRequest(() ->
             point.withModuleDirection(new Rotation2d(-controller_drive.getLeftY(), -controller_drive.getLeftX()))
         ));
-        controller_drive.y().whileTrue(new IntakeCommand(intake, 0.4));
+        controller_drive.y().whileTrue(new IntakeCommand(intake));
 
         // Operator controller bindings
         controller_drive.rightTrigger().whileTrue(new ShootCommand(turret));
