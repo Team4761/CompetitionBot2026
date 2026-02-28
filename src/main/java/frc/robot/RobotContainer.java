@@ -117,7 +117,7 @@ public class RobotContainer {
         // controller_drive.start().and(controller_drive.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        controller_drive.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
