@@ -27,6 +27,7 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.turret.ShootCommand;
+import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.SmartCameraNetwork;
@@ -49,6 +50,7 @@ public class RobotContainer {
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
+    //private double TurretMaxAngularRate = RotationsPerSecond.of
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -61,6 +63,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController controller_drive = new CommandXboxController(0);
+    private final CommandXboxController controller_turret = new CommandXboxController(1);
     //private final CommandXboxController controller_operator = new CommandXboxController(1);
     private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
@@ -103,7 +106,8 @@ public class RobotContainer {
 
         // Operator controller bindings
         controller_drive.rightTrigger().whileTrue(new ShootCommand(turret));
-
+        
+        turret.setDefaultCommand( new TurretAimChangeCommand(turret, () -> controller_turret.getLeftX(), () -> controller_turret.getLeftY()));
         // [FIXME]: Do we need these?
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
