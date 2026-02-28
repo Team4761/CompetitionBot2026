@@ -59,7 +59,10 @@ public class Constants {
         public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken [FIXME]
 
         public static final int SPINDEXER_MOTOR_PORT = 18; // Type: flex/vortex
-        public static final int KICKER_MOTOR_PORT = 19; // Type: flex/vortex
+        public static final int KICKER_MOTOR_PORT = 25; // Type: flex/vortex
+
+        public static final double KICKER_SPEED = 0.5;
+        public static final double SPITTER_SPEED = 0.2; // Units: percent (0-1)
 
         public class Horizontal {
             public static final double ANGLE_TURN_THRESHOLD = 2; // Units: degrees
@@ -90,8 +93,8 @@ public class Constants {
     }
 
     public class Intake {
-        public static final int INTAKE_EXTENDER_MOTOR_PORT = -1; // Type: kraken [FIXME]
-        public static final int MAIN_INTAKE_MOTOR_PORT = -1; // Type: kraken [FIXME]
+        public static final int INTAKE_EXTENDER_MOTOR_PORT = 55; // Type: kraken
+        public static final int MAIN_INTAKE_MOTOR_PORT = 57; // Type: kraken
     }
 
     public class ShootConfig {
