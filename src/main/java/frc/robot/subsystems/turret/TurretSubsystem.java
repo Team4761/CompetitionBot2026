@@ -15,9 +15,6 @@ public class TurretSubsystem extends SubsystemBase {
     private final SmartVortexMotor kickerMotor;
 
     public TurretSubsystem() {
-        double verticalMinAngle = Math.min(Constants.Turret.Vertical.ANGLE_LIM_LEFT, Constants.Turret.Vertical.ANGLE_LIM_RIGHT);
-        double verticalMaxAngle = Math.max(Constants.Turret.Vertical.ANGLE_LIM_LEFT, Constants.Turret.Vertical.ANGLE_LIM_RIGHT);
-
         this.spindexerMotor = SmartVortexMotor.Builder.newInstance()
             .port(Constants.Turret.SPINDEXER_MOTOR_PORT)
             .build();
@@ -36,17 +33,17 @@ public class TurretSubsystem extends SubsystemBase {
             .port(Constants.Turret.HORIZONTAL_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
             .outputRange(-1, 1)
-            .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT, Constants.Turret.Horizontal.ANGLE_LIM_RIGHT)
+            .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM, 
+                        Constants.Turret.Horizontal.ANGLE_LIM_RIGHT * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM)
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
-            .motorRotationsPerMechanismRotation(Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM)
             .build();
         this.verticalMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.VERTICAL_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
             .outputRange(-1, 1)
-            .angleLimits(verticalMinAngle, verticalMaxAngle)
-            .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
-            .motorRotationsPerMechanismRotation(Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM)
+            .angleLimits(Constants.Turret.Vertical.ANGLE_LIM_LEFT * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM, 
+                        Constants.Turret.Vertical.ANGLE_LIM_RIGHT * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM)
+            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
     }
 
@@ -60,24 +57,12 @@ public class TurretSubsystem extends SubsystemBase {
 
     public void turnHorizontalMotor(double degrees) { 
         if (!horizontalMotor.turn(degrees)) {
-            horizontalMotor.stopTurning();
+            horizontalMotor.set(0);
         } 
     }
-    public void setHorizontalMotor(double degrees) {
-        if (!horizontalMotor.set(degrees)) {
-            horizontalMotor.stopTurning();
-        }
-    }
-    public void turnVerticalMotor(double degrees) {
-        if (!verticalMotor.turn(degrees)) {
-            verticalMotor.stopTurning();
-        }
-    }
-    public void setVerticalMotor(double degrees) {
-        if (!verticalMotor.set(degrees)) {
-            verticalMotor.stopTurning();
-        }
-    }
+    public void setHorizontalMotor(double degrees) { horizontalMotor.set(degrees); }
+    public void turnVerticalMotor(double degrees) { verticalMotor.turn(degrees); }
+    public void setVerticalMotor(double degrees) { verticalMotor.set(degrees); }
 
     public void stopHorizontal() { horizontalMotor.stopTurning(); }
     public void stopVertical() { verticalMotor.stopTurning(); }

@@ -3,6 +3,7 @@ package frc.robot.subsystems.turret;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 
 public class TurretAimChangeCommand extends Command{
     private TurretSubsystem turretSubsystem;
@@ -21,8 +22,8 @@ public class TurretAimChangeCommand extends Command{
 
     @Override
     public void execute() {
-        this.turretSubsystem.turnVerticalMotor(supplierY.getAsDouble());
-        this.turretSubsystem.turnHorizontalMotor(supplierX.getAsDouble());
+        //this.turretSubsystem.turnVerticalMotor(supplierY.getAsDouble() * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM);
+        this.turretSubsystem.turnHorizontalMotor(supplierX.getAsDouble() * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM);
     }
 
     @Override
