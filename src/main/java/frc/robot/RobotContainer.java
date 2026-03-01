@@ -139,7 +139,7 @@ public class RobotContainer {
 
     private void configAutos() {
         //autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        autoChooser.setDefaultOption("Shoot", new Shoot4s(turret));
+        autoChooser.setDefaultOption("Shoot4s", new Shoot4s(turret));
         autoChooser.addOption(
             "Test move",
             new DriveFwd2s(swerve)
