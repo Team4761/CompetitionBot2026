@@ -2,7 +2,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class ExtendCommand extends Command{
+public class ExtendAtSpeedCommand extends Command{
     private double extendSpeed;
     private IntakeSubsystem intakeSubsystem;
 
@@ -11,7 +11,7 @@ public class ExtendCommand extends Command{
      * @param sub is the subsystem the intake subsystem
      * @param speed speed sets the speed to the input
      */
-    public ExtendCommand(IntakeSubsystem sub, double speed) {
+    public ExtendAtSpeedCommand(IntakeSubsystem sub, double speed) {
         this.extendSpeed = speed;
         this.intakeSubsystem = sub;
     }
@@ -19,9 +19,14 @@ public class ExtendCommand extends Command{
     //run the extender motor so that it extends
     @Override
     public void initialize() {
-        intakeSubsystem.runExtenderMotor(extendSpeed);
+        
     }
 
+    @Override
+    public void execute() {
+        intakeSubsystem.runExtenderMotor(extendSpeed);
+    }
+    
     //stop the motor when its done idk if neccesary
     @Override
     public boolean isFinished() {

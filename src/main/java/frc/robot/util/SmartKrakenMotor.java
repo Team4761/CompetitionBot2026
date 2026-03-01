@@ -44,6 +44,7 @@ public class SmartKrakenMotor {
     }
 
     public void setSpeedPercent(double speedPercent) {
+        System.out.println(speedPercent);
         this.motor.setControl(this.dutyCycleRequest.withOutput(speedPercent));
     }
 
@@ -52,7 +53,7 @@ public class SmartKrakenMotor {
     }
 
     public boolean turn(double degrees) {
-        System.out.println("Degrees " + degrees + "\nCurrent Angle: " + this.currentAngle);
+        //System.out.println("Degrees " + degrees + "\nCurrent Angle: " + this.currentAngle);
         double targetAngle = this.currentAngle + degrees;
         if (this.mode == MotorMode.WRAPPED) {
             targetAngle %= 360.0;

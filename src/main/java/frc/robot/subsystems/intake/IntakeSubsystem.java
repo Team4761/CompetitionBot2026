@@ -29,6 +29,7 @@ public class IntakeSubsystem extends SubsystemBase{
 
     //sets the speed of the extender motor so it can be used in the extend and retract commands
     public void runExtenderMotor(double speed) {
+        
         intakeExtenderMotor.setSpeedPercent(speed);
     }
 
