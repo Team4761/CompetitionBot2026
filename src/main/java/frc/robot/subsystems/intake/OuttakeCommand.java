@@ -15,13 +15,17 @@ public class OuttakeCommand extends Command{
         this.intakeSubsystem = sub;
     }
 
+    private double speed = (-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED_RPM);
+
     @Override
     public void initialize() {
-        intakeSubsystem.turnIntakeMotor( -1 * Constants.Turret.ShootConfig.INTAKE_SPEED);
+        //intakeSubsystem.turnIntakeMotor( -1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
+        intakeSubsystem.turnIntakeMotorRPM(speed);
+        System.out.println(speed);
     }
     @Override
     public void execute() {
-        
+        System.out.println("execute command");
     }
 
     @Override

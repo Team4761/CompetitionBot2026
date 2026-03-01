@@ -40,6 +40,12 @@ public class IntakeSubsystem extends SubsystemBase{
     //sets the speed of the intake motor so it can be used in the intake and outake commands
     public void turnIntakeMotor(double speed) {
         intakeMotor.setSpeedPercent(speed);
+        //System.out.println("subsystem");
+    }
+
+    public void turnIntakeMotorRPM(double speed) {
+        intakeMotor.setSpeed(speed);
+        System.out.println("were rotating :o");
     }
 
     //stops the intake motor so that it can be use in intake and outtake commands
