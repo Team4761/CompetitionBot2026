@@ -52,6 +52,7 @@ public class SmartKrakenMotor {
     }
 
     public boolean turn(double degrees) {
+        System.out.println("Degrees " + degrees + "\nCurrent Angle: " + this.currentAngle);
         double targetAngle = this.currentAngle + degrees;
         if (this.mode == MotorMode.WRAPPED) {
             targetAngle %= 360.0;
@@ -60,9 +61,11 @@ public class SmartKrakenMotor {
         if ((this.minAngle == -1 && this.maxAngle == -1)
             || (targetAngle >= this.minAngle && targetAngle <= this.maxAngle)) {
             this.currentAngle = targetAngle;
+            //System.out.println("CURRENTLY SETTING CONTROL REQUEST");
             this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 360));
             return true;
         } else {
+            //System.out.println("CREATING ERROR LOG");
             LOGGER.warning(String.format("Tried turning to angle: [%.2f] which is past angle limits min: [%.2f] max: [%.2f]", 
                                             targetAngle, this.minAngle, this.maxAngle));
             return false;

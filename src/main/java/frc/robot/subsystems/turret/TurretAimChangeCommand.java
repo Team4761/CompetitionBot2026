@@ -23,7 +23,8 @@ public class TurretAimChangeCommand extends Command{
     @Override
     public void execute() {
         this.turretSubsystem.turnVerticalMotor(supplierY.getAsDouble() * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH);
-        this.turretSubsystem.turnHorizontalMotor(supplierX.getAsDouble() * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM);
+        //System.out.println("SUPPOSED TO TURN: " + supplierX.getAsDouble() * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM);
+        this.turretSubsystem.turnHorizontalMotor(supplierX.getAsDouble() * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT);
     }
 
     @Override

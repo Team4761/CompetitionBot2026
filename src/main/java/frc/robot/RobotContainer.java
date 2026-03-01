@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.autos.DriveFwd2s;
-import frc.robot.autos.Shoot;
+import frc.robot.autos.Shoot4s;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.climber.ClimberSubsystem;
@@ -112,7 +112,7 @@ public class RobotContainer {
         
         turret.setDefaultCommand(new TurretAimChangeCommand(
             turret,
-            () -> applyDeadband(controller_turret.getLeftX(), Constants.Controller.TURRET_INPUT_DEADBAND),
+            () -> applyDeadband(controller_turret.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
         // [FIXME]: Do we need these?
         // Run SysId routines when holding back/start and X/Y.
@@ -139,7 +139,7 @@ public class RobotContainer {
 
     private void configAutos() {
         //autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        autoChooser.setDefaultOption("Shoot", new Shoot(turret));
+        autoChooser.setDefaultOption("Shoot", new Shoot4s(turret));
         autoChooser.addOption(
             "Test move",
             new DriveFwd2s(swerve)

@@ -33,8 +33,8 @@ public class TurretSubsystem extends SubsystemBase {
             .port(Constants.Turret.HORIZONTAL_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
             .outputRange(-1, 1)
-            .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM, 
-                        Constants.Turret.Horizontal.ANGLE_LIM_RIGHT * Constants.Turret.Horizontal.CONVERSION_FACTOR_TtoM)
+            .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT, 
+                        Constants.Turret.Horizontal.ANGLE_LIM_RIGHT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT)
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
             .build();
         this.verticalMotor = SmartKrakenMotor.Builder.newInstance()
@@ -56,12 +56,14 @@ public class TurretSubsystem extends SubsystemBase {
     public void stopSpindexer() { spindexerMotor.stopTurning(); }
 
     public void turnHorizontalMotor(double degrees) { 
+        System.out.println("I AM TURNING HORIZONTALLY");
         if (!horizontalMotor.turn(degrees)) {
             horizontalMotor.set(0);
+            System.out.println(String.format("Failed to turn horizontal motor by [%.2f] degrees. Current angle: [%.2f]", degrees, horizontalMotor.getAngle()));
         } 
     }
     public void setHorizontalMotor(double degrees) { horizontalMotor.set(degrees); }
-    public void turnVerticalMotor(double degrees) { verticalMotor.turn(degrees); }
+    public void turnVerticalMotor(double degrees) {verticalMotor.turn(degrees); }
     public void setVerticalMotor(double degrees) { verticalMotor.set(degrees * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH); }
 
     public void stopHorizontal() { horizontalMotor.stopTurning(); }
