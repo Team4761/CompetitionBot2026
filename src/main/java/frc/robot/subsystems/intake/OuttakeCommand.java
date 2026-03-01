@@ -11,7 +11,6 @@ public class OuttakeCommand extends Command{
      * @param sub is the subsystem the intake subsystem
      */
     public OuttakeCommand(IntakeSubsystem sub) {
-        
         this.intakeSubsystem = sub;
     }
 
@@ -19,13 +18,14 @@ public class OuttakeCommand extends Command{
 
     @Override
     public void initialize() {
-        //intakeSubsystem.turnIntakeMotor( -1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
-        intakeSubsystem.turnIntakeMotorRPM(speed);
+        intakeSubsystem.turnIntakeMotor(-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
+        //intakeSubsystem.turnIntakeMotorRPM(speed);
         System.out.println(speed);
     }
+
     @Override
     public void execute() {
-        System.out.println("execute command");
+        
     }
 
     @Override
