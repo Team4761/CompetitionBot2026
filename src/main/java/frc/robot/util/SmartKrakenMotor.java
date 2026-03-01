@@ -60,7 +60,7 @@ public class SmartKrakenMotor {
         if ((this.minAngle == -1 && this.maxAngle == -1)
             || (targetAngle >= this.minAngle && targetAngle <= this.maxAngle)) {
             this.currentAngle = targetAngle;
-            this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 3.6));
+            this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 360));
             return true;
         } else {
             LOGGER.warning(String.format("Tried turning to angle: [%.2f] which is past angle limits min: [%.2f] max: [%.2f]", 
@@ -78,7 +78,7 @@ public class SmartKrakenMotor {
         if ((this.minAngle == -1 && this.maxAngle == -1) ||
             (targetAngle >= this.minAngle && targetAngle <= this.maxAngle)) {
             this.currentAngle = targetAngle;
-            this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 3.6));
+            this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 360));
             return true;
         } else {
             LOGGER.warning(String.format("Tried setting angle to: [%.2f] which is past angle limits min: [%.2f] max: [%.2f]",

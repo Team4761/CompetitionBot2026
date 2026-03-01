@@ -53,7 +53,7 @@ public class Constants {
         public static final int KICKER_MOTOR_PORT = 44; // Type: flex/vortex
 
         public class ShootConfig {
-            public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
+            public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
             public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
             public static final double INTAKE_SPEED = 0.8; // Units: percent (0-1)
@@ -78,8 +78,8 @@ public class Constants {
             public static final double CONVERSION_FACTOR_MtoH = 325.0 / 18.0; // Motor rotations -> hood rotations
             public static final double CONVERSION_FACTOR_HtoM = 18.0 / 325.0; // Hood rotations -> motor rotations
 
-            public static final double ANGLE_LIM_LEFT = 0.0; // Units: degrees
-            public static final double ANGLE_LIM_RIGHT = 25.0; // Units: degrees
+            public static final double ANGLE_LIM_LEFT = -31.0; // Units: degrees
+            public static final double ANGLE_LIM_RIGHT = 0.0; // Units: degrees
         }
 
         public class Offset {

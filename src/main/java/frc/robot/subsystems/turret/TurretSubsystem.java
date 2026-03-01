@@ -43,7 +43,7 @@ public class TurretSubsystem extends SubsystemBase {
             .outputRange(-1, 1)
             .angleLimits(Constants.Turret.Vertical.ANGLE_LIM_LEFT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH,
                         Constants.Turret.Vertical.ANGLE_LIM_RIGHT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH)
-            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
+            .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
             .build();
     }
 
