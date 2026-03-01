@@ -53,10 +53,10 @@ public class Constants {
         public static final int KICKER_MOTOR_PORT = 44; // Type: flex/vortex
 
         public class ShootConfig {
-            public static final double SPINDEXER_SPEED = 0.3; // Units: percent (0-1)
+            public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
             public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
-            public static final double INTAKE_SPEED = 0.2; // Units: percent (0-1)
+            public static final double INTAKE_SPEED = 0.8; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 2000; // Unites: RPM (max is around 5700)
 
             public static final double KICKER_INIT_DELAY = 1; // Units: seconds
@@ -93,6 +93,9 @@ public class Constants {
     public class Intake {
         public static final int INTAKE_EXTENDER_MOTOR_PORT = 55; // Type: kraken
         public static final int MAIN_INTAKE_MOTOR_PORT = 57; // Type: kraken
+
+        public static final double CONVERSION_FACTOR_MtoE = 14 / 64; // Motor rotations -> extender rotations
+        public static final double CONVERSION_FACTOR_EtoM = 64 / 14; // extender rotations -> Motor rotations
     }
 
     public class RelativeHubLocation {

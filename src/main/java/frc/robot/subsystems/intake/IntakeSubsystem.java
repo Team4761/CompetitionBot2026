@@ -36,6 +36,22 @@ public class IntakeSubsystem extends SubsystemBase{
     public void stopExtenderMotor() {
         intakeExtenderMotor.stopTurning();
     }
+    
+    //sets an angle for the extender motor to go to
+    public void setExtenderMotorAngle(double angle) {
+        intakeExtenderMotor.setAngle(angle * Constants.Intake.CONVERSION_FACTOR_MtoE);
+    }
+
+    //puts the extender motor into coast mode
+    public void coastExtenderMotor(){
+        intakeExtenderMotor.enableCoasting();
+
+    }
+
+    //puts the robot back into the original mode called brake
+    public void brakeExtenderMotor() {
+        intakeExtenderMotor.enableBrake();
+    }
 
     //sets the speed of the intake motor so it can be used in the intake and outake commands
     public void turnIntakeMotor(double speed) {
@@ -43,9 +59,11 @@ public class IntakeSubsystem extends SubsystemBase{
         //System.out.println("subsystem");
     }
 
+    
+
     public void turnIntakeMotorRPM(double speed) {
         intakeMotor.setSpeed(speed);
-        System.out.println("we're rotating :o");
+        //System.out.println("were rotating :o");
     }
 
     //stops the intake motor so that it can be use in intake and outtake commands
