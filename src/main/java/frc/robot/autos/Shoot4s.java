@@ -4,20 +4,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.turret.*;
 import frc.robot.subsystems.turret.ShootCommand;
 
-public class Shoot extends SequentialCommandGroup {
+public class Shoot4s extends SequentialCommandGroup {
     
-
-    public Shoot(TurretSubsystem turretSubsystem) {
+    public Shoot4s(TurretSubsystem turretSubsystem) {
         
-
         addCommands(
 
-
-            new ShootCommand(turretSubsystem).withTimeout(4)
+            new ShootCommand(turretSubsystem).withTimeout(5)
 
         );
-           
-        
     }
 }
 
