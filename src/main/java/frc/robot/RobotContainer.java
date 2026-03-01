@@ -26,6 +26,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
@@ -103,6 +104,7 @@ public class RobotContainer {
                 -1 * applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND)))
         ));
         controller_drive.y().whileTrue(new IntakeCommand(intake));
+        controller_drive.x().whileTrue(new OuttakeCommand(intake));
 
         // Operator controller bindings
         controller_drive.rightTrigger().whileTrue(new ShootCommand(turret));

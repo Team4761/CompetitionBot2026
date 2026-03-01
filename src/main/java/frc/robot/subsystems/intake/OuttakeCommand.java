@@ -1,28 +1,27 @@
 package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 
 public class OuttakeCommand extends Command{
-    private double outtakeSpeed;
     private IntakeSubsystem intakeSubsystem;
 
     /**
      * 
      * @param sub is the subsystem the intake subsystem
-     * @param speed speed sets the speed to the input
      */
-    public OuttakeCommand(IntakeSubsystem sub, double speed) {
-        this.outtakeSpeed = speed;
+    public OuttakeCommand(IntakeSubsystem sub) {
+        
         this.intakeSubsystem = sub;
     }
 
     @Override
     public void initialize() {
-        
+        intakeSubsystem.turnIntakeMotor( -1 * Constants.Turret.ShootConfig.INTAKE_SPEED);
     }
     @Override
     public void execute() {
-        intakeSubsystem.turnIntakeMotor(-1 * outtakeSpeed);
+        
     }
 
     @Override
