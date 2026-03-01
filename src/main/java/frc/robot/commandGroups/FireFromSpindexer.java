@@ -7,9 +7,9 @@ import frc.robot.subsystems.turret.*;
 public class FireFromSpindexer extends SequentialCommandGroup {
     public FireFromSpindexer(TurretSubsystem turret) {
         addCommands(
-                new SpitterSpinCommand(turret, Constants.ShootConfig.SPITTER_SPEED),
-                new KickerSpinCommand(turret, Constants.ShootConfig.KICKER_SPEED),
-                new SpindexSpinCommand(turret, Constants.ShootConfig.SPINDEXER_SPEED)
+                new SpitterSpinCommand(turret, Constants.Turret.ShootConfig.SPITTER_SPEED),
+                new KickerSpinCommand(turret, Constants.Turret.ShootConfig.KICKER_SPEED),
+                new SpindexSpinCommand(turret, Constants.Turret.ShootConfig.SPINDEXER_SPEED)
             );
     }
 }

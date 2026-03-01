@@ -27,7 +27,9 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.turret.ShootCommand;
+import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.SmartCameraNetwork;
@@ -36,11 +38,6 @@ import frc.robot.util.SmartVortexMotor;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
-    private static final double ROTATION_INPUT_DEADBAND = 0.12;
-    private static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 3.0;
-    private static final double TEST_VORTEX_OUTPUT = 0.20;
-    private static final double TEST_KRAKEN_OUTPUT = 0.20;
-
     private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final CommandSwerveDrivetrain swerve = TunerConstants.createDrivetrain();
     private static final VisionSubsystem vision = new VisionSubsystem();
@@ -50,6 +47,7 @@ public class RobotContainer {
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
+    //private double TurretMaxAngularRate = RotationsPerSecond.of
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -62,8 +60,10 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController controller_drive = new CommandXboxController(0);
+    private final CommandXboxController controller_turret = new CommandXboxController(1);
     //private final CommandXboxController controller_operator = new CommandXboxController(1);
-    private final SlewRateLimiter rotationLimiter = new SlewRateLimiter(ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
+    private final SlewRateLimiter rotationLimiter =
+        new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -80,9 +80,11 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {
-                double turnInput = shapeTurnInput(-controller_drive.getRightX());
-                return drive.withVelocityX(controller_drive.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(controller_drive.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                double xInput = applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
+                double yInput = applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
+                double turnInput = shapeTurnInput(-1 * applyDeadband(controller_drive.getRightX(), Constants.Controller.ROTATION_INPUT_DEADBAND));
+                return drive.withVelocityX(xInput * MaxSpeed)
+                    .withVelocityY(yInput * MaxSpeed)
                     .withRotationalRate(rotationLimiter.calculate(turnInput * MaxAngularRate)); // smoothed turn request
             })
         );
@@ -98,13 +100,20 @@ public class RobotContainer {
         // Driver controller bindings
         controller_drive.a().whileTrue(drivetrain.applyRequest(() -> brake));
         controller_drive.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-controller_drive.getLeftY(), -controller_drive.getLeftX()))
+            point.withModuleDirection(new Rotation2d(
+                -1 * applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND),
+                -1 * applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND)))
         ));
-        controller_drive.y().whileTrue(new IntakeCommand(intake, 0.4));
+        controller_drive.y().whileTrue(new IntakeCommand(intake));
+        controller_drive.x().whileTrue(new OuttakeCommand(intake));
 
         // Operator controller bindings
         controller_drive.rightTrigger().whileTrue(new ShootCommand(turret));
-
+        
+        turret.setDefaultCommand(new TurretAimChangeCommand(
+            turret,
+            () -> applyDeadband(controller_turret.getLeftX(), Constants.Controller.TURRET_INPUT_DEADBAND),
+            () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
         // [FIXME]: Do we need these?
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -114,14 +123,18 @@ public class RobotContainer {
         // controller_drive.start().and(controller_drive.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        controller_drive.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
     private double shapeTurnInput(double rawTurn) {
-        double deadbanded = MathUtil.applyDeadband(rawTurn, ROTATION_INPUT_DEADBAND);
+        double deadbanded = MathUtil.applyDeadband(rawTurn, Constants.Controller.ROTATION_INPUT_DEADBAND);
         return Math.copySign(deadbanded * deadbanded, deadbanded);
+    }
+
+    private double applyDeadband(double rawInput, double deadband) {
+        return MathUtil.applyDeadband(rawInput, deadband);
     }
 
     private void configAutos() {

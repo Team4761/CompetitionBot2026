@@ -9,6 +9,15 @@ public class Constants {
 
     public static final String TEAM = "BLUE"; // Type: enum("BLUE", "RED")
 
+    public class Controller {
+        public static final double TRANSLATION_INPUT_DEADBAND = 0.10;
+        public static final double ROTATION_INPUT_DEADBAND = 0.12;
+        public static final double TURRET_INPUT_DEADBAND = 0.10;
+        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 3.0;
+        public static final double TEST_VORTEX_OUTPUT = 0.20;
+        public static final double TEST_KRAKEN_OUTPUT = 0.20;
+    }
+
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
     }
@@ -43,10 +52,14 @@ public class Constants {
         public static final int SPINDEXER_MOTOR_PORT = 43; // Type: flex/vortex
         public static final int KICKER_MOTOR_PORT = 44; // Type: flex/vortex
 
-        public static final double KICKER_SPEED = 0.2;
-        public static final double SPITTER_SPEED = 0.15; // Units: percent (0-1)
-        public static final double SPINDEXER_SPEED = 0.1; // Units: percent (0-1)
-        public static final double KICKER_INIT_DELAY = 0.3; // Units: seconds
+        public class ShootConfig {
+            public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
+            public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
+            public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
+            public static final double INTAKE_SPEED = 0.8; // Units: percent (0-1)
+
+            public static final double KICKER_INIT_DELAY = 1; // Units: seconds
+        }
 
         public class Horizontal {
             public static final double ANGLE_TURN_THRESHOLD = 2; // Units: degrees
@@ -54,19 +67,19 @@ public class Constants {
             public static final double MAX_TRACK_STEP_DEGREES = 4.0; // Units: degrees
             public static final double MAX_TRACK_RATE_DEGREES_PER_SEC = 120.0; // Units: degrees/seconds
 
-            public static final double CONVERSION_FACTOR_MtoT = 185 / 28; // Motor rotations -> turret rotations
-            public static final double CONVERSION_FACTOR_TtoM = 28 / 185; // Turret rotations -> motor rotations
+            public static final double CONVERSION_FACTOR_MtoT = 185.0 / 28.0; // Motor rotations -> turret rotations
+            public static final double CONVERSION_FACTOR_TtoM = 28.0 / 185.0; // Turret rotations -> motor rotations
 
             public static final double ANGLE_LIM_LEFT = -80.0; // Units: degrees
             public static final double ANGLE_LIM_RIGHT = 80.0; // Units: degrees
         }
 
         public class Vertical {
-            public static final double CONVERSION_FACTOR_MtoH = 325 / 18; // Motor rotations -> hood rotations
-            public static final double CONVERSION_FACTOR_HtoM = 18 / 325; // Hood rotations -> motor rotations
+            public static final double CONVERSION_FACTOR_MtoH = 325.0 / 18.0; // Motor rotations -> hood rotations
+            public static final double CONVERSION_FACTOR_HtoM = 18.0 / 325.0; // Hood rotations -> motor rotations
 
-            public static final double ANGLE_LIM_LEFT = 25; // Units: degrees
-            public static final double ANGLE_LIM_RIGHT = 0; // Units: degrees
+            public static final double ANGLE_LIM_LEFT = 0.0; // Units: degrees
+            public static final double ANGLE_LIM_RIGHT = 25.0; // Units: degrees
         }
 
         public class Offset {
@@ -79,12 +92,6 @@ public class Constants {
     public class Intake {
         public static final int INTAKE_EXTENDER_MOTOR_PORT = 55; // Type: kraken
         public static final int MAIN_INTAKE_MOTOR_PORT = 57; // Type: kraken
-    }
-
-    public class ShootConfig {
-        public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
-        public static final double KICKER_SPEED = 0.2; // Units: percent (0-1)
-        public static final double SPITTER_SPEED = 0.2; // Units: percent (0-1)
     }
 
     public class RelativeHubLocation {

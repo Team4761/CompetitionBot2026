@@ -10,7 +10,7 @@ public class SmartVortexMotor {
         this.motor = new SparkFlex(builder.canId, MotorType.kBrushless);
     }
 
-    public void setSpeed(double speed) {
+    public void setSpeedPercent(double speed) {
         this.motor.set(speed);
     }
 

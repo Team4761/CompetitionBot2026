@@ -3,6 +3,7 @@ package frc.robot.util;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import java.util.logging.Logger;
@@ -42,8 +43,12 @@ public class SmartKrakenMotor {
         this.mode = builder.mode;
     }
 
-    public void setSpeed(double speed) {
-        this.motor.setControl(this.dutyCycleRequest.withOutput(speed));
+    public void setSpeedPercent(double speedPercent) {
+        this.motor.setControl(this.dutyCycleRequest.withOutput(speedPercent));
+    }
+
+    public void setSpeed(double speedRPM) {
+        this.motor.setControl(new VelocityDutyCycle(speedRPM / 60.0));
     }
 
     public boolean turn(double degrees) {

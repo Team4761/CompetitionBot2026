@@ -41,15 +41,15 @@ public class TurretSubsystem extends SubsystemBase {
             .port(Constants.Turret.VERTICAL_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
             .outputRange(-1, 1)
-            .angleLimits(Constants.Turret.Vertical.ANGLE_LIM_LEFT * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM, 
-                        Constants.Turret.Vertical.ANGLE_LIM_RIGHT * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM)
+            .angleLimits(Constants.Turret.Vertical.ANGLE_LIM_LEFT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH,
+                        Constants.Turret.Vertical.ANGLE_LIM_RIGHT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH)
             .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
     }
 
-    public void setKickerMotorSpeed(double speed) { kickerMotor.setSpeed(speed); }
-    public void setSpitterMotorSpeed(double speed) { spitterMotor.setSpeed(speed); }
-    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setSpeed(speed); }
+    public void setKickerMotorSpeed(double speed) { kickerMotor.setSpeedPercent(speed); }
+    public void setSpitterMotorSpeed(double speed) { spitterMotor.setSpeedPercent(speed); }
+    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setSpeedPercent(speed); }
 
     public void stopKicker() { kickerMotor.stopTurning(); }
     public void stopSpitter() { spitterMotor.stopTurning(); }

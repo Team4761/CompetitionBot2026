@@ -22,10 +22,10 @@ public class ShootCommand extends Command {
 
     @Override
     public void initialize() {
-        this.turretSubsystem.setSpitterMotorSpeed(Constants.Turret.SPITTER_SPEED);
-        Timer.delay(Constants.Turret.KICKER_INIT_DELAY);
-        this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.SPINDEXER_SPEED); // [FIXME]: Make this a constant or passed in arg
-        this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.KICKER_SPEED);
+        this.turretSubsystem.setSpitterMotorSpeed(Constants.Turret.ShootConfig.SPITTER_SPEED);
+        Timer.delay(Constants.Turret.ShootConfig.KICKER_INIT_DELAY);
+        this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED); // [FIXME]: Make this a constant or passed in arg
+        this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED);
     }
 
     @Override
