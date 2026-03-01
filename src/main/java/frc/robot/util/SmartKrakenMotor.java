@@ -5,6 +5,7 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import java.util.logging.Logger;
 
@@ -28,7 +29,6 @@ public class SmartKrakenMotor {
 
     public SmartKrakenMotor(Builder builder) {
         this.motor = new TalonFX(builder.port);
-
         this.config.Slot0.kP = builder.p;
         this.config.Slot0.kI = builder.i;
         this.config.Slot0.kD = builder.d;
@@ -45,6 +45,13 @@ public class SmartKrakenMotor {
 
     public void setSpeedPercent(double speedPercent) {
         System.out.println(speedPercent);
+        if (speedPercent < 0.0) {
+            this.config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+            this.motor.getConfigurator().apply(this.config);
+        } else {
+            this.config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+            this.motor.getConfigurator().apply(this.config);
+        }
         this.motor.setControl(this.dutyCycleRequest.withOutput(speedPercent));
     }
 

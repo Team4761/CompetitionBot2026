@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase{
     public void stopExtenderMotor() {
         intakeExtenderMotor.stopTurning();
     }
-    
+    /* 
     //sets an angle for the extender motor to go to
     public void setExtenderMotorAngle(double angle) {
         intakeExtenderMotor.setAngle(angle * Constants.Intake.CONVERSION_FACTOR_MtoE);
@@ -53,7 +53,7 @@ public class IntakeSubsystem extends SubsystemBase{
     public void brakeExtenderMotor() {
         intakeExtenderMotor.enableBrake();
     }
-
+    */
     //sets the speed of the intake motor so it can be used in the intake and outake commands
     public void turnIntakeMotor(double speed) {
         intakeMotor.setSpeedPercent(speed);

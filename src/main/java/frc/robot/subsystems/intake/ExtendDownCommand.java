@@ -11,7 +11,7 @@ public class ExtendDownCommand extends Command {
         this.intakeSubsystem = sub;
 
     }
-
+    /* 
     public void initialize(){
         intakeSubsystem.setExtenderMotorAngle(95);
         intakeSubsystem.coastExtenderMotor();
@@ -19,7 +19,7 @@ public class ExtendDownCommand extends Command {
         intakeSubsystem.runExtenderMotor(-0.1);
         intakeSubsystem.brakeExtenderMotor();
 
-    }
+    }*/
 
     public void execute() {
 

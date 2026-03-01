@@ -18,14 +18,14 @@ public class OuttakeCommand extends Command{
 
     @Override
     public void initialize() {
-        intakeSubsystem.turnIntakeMotor(-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
+        
         //intakeSubsystem.turnIntakeMotorRPM(speed);
         System.out.println(speed);
     }
 
     @Override
     public void execute() {
-        
+        intakeSubsystem.turnIntakeMotor(-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
     }
 
     @Override
