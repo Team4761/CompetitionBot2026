@@ -57,7 +57,7 @@ public class Constants {
             public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
             public static final double INTAKE_SPEED = 0.3; // Units: percent (0-1)
-            public static final double INTAKE_SPEED_RPM = 2000; // Unites: RPM (max is around 5700)
+            public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 
             public static final double KICKER_INIT_DELAY = 1; // Units: seconds
         }

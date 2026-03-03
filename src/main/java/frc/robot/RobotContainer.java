@@ -115,7 +115,7 @@ public class RobotContainer {
             turret,
             () -> applyDeadband(controller_turret.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
-        controller_turret.x().whileTrue(new ExtendAtSpeedCommand(intake, -0.5));
+        controller_turret.x().whileTrue(new ExtendAtSpeedCommand(intake, -1));
         // [FIXME]: Do we need these?
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

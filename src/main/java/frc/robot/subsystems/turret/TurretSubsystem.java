@@ -56,9 +56,8 @@ public class TurretSubsystem extends SubsystemBase {
     public void stopSpindexer() { spindexerMotor.stopTurning(); }
 
     public void turnHorizontalMotor(double degrees) { 
-        //System.out.println("I AM TURNING HORIZONTALLY");
         if (!horizontalMotor.turn(degrees)) {
-            horizontalMotor.set(0);
+            //horizontalMotor.set(0);
             System.out.println(String.format("Failed to turn horizontal motor by [%.2f] degrees. Current angle: [%.2f]", degrees, horizontalMotor.getAngle()));
         } 
     }

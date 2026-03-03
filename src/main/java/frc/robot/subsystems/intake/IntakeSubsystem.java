@@ -14,14 +14,14 @@ public class IntakeSubsystem extends SubsystemBase{
         this.intakeExtenderMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Intake.INTAKE_EXTENDER_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0) // Temp Values
-            .outputRange(0, 360) // Temp Values
+            .outputRange(-360, 360) // Temp Values
             .angleLimits(-1, -1) // Temp Values
             .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
         this.intakeMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Intake.MAIN_INTAKE_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0) // Temp Values
-            .outputRange(0, 360) // Temp Values
+            .outputRange(-360, 360) // Temp Values
             .angleLimits(-1, -1) // Temp Values
             .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
