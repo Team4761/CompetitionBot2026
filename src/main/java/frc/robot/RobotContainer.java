@@ -14,6 +14,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -75,6 +76,8 @@ public class RobotContainer {
         configAutos();
     }
 
+
+
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -116,6 +119,7 @@ public class RobotContainer {
             () -> applyDeadband(controller_turret.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
         controller_turret.x().whileTrue(new ExtendAtSpeedCommand(intake, -1));
+        controller_turret.b().whileTrue(new TurretAimChangeCommand(turret, () -> 0, () -> 0));
         // [FIXME]: Do we need these?
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -140,7 +144,7 @@ public class RobotContainer {
     }
 
     private void configAutos() {
-        //autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.setDefaultOption("Shoot4s", new Shoot4s(turret));
         autoChooser.addOption(
             "Test move",
