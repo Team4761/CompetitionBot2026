@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.autos.DriveFwd2s;
+import frc.robot.autos.Shoot;
 import frc.robot.autos.Shoot4s;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.OuttakeCommand;
+import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
@@ -81,8 +83,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {
-                double xInput = applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
-                double yInput = applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
+                double xInput = -1 * applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
+                double yInput = -1 * applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
                 double turnInput = shapeTurnInput(-1 * applyDeadband(controller_drive.getRightX(), Constants.Controller.ROTATION_INPUT_DEADBAND));
                 return drive.withVelocityX(xInput * MaxSpeed)
                     .withVelocityY(yInput * MaxSpeed)
@@ -141,15 +143,22 @@ public class RobotContainer {
 
     private void configAutos() {
         //autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        autoChooser.setDefaultOption("Shoot4s", new Shoot4s(turret));
+        autoChooser.setDefaultOption(
+            "Shoot4s", 
+            new Shoot4s(turret)
+        );
         autoChooser.addOption(
             "Test move",
             new DriveFwd2s(swerve)
         );
-        /*autoChooser.addOption(
+        autoChooser.addOption(
             "Shoot",
             new Shoot(turret)
-        );*/
+        );
+        autoChooser.addOption(
+            "Drive for 2 seconds",
+            new DriveFwd2s(swerve)
+        );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
@@ -157,26 +166,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
     }
-
-    // [FIXME]: Integrate this into regular auto options after testing
-    // public Command getAutonomousCommand() {
-    //     // Simple drive forward auton
-    //     final var idle = new SwerveRequest.Idle();
-    //     return Commands.sequence(
-    //         // Reset our field centric heading to match the robot
-    //         // facing away from our alliance station wall (0 deg).
-    //         drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-    //         // Then slowly drive forward (away from us) for 5 seconds.
-    //         drivetrain.applyRequest(() ->
-    //             drive.withVelocityX(0.5)
-    //                 .withVelocityY(0)
-    //                 .withRotationalRate(0)
-    //         )
-    //         .withTimeout(5.0),
-    //         // Finally idle for the rest of auton
-    //         drivetrain.applyRequest(() -> idle)
-    //     );
-    // }
 
     public static ClimberSubsystem getClimberSubsystem() { return climber; }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
