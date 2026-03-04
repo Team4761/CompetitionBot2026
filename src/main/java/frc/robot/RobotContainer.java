@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.Shoot4s;
 import frc.robot.generated.TunerConstants;
@@ -32,9 +31,6 @@ import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.SmartCameraNetwork;
-import frc.robot.util.SmartKrakenMotor;
-import frc.robot.util.SmartVortexMotor;
 import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
@@ -116,14 +112,7 @@ public class RobotContainer {
             () -> applyDeadband(controller_turret.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
         controller_turret.x().whileTrue(new ExtendAtSpeedCommand(intake, -0.5));
-        // [FIXME]: Do we need these?
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        // controller_drive.back().and(controller_drive.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        // controller_drive.back().and(controller_drive.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        // controller_drive.start().and(controller_drive.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        // controller_drive.start().and(controller_drive.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
+        
         // Reset the field-centric heading on left bumper press.
         controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
@@ -140,16 +129,16 @@ public class RobotContainer {
     }
 
     private void configAutos() {
-        //autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        autoChooser.setDefaultOption("Shoot4s", new Shoot4s(turret));
+        autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        //autoChooser.setDefaultOption("Shoot4s", new Shoot4s(turret));
         autoChooser.addOption(
             "Test move",
             new DriveFwd2s(swerve)
         );
-        /*autoChooser.addOption(
-            "Shoot",
-            new Shoot(turret)
-        );*/
+        autoChooser.addOption(
+            "Shoot4s",
+            new Shoot4s(turret)
+        );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

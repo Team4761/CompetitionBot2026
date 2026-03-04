@@ -14,7 +14,7 @@ public class ShootAtAngleAtSpeedCommand extends Command{
     /**
      * @param sub The turret subsystem holding the shooter components
      * @param speed % of max speed (0-1)
-     * 
+     * @param angle angle at witch you will shoot (vertical angle)
      */
     public ShootAtAngleAtSpeedCommand(TurretSubsystem sub, double angle, double speed) {
         this.turretSubsystem = sub;
@@ -30,7 +30,7 @@ public class ShootAtAngleAtSpeedCommand extends Command{
     public void initialize() {
         this.turretSubsystem.setSpitterMotorSpeed(shootSpeed * Constants.Turret.ShootConfig.SPITTER_SPEED);
         Timer.delay(Constants.Turret.ShootConfig.KICKER_INIT_DELAY);
-        this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED * shootSpeed); // [FIXME]: Make this a constant or passed in arg
+        this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED * shootSpeed); 
         this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED * shootSpeed);
 
         this.turretSubsystem.setVerticalMotor(shootAngle);
