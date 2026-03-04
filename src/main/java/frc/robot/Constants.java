@@ -23,7 +23,7 @@ public class Constants {
     }
 
     public class Gyro {
-        public static final int PIGEON_ID = 0; // Type: pigeon2 [FIXME]
+        public static final int PIGEON_ID = 0; // Type: pigeon2 
     }
 
     public class Vision {
@@ -45,9 +45,9 @@ public class Constants {
     }
 
     public class Turret {
-        public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken [FIXME]
-        public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken [FIXME]
-        public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken [FIXME]
+        public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken 
+        public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken 
+        public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken 
 
         public static final int SPINDEXER_MOTOR_PORT = 43; // Type: flex/vortex
         public static final int KICKER_MOTOR_PORT = 44; // Type: flex/vortex
