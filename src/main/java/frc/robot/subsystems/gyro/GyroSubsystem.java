@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.util.SmartKrakenMotor;
 
 public class GyroSubsystem extends SubsystemBase{
     // Make the code aware there should be 2 motors

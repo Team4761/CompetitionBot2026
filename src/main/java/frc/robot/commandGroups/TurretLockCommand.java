@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
-import frc.robot.Constants.Gyro;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.util.SmartCameraNetwork;
