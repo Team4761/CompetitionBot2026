@@ -9,8 +9,10 @@ import com.ctre.phoenix6.HootAutoReplay;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -34,7 +36,8 @@ public class Robot extends TimedRobot {
     private MatchPhase currentPhase;
     private Timer phaseTimer;
     private double phaseDuration;
-
+    private VisionSubsystem visionSubsystem = new VisionSubsystem();
+    
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
         .withTimestampReplay()
@@ -61,7 +64,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Match Time Left", Math.round((FieldConstants.Match.MATCH_DURATION-matchTimer.get())*10)/10.0);
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);
-
+        //below has not been tested please test
+        //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire
+        SmartDashboard.putString("aprilTagStatus", (visionSubsystem.seesAprilTag()).toHexString());
     }
 
     @Override

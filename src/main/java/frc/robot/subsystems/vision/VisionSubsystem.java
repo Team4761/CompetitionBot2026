@@ -1,5 +1,6 @@
 package frc.robot.subsystems.vision;
 
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.SmartCameraNetwork;
@@ -11,6 +12,7 @@ public class VisionSubsystem extends SubsystemBase {
     private double angleToAprilCode = 0;
     private double distToAprilCode = 0;
     private boolean tracking = false;
+    private boolean readyToFire = false;
 
     public void disenableTracker() {
         this.tracking = !this.tracking;
@@ -42,5 +44,25 @@ public class VisionSubsystem extends SubsystemBase {
             this.angleToAprilCode = 0;
             this.distToAprilCode = 0;
         }
+    }
+
+    public boolean shootSetUpComplete(boolean isReadyToFire)
+    {
+        readyToFire = isReadyToFire;
+        return isReadyToFire;
+    }
+
+    public Color seesAprilTag() {
+        Color color = null;
+        if (this.angleToAprilCode == 0 && this.distToAprilCode == 0) {
+            color = new Color(255,50,50);
+        }
+        else {
+            color = new Color(255,255,50);
+            if (readyToFire) {
+                color = new Color(50,255,50);
+            }
+        }
+        return color;
     }
 }
