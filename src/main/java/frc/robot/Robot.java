@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     private Timer phaseTimer;
     private double phaseDuration;
     private VisionSubsystem visionSubsystem = new VisionSubsystem();
-    
+
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
         .withTimestampReplay()
@@ -81,6 +81,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
+        currentPhase = MatchPhase.AUTONOMOUS;
 
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);
