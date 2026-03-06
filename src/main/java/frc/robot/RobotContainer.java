@@ -133,6 +133,16 @@ public class RobotContainer {
     }
 
     private void configAutos() {
+        /*
+         * Current Autos we want to have:
+         * Do Nothing 
+         * Shoot
+         * Shoot Long
+         * Shoot, Go to Corner, Shoot [TODO]
+         * Go to Depot, Pickup, Shoot [TODO]
+         * Shoot Long, Go under Trench, Intake From Middle [TODO]
+         * Climb (maybe) [TODO]
+         */
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.setDefaultOption("Shoot4s", new Shoot4s(turret));
         autoChooser.addOption(

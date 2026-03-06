@@ -14,7 +14,7 @@ public class FieldConstants {
         public static final double FIELD_WIDTH = Units.inchesToMeters(316.64); // Units: meters 
         public static final double FIELD_LENGTH = Units.inchesToMeters(650.12); // Units: meters
 
-        public static final double ALLIANCE_ZONE_WIDTH = Units.inchesToMeters(316.64); // Units: meters (yes this is correct, i don't know why)
+        public static final double ALLIANCE_ZONE_WIDTH = Units.inchesToMeters(316.64); // Units: meters
         public static final double ALLIANCE_ZONE_LENGTH = Units.inchesToMeters(158.6); // Units: meters
 
         public static final double NEUTRAL_ZONE_WIDTH = Units.inchesToMeters(316.64); // Units: meters
@@ -45,6 +45,7 @@ public class FieldConstants {
     }
     
     public class Depot {
+        public static final double DEPOT_DISTANCE_FROM_LEFT_EDGE = Units.inchesToMeters(82.32); // Units: meters (AndyMark) (from left edge of field to center of depot)
         public static final double DEPOT_WIDTH = Units.inchesToMeters(27.0); // Units: meters
         public static final double DEPOT_LENGTH = Units.inchesToMeters(42.0); // Units: meters
         public static final double DEPOT_BORDER_WIDTH = Units.inchesToMeters(3.0); // Units: meters
@@ -81,6 +82,8 @@ public class FieldConstants {
         public static final double CORRAL_OPENING_WIDTH = Units.inchesToMeters(32.0); // Units: meters
         public static final double CORRAL_OPENING_HEIGHT = Units.inchesToMeters(7.0); // Units: meters
         public static final double CORRAL_OPENING_ELEVATION = Units.inchesToMeters(1.88);
+
+        public static final double OUTPOST_DISTANCE_FROM_RIGHT_EDGE = Units.inchesToMeters(25.62); // Units: meters (AndyMark) (from right edge of field to center of outpost)
     }
 
     public class Match {

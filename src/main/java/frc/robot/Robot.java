@@ -67,7 +67,7 @@ public class Robot extends TimedRobot {
         //below has not been tested please test
         //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire
         //make sure to to right click and click on show as single color veiw
-        SmartDashboard.putString("aprilTagStatus", (visionSubsystem.seesAprilTag()).toHexString());
+        SmartDashboard.putString("April Tag Status", (visionSubsystem.seesAprilTag()).toHexString());
     }
 
     @Override
