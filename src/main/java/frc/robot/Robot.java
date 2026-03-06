@@ -21,6 +21,20 @@ public class Robot extends TimedRobot {
 
     private Timer matchTimer;
 
+    private enum MatchPhase {
+        AUTONOMOUS,
+        TRANSITION,
+        TELEOP_FIRST_SHIFT,
+        TELEOP_SECOND_SHIFT,
+        TELEOP_THIRD_SHIFT,
+        TELEOP_FOURTH_SHIFT,
+        ENDGAME
+    }
+
+    private MatchPhase currentPhase;
+    private Timer phaseTimer;
+    private double phaseDuration;
+
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
         .withTimestampReplay()
@@ -29,6 +43,10 @@ public class Robot extends TimedRobot {
     public Robot() {
         m_robotContainer = new RobotContainer();
         matchTimer = new Timer();
+        currentPhase = MatchPhase.AUTONOMOUS;
+        phaseTimer = new Timer();
+        phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
+
     }
 
     @Override
@@ -40,7 +58,10 @@ public class Robot extends TimedRobot {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
         // Alex M. helped
-        SmartDashboard.putNumber("Match Time Left", FieldConstants.Match.MATCH_DURATION-matchTimer.get());
+        SmartDashboard.putNumber("Match Time Left", Math.round((FieldConstants.Match.MATCH_DURATION-matchTimer.get())*10)/10.0);
+        SmartDashboard.putString("Current Match Phase", currentPhase.toString());
+        SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);
+
     }
 
     @Override
@@ -61,6 +82,8 @@ public class Robot extends TimedRobot {
         }
         matchTimer.reset();
         matchTimer.start();
+        phaseTimer.reset();
+        phaseTimer.start();
         
     }
 
@@ -72,13 +95,57 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        currentPhase = MatchPhase.TRANSITION;
+        phaseTimer.reset();
+        phaseDuration = FieldConstants.Match.TRANSITION_DURATION;
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().cancel(m_autonomousCommand);
         }
     }
 
     @Override
-    public void teleopPeriodic() {}
+    public void teleopPeriodic() {
+        switch (currentPhase) {
+            case TRANSITION:
+                if (phaseTimer.get() >= FieldConstants.Match.TRANSITION_DURATION) {
+                    currentPhase = MatchPhase.TELEOP_FIRST_SHIFT;
+                    phaseTimer.reset();
+                    phaseDuration = FieldConstants.Match.ALLIANCE_SHIFT_DURATION;
+                }
+                break;
+            case TELEOP_FIRST_SHIFT:
+                if (phaseTimer.get() >= FieldConstants.Match.ALLIANCE_SHIFT_DURATION) {
+                    currentPhase = MatchPhase.TELEOP_SECOND_SHIFT;
+                    phaseTimer.reset();
+                    phaseDuration = FieldConstants.Match.ALLIANCE_SHIFT_DURATION;
+                }
+                break;
+            case TELEOP_SECOND_SHIFT:
+                if (phaseTimer.get() >= FieldConstants.Match.ALLIANCE_SHIFT_DURATION) {
+                    currentPhase = MatchPhase.TELEOP_THIRD_SHIFT;
+                    phaseTimer.reset();
+                    phaseDuration = FieldConstants.Match.ALLIANCE_SHIFT_DURATION;
+                }
+                break;
+            case TELEOP_THIRD_SHIFT:
+                if (phaseTimer.get() >= FieldConstants.Match.ALLIANCE_SHIFT_DURATION) {
+                    currentPhase = MatchPhase.TELEOP_FOURTH_SHIFT;
+                    phaseTimer.reset();
+                    phaseDuration = FieldConstants.Match.ALLIANCE_SHIFT_DURATION;
+                }
+                break;
+            case TELEOP_FOURTH_SHIFT:
+                if (phaseTimer.get() >= FieldConstants.Match.ALLIANCE_SHIFT_DURATION) {
+                    currentPhase = MatchPhase.ENDGAME;
+                    phaseTimer.reset();
+                    phaseDuration = FieldConstants.Match.ENDGAME_DURATION;
+                }
+                break;
+            case ENDGAME:
+                // Do nothing, just stay in endgame until the match ends
+                break;
+        }
+    }
 
     @Override
     public void teleopExit() {}
