@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.DriveFwd2s;
+import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.Shoot4s;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -134,7 +135,6 @@ public class RobotContainer {
 
     private void configAutos() {
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
-        autoChooser.setDefaultOption("Shoot4s", new Shoot4s(turret));
         autoChooser.addOption(
             "Test move",
             new DriveFwd2s(swerve)
@@ -150,6 +150,10 @@ public class RobotContainer {
         autoChooser.addOption(
             "Shoot4s",
             new Shoot4s(turret)
+        );
+        autoChooser.addOption(
+            "Extand Down Move And Gather",
+            new ExtendDownMoveAndGather(intake,swerve)
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
