@@ -97,7 +97,9 @@ public class RobotContainer {
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
-        RobotModeTriggers.disabled().onTrue(drivetrain.runOnce(() -> rotationLimiter.reset(0.0)).ignoringDisable(true));
+        RobotModeTriggers.disabled().onTrue(
+            drivetrain.runOnce(() -> rotationLimiter.reset(0.0)).ignoringDisable(true)
+        );
 
         // Driver controller bindings
         controller_drive.a().whileTrue(drivetrain.applyRequest(() -> brake));

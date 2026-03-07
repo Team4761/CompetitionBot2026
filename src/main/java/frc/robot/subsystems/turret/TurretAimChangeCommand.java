@@ -18,6 +18,7 @@ public class TurretAimChangeCommand extends Command{
 
     @Override
     public void initialize() {
+        
     }
 
     @Override
@@ -28,7 +29,9 @@ public class TurretAimChangeCommand extends Command{
     }
 
     @Override
-    public boolean isFinished() { return false; }
+    public boolean isFinished() {
+        return false;
+    }
 
     @Override
     public void end(boolean isInterrupted) {
