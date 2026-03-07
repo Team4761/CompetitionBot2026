@@ -6,6 +6,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.DriveFwd2s;
@@ -23,13 +25,16 @@ import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.Shoot4s;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.climber.ClimbCommand;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.turret.ShootCommand;
+import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
@@ -41,6 +46,7 @@ public class RobotContainer {
     private static final TurretSubsystem turret = new TurretSubsystem();
     private static final GyroSubsystem gyro = new GyroSubsystem();
     private static final ClimberSubsystem climber = new ClimberSubsystem();
+    private static final Orchestra orchestra = new Orchestra("output.chrp");
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
@@ -56,7 +62,7 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController controller_drive = new CommandXboxController(0);
-    private final CommandXboxController controller_turret = new CommandXboxController(1);
+    private final CommandXboxController controller_operator = new CommandXboxController(1);
     private final SlewRateLimiter rotationLimiter =
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
@@ -103,17 +109,43 @@ public class RobotContainer {
         //run intake/outtake
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
-
+        
+        orchestra.addInstrument(swerve.getModule(0).getDriveMotor());
+        orchestra.addInstrument(swerve.getModule(0).getSteerMotor());
+        orchestra.addInstrument(swerve.getModule(1).getDriveMotor());
+        orchestra.addInstrument(swerve.getModule(1).getSteerMotor());
+        orchestra.addInstrument(swerve.getModule(2).getDriveMotor());
+        orchestra.addInstrument(swerve.getModule(2).getSteerMotor());
+        orchestra.addInstrument(swerve.getModule(3).getDriveMotor());
+        orchestra.addInstrument(swerve.getModule(3).getSteerMotor());
+        controller_drive.a().and(controller_drive.b().and(controller_drive.x().and(controller_drive.y().and(controller_drive.start().and(controller_drive.back().whileTrue(
+            new InstantCommand(() -> orchestra.play()))
+        )))));
         // Operator controller bindings
 
-        controller_turret.rightTrigger().whileTrue(new ShootCommand(turret));
+        controller_operator.rightTrigger().whileTrue(new ShootCommand(turret));
         
-        turret.setDefaultCommand(new TurretAimChangeCommand(
+        
+        // Construct the TurretAimChangeCommand directly [FIXME]
+        new TurretAimChangeCommand(
             turret,
-            () -> applyDeadband(controller_turret.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
-            () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
-        controller_turret.start().whileTrue(new ExtendAtSpeedCommand(intake, -0.5));
+            () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
+            () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND));
+        // Manual Override
+        controller_operator.leftTrigger().and(controller_operator.leftStick().or(controller_operator.rightStick().whileTrue(
+            new TurretAimChangeCommand(
+                turret,
+                () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
+                () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)))));
+        controller_operator.leftTrigger().and(controller_operator.rightTrigger().whileTrue(new ShootCommand(turret))); // [BEN] please implement IgnoreSafeties here
+        controller_operator.leftTrigger().and(controller_operator.b().whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED)));
+        controller_operator.leftTrigger().and(controller_operator.back().whileTrue(new DisenableTrackerCommand(vision)));
+                
+        // Climber & Intake Extension
         
+        controller_operator.start().whileTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
+        controller_operator.start().whileFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released
+        controller_operator.y().whileTrue(new ClimbCommand(climber, 0));
        
         drivetrain.registerTelemetry(logger::telemeterize);
     }
