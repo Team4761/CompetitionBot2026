@@ -11,10 +11,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -29,7 +27,6 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.OuttakeCommand;
-import frc.robot.subsystems.intake.*;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
@@ -47,7 +44,6 @@ public class RobotContainer {
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
-    //private double TurretMaxAngularRate = RotationsPerSecond.of
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -61,7 +57,6 @@ public class RobotContainer {
 
     private final CommandXboxController controller_drive = new CommandXboxController(0);
     private final CommandXboxController controller_turret = new CommandXboxController(1);
-    //private final CommandXboxController controller_operator = new CommandXboxController(1);
     private final SlewRateLimiter rotationLimiter =
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
@@ -77,6 +72,9 @@ public class RobotContainer {
 
 
     private void configureBindings() {
+
+        // Driver controller bindings
+
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
@@ -100,19 +98,14 @@ public class RobotContainer {
         RobotModeTriggers.disabled().onTrue(
             drivetrain.runOnce(() -> rotationLimiter.reset(0.0)).ignoringDisable(true)
         );
-
-        // Driver controller bindings
-        controller_drive.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        controller_drive.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(
-                -1 * applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND),
-                -1 * applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND)))
-        ));
+         // Reset the field-centric heading on left bumper press.
         controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-        controller_drive.y().whileTrue(new IntakeCommand(intake));
-        controller_drive.x().whileTrue(new OuttakeCommand(intake));
+        //run intake/outtake
+        controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
+        controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
 
         // Operator controller bindings
+
         controller_turret.rightTrigger().whileTrue(new ShootCommand(turret));
         
         turret.setDefaultCommand(new TurretAimChangeCommand(
@@ -121,9 +114,7 @@ public class RobotContainer {
             () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
         controller_turret.start().whileTrue(new ExtendAtSpeedCommand(intake, -0.5));
         
-        // Reset the field-centric heading on left bumper press.
-        
-
+       
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
