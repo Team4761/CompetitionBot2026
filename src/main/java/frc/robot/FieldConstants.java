@@ -10,12 +10,7 @@ public class FieldConstants {
     /**
      * Describes all general field dimensions, including the field itself, the alliance zones, and the neutral zone.
      */
-    public class Robot {
-        public static final double ROBOT_WIDTH = Units.inchesToMeters(27.0); // Units: meters
-        public static final double ROBOT_LENGTH = Units.inchesToMeters(27.0); // Units: meters
-        public static final double ROBOT_HEIGHT_WITHOUT_TURRET = Units.inchesToMeters(19.375); // Units: meters 
-    }
-    
+
     public class Field {
         public static final double FIELD_WIDTH = Units.inchesToMeters(316.64); // Units: meters 
         public static final double FIELD_LENGTH = Units.inchesToMeters(650.12); // Units: meters

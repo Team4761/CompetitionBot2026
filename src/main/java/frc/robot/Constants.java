@@ -1,13 +1,24 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
+
 import java.util.Map;
+import java.util.function.Function;
 
 public class Constants {
     // Controller
     public static final int CONTROLLER_PORT = 0; // Port on the Driverstation
 
     public static final String TEAM = "BLUE"; // Type: enum("BLUE", "RED")
+
+    public class Robot {
+        public static final double ROBOT_WIDTH = Units.inchesToMeters(27.0); // Units: meters
+        public static final double ROBOT_LENGTH = Units.inchesToMeters(27.0); // Units: meters
+        public static final double ROBOT_HEIGHT_WITHOUT_TURRET = Units.inchesToMeters(19.375); // Units: meters
+
+        public static final Function<Double, Double> ROBOT_HEIGHT_WITH_TURRET = (theta) -> ROBOT_HEIGHT_WITHOUT_TURRET + Units.inchesToMeters(Math.sin(theta) * 4.5); // Units: meters
+    }
 
     public class Controller {
         public static final double TRANSLATION_INPUT_DEADBAND = 0.10;
@@ -45,6 +56,8 @@ public class Constants {
     }
 
     public class Turret {
+        public static final double MAX_SPEED_MEASURED_MpS = 15.0; // Units: m/s
+
         public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken 
         public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken 
         public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken 
@@ -84,9 +97,8 @@ public class Constants {
         }
 
         public class Offset {
-            public static final double X = 0.0; // Units: meters [FIXME]
-            public static final double Y = 0.0; // Units: meters [FIXME]
-            public static final double Z = 0.0; // Units: meters [FIXME]
+            public static final double X = 0.0; // Units: meters
+            public static final double Y = -6.5; // Units: meters
         }
     }
 
@@ -124,7 +136,7 @@ public class Constants {
             4, new Translation2d(23.5, 0.0)
         );
 
-        // [TODO]: make init for it use Elastic dashboard instead of constant
+        // [FIXME]: make init for it use Elastic dashboard instead of constant
         public static final Map<Integer, Translation2d> MY_APRIL_POS =
             "BLUE".equals(TEAM) ? BLUE_APRIL_POS : RED_APRIL_POS;
 

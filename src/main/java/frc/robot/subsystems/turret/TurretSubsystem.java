@@ -56,15 +56,24 @@ public class TurretSubsystem extends SubsystemBase {
     public void stopSpindexer() { spindexerMotor.stopTurning(); }
 
     public void turnHorizontalMotor(double degrees) { 
-        if (!horizontalMotor.turn(degrees)) {
+        double motorDegrees = toHorizontalMotorDegrees(degrees);
+        if (!horizontalMotor.turn(motorDegrees)) {
             //horizontalMotor.set(0);
             System.out.println(String.format("Failed to turn horizontal motor by [%.2f] degrees. Current angle: [%.2f]", degrees, horizontalMotor.getAngle()));
         } 
     }
-    public void setHorizontalMotor(double degrees) { horizontalMotor.set(degrees); }
-    public void turnVerticalMotor(double degrees) {verticalMotor.turn(degrees); }
-    public void setVerticalMotor(double degrees) { verticalMotor.set(degrees * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH); }
+    public void setHorizontalMotor(double degrees) { horizontalMotor.set(toHorizontalMotorDegrees(degrees)); }
+    public void turnVerticalMotor(double degrees) { verticalMotor.turn(toVerticalMotorDegrees(degrees)); }
+    public void setVerticalMotor(double degrees) { verticalMotor.set(toVerticalMotorDegrees(degrees)); }
 
     public void stopHorizontal() { horizontalMotor.stopTurning(); }
     public void stopVertical() { verticalMotor.stopTurning(); }
+
+    private double toHorizontalMotorDegrees(double turretDegrees) {
+        return turretDegrees * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT;
+    }
+
+    private double toVerticalMotorDegrees(double hoodDegrees) {
+        return hoodDegrees * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH;
+    }
 }
