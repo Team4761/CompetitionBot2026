@@ -147,8 +147,8 @@ public class RobotContainer {
         controller_operator.leftTrigger().whileFalse(new ElasticManualOverrideCommand(turret, () -> false));
         // Climber & Intake Extension
         
-        controller_operator.start().whileTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
-        controller_operator.start().whileFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released
+        controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
+        controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released
         controller_operator.y().whileTrue(new ClimbCommand(climber, 0));
        
         drivetrain.registerTelemetry(logger::telemeterize);
