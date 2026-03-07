@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);
         //below has not been tested please test
-        //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire
+        //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire purple is tracking disabled
         //make sure to to right click and click on show as single color veiw
         SmartDashboard.putString("April Tag Status", (visionSubsystem.seesAprilTag()).toHexString());
     }
