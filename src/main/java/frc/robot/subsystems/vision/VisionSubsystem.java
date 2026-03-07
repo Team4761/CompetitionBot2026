@@ -8,7 +8,7 @@ import frc.robot.util.SmartCameraNetwork.TargetObservation;
 import java.util.Optional;
 
 public class VisionSubsystem extends SubsystemBase {
-    private final SmartCameraNetwork smartCamera = SmartCameraNetwork.Builder.newInstance().build();
+    public final SmartCameraNetwork smartCamera = SmartCameraNetwork.Builder.newInstance().build();
     private double angleToAprilCode = 0;
     private double distToAprilCode = 0;
     private boolean tracking = true;

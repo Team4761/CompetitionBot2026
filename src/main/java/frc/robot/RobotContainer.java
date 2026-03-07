@@ -25,6 +25,7 @@ import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
 import frc.robot.autos.Shoot3s;
+import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.climber.ClimbCommand;
@@ -203,6 +204,9 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
+    public void init() {
+        new TurretLockCommand(turret, gyro, drivetrain, vision.smartCamera);
+    }
     public static ClimberSubsystem getClimberSubsystem() { return climber; }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }

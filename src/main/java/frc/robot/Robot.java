@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class Robot extends TimedRobot {
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        m_robotContainer.init();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;
