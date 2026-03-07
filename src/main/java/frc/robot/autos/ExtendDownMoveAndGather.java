@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DoNothingCommand;
 import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
@@ -25,7 +26,7 @@ public class ExtendDownMoveAndGather  extends SequentialCommandGroup{
         final var idle = new SwerveRequest.Idle();
         
         addCommands(
-
+            new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
             new ExtendAtSpeedCommand(intakeSubsystem, 12).withTimeout(3),
             new IntakeCommand(intakeSubsystem),
             drivetrain.runOnce(drivetrain::seedFieldCentric),

@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DoNothingCommand;
 
 public class TurnMotors extends SequentialCommandGroup {
     private static final double AUTO_TURN_RATE_RAD_PER_SEC =
@@ -20,6 +21,7 @@ public class TurnMotors extends SequentialCommandGroup {
         final var idle = new SwerveRequest.Idle();
 
         addCommands(
+            new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
             drivetrain.runOnce(drivetrain::seedFieldCentric),
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(0.0)

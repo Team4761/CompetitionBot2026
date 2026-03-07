@@ -8,6 +8,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DoNothingCommand;
 
 public class DriveFwd2s extends SequentialCommandGroup {
     private static final double AUTO_SPEED_MPS =
@@ -20,6 +21,7 @@ public class DriveFwd2s extends SequentialCommandGroup {
         final var idle = new SwerveRequest.Idle();
 
         addCommands(
+            new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
             drivetrain.runOnce(drivetrain::seedFieldCentric),
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(AUTO_SPEED_MPS)
