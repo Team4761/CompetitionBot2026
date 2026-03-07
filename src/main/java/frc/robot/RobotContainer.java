@@ -25,6 +25,7 @@ import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
 import frc.robot.autos.Shoot3s;
+import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.climber.ClimbCommand;
@@ -147,8 +148,8 @@ public class RobotContainer {
         controller_operator.leftTrigger().whileFalse(new ElasticManualOverrideCommand(turret, () -> false));
         // Climber & Intake Extension
         
-        controller_operator.start().whileTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
-        controller_operator.start().whileFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released
+        controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
+        controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released
         controller_operator.y().whileTrue(new ClimbCommand(climber, 0));
        
         drivetrain.registerTelemetry(logger::telemeterize);
@@ -203,6 +204,9 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
+    public void init() {
+        new TurretLockCommand(turret, gyro, drivetrain, vision.smartCamera);
+    }
     public static ClimberSubsystem getClimberSubsystem() { return climber; }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
