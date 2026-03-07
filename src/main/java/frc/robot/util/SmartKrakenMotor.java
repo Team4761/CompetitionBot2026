@@ -44,15 +44,6 @@ public class SmartKrakenMotor {
     }
 
     public void setSpeedPercent(double speedPercent) {
-        System.out.println(speedPercent);
-        /* 
-        if (speedPercent < 0.0) {
-            this.config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-            this.motor.getConfigurator().apply(this.config);
-        } else {
-            this.config.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-            this.motor.getConfigurator().apply(this.config);
-        }*/
         this.motor.setControl(this.dutyCycleRequest.withOutput(speedPercent));
     }
 

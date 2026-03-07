@@ -11,7 +11,7 @@ public class ClimberSubsystem extends SubsystemBase{
         this.climberMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Intake.INTAKE_EXTENDER_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0) // Temp Values
-            .outputRange(-360, 360) // Temp Values
+            .outputRange(-1.0, 1.0) // Duty cycle output limits
             .angleLimits(-1, -1) // Temp Values
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
             .build();
