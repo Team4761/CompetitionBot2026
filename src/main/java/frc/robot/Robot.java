@@ -53,6 +53,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        SmartDashboard.putBoolean("Manual Turret Control", false);
     }
 
     @Override

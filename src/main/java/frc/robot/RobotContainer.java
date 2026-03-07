@@ -32,6 +32,7 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.OuttakeCommand;
+import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
@@ -120,9 +121,8 @@ public class RobotContainer {
         orchestra.addInstrument(swerve.getModule(2).getSteerMotor());
         orchestra.addInstrument(swerve.getModule(3).getDriveMotor());
         orchestra.addInstrument(swerve.getModule(3).getSteerMotor());
-        controller_drive.a().and(controller_drive.b().and(controller_drive.x().and(controller_drive.y().and(controller_drive.start().and(controller_drive.back().whileTrue(
-            new InstantCommand(() -> orchestra.play()))
-        )))));
+        controller_drive.a().and(controller_drive.b()).and(controller_drive.x()).and(controller_drive.y()).and(controller_drive.start()).and(controller_drive.back()).whileTrue(
+            new InstantCommand(() -> orchestra.play()));
         // Operator controller bindings
 
         controller_operator.rightTrigger().whileTrue(new ShootCommand(turret));
@@ -134,15 +134,17 @@ public class RobotContainer {
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND));
         // Manual Override
-        controller_operator.leftTrigger().and(controller_operator.leftStick().or(controller_operator.rightStick().whileTrue(
+        
+        controller_operator.leftTrigger().and(controller_operator.leftStick().or(controller_operator.rightStick())).whileTrue(
             new TurretAimChangeCommand(
                 turret,
                 () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
-                () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)))));
-        controller_operator.leftTrigger().and(controller_operator.rightTrigger().whileTrue(new ShootCommand(turret))); // [BEN] please implement IgnoreSafeties here
-        controller_operator.leftTrigger().and(controller_operator.b().whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED)));
-        controller_operator.leftTrigger().and(controller_operator.back().whileTrue(new DisenableTrackerCommand(vision)));
-                
+                () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
+        controller_operator.leftTrigger().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // [BEN] please implement IgnoreSafeties here
+        controller_operator.leftTrigger().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED));
+        controller_operator.leftTrigger().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
+        controller_operator.leftTrigger().whileTrue(new ElasticManualOverrideCommand(turret, () -> true));
+        controller_operator.leftTrigger().whileFalse(new ElasticManualOverrideCommand(turret, () -> false));
         // Climber & Intake Extension
         
         controller_operator.start().whileTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
@@ -167,7 +169,7 @@ public class RobotContainer {
          * Do Nothing  √
          * Shoot √
          * Shoot Long √
-         * Shoot, Go to Corner, Shoot [TODO]
+         * Shoot, Go to Outpost, Shoot [TODO]
          * Go to Depot, Pickup, Shoot [TODO] (kind of done we need to test extend down move and gather)
          * Shoot Long, Go under Trench, Intake From Middle [TODO]
          * Climb (maybe) [TODO]

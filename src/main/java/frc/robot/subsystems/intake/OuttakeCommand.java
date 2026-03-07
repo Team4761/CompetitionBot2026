@@ -21,7 +21,7 @@ public class OuttakeCommand extends Command{
         intakeSubsystem.turnIntakeMotor(-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
         
         //intakeSubsystem.turnIntakeMotorRPM(speed);
-        System.out.println(speed);
+        //System.out.println(speed);
     }
 
     @Override
