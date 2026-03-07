@@ -25,6 +25,7 @@ public class TurretLockCommand extends Command {
     private static final double GRAVITY_METERS_PER_SEC_SQ = 9.80665;
     private static final double LAUNCH_LEAD_TIME_SECONDS = 0.08;
     private static final double MAX_YAW_ACCEL_RAD_PER_SEC_SQ = 20.0;
+    private static final int HEIGHT_COUPLING_ITERATIONS = 5;
 
     private final TurretSubsystem turretSubsystem;
     private final GyroSubsystem gyroSubsystem;
@@ -84,17 +85,7 @@ public class TurretLockCommand extends Command {
         Translation2d hubOffset = Constants.RelativeHubLocation.MY_APRIL_POS.get(bestID);
         double xOffset = Units.inchesToMeters(hubOffset.getX());
         double yOffset = Units.inchesToMeters(hubOffset.getY());
-        double zOffset = Units.inchesToMeters(Constants.RelativeHubLocation.Z_POS) - Constants.Robot.ROBOT_HEIGHT_WITH_TURRET.apply(0.0); // [FIXME]: Actual theta is depndant on whats calculated.. so its self referencing
-
         Transform3d robotToTarget = bestObservation.getRobotToTarget();
-        Transform3d robotToOpening = robotToTarget.plus(new Transform3d(
-            new Translation3d(xOffset, yOffset, zOffset),
-            new Rotation3d()
-        ));
-        Transform3d turretToOpening = robotToOpening.plus(new Transform3d(
-            new Translation3d(Constants.Turret.Offset.X, Constants.Turret.Offset.Y, 0.0),
-            new Rotation3d()
-        ));
 
         // Calculate angle and speed at which to shoot the ball at
         var s = this.drivetrain.getState().Speeds;
@@ -124,24 +115,48 @@ public class TurretLockCommand extends Command {
         double turretVelocityX = vxRobot - omegaAtLaunch * Constants.Turret.Offset.Y;
         double turretVelocityY = vyRobot + omegaAtLaunch * Constants.Turret.Offset.X;
 
-        double x = turretToOpening.getX();
-        double y = turretToOpening.getY();
-        double z = turretToOpening.getZ();
+        double phi = 0.0;
+        double launchAngleDegrees = Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES;
+        OptionalDouble flightTime = OptionalDouble.empty();
 
-        OptionalDouble flightTime = solveFlightTimeSeconds(x, y, z, turretVelocityX, turretVelocityY, speedMagnitude);
-        if (flightTime.isEmpty()) {
-            turretSubsystem.setHorizontalMotor(0.0);
-            angleStepLimiter.reset(0.0);
-            return;
+        for (int i = 0; i < HEIGHT_COUPLING_ITERATIONS; i++) {
+            double releaseHeightMeters = Constants.Robot.ROBOT_HEIGHT_WITH_TURRET.apply(
+                Units.degreesToRadians(launchAngleDegrees)
+            );
+            double zOffset = Units.inchesToMeters(Constants.RelativeHubLocation.Z_POS) - releaseHeightMeters;
+
+            Transform3d robotToOpening = robotToTarget.plus(new Transform3d(
+                new Translation3d(xOffset, yOffset, zOffset),
+                new Rotation3d()
+            ));
+            Transform3d turretToOpening = robotToOpening.plus(new Transform3d(
+                new Translation3d(Constants.Turret.Offset.X, Constants.Turret.Offset.Y, 0.0),
+                new Rotation3d()
+            ));
+
+            double x = turretToOpening.getX();
+            double y = turretToOpening.getY();
+            double z = turretToOpening.getZ();
+
+            flightTime = solveFlightTimeSeconds(x, y, z, turretVelocityX, turretVelocityY, speedMagnitude);
+            if (flightTime.isEmpty()) {
+                turretSubsystem.setHorizontalMotor(0.0);
+                angleStepLimiter.reset(0.0);
+                return;
+            }
+
+            double t = flightTime.getAsDouble();
+            double shotVx = (x - turretVelocityX * t) / t;
+            double shotVy = (y - turretVelocityY * t) / t;
+            double shotVz = (z + 0.5 * GRAVITY_METERS_PER_SEC_SQ * t * t) / t;
+
+            phi = -Math.toDegrees(Math.atan2(shotVy, shotVx));
+            launchAngleDegrees = MathUtil.clamp(
+                Math.toDegrees(Math.atan2(shotVz, Math.hypot(shotVx, shotVy))),
+                Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES,
+                Constants.Turret.Vertical.MAX_LAUNCH_ANGLE_DEGREES
+            );
         }
-
-        double t = flightTime.getAsDouble();
-        double shotVx = (x - turretVelocityX * t) / t;
-        double shotVy = (y - turretVelocityY * t) / t;
-        double shotVz = (z + 0.5 * GRAVITY_METERS_PER_SEC_SQ * t * t) / t;
-
-        double phi = -Math.toDegrees(Math.atan2(shotVy, shotVx));
-        double theta = -Math.toDegrees(Math.atan2(shotVz, Math.hypot(shotVx, shotVy)));
 
         double desiredStep = 0.0;
         if (Math.abs(phi) > Constants.Vision.ANGLE_DEADBAND) {
@@ -152,11 +167,7 @@ public class TurretLockCommand extends Command {
             );
         }
         turretSubsystem.turnHorizontalMotor(angleStepLimiter.calculate(desiredStep));
-        turretSubsystem.setVerticalMotor(MathUtil.clamp(
-            theta,
-            Constants.Turret.Vertical.ANGLE_LIM_LEFT,
-            Constants.Turret.Vertical.ANGLE_LIM_RIGHT
-        ));
+        turretSubsystem.setVerticalMotor(launchAngleDegrees);
     }
 
     @Override

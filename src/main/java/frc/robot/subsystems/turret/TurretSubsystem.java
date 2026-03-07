@@ -1,5 +1,6 @@
 package frc.robot.subsystems.turret;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -41,8 +42,10 @@ public class TurretSubsystem extends SubsystemBase {
             .port(Constants.Turret.VERTICAL_MOTOR_PORT)
             .PID(0.2, 0.0, 0.0)
             .outputRange(-1, 1)
-            .angleLimits(Constants.Turret.Vertical.ANGLE_LIM_LEFT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH,
-                        Constants.Turret.Vertical.ANGLE_LIM_RIGHT * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH)
+            .angleLimits(
+                Constants.Turret.Vertical.MIN_HOOD_ANGLE_DEGREES * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM,
+                Constants.Turret.Vertical.MAX_HOOD_ANGLE_DEGREES * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM
+            )
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
             .build();
     }
@@ -64,7 +67,9 @@ public class TurretSubsystem extends SubsystemBase {
     }
     public void setHorizontalMotor(double degrees) { horizontalMotor.set(toHorizontalMotorDegrees(degrees)); }
     public void turnVerticalMotor(double degrees) { verticalMotor.turn(toVerticalMotorDegrees(degrees)); }
-    public void setVerticalMotor(double degrees) { verticalMotor.set(toVerticalMotorDegrees(degrees)); }
+    public void setVerticalMotor(double launchAngleDegrees) {
+        verticalMotor.set(toVerticalMotorDegrees(toHoodDegreesFromLaunchAngle(launchAngleDegrees)));
+    }
 
     public void stopHorizontal() { horizontalMotor.stopTurning(); }
     public void stopVertical() { verticalMotor.stopTurning(); }
@@ -74,6 +79,16 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     private double toVerticalMotorDegrees(double hoodDegrees) {
-        return hoodDegrees * Constants.Turret.Vertical.CONVERSION_FACTOR_MtoH;
+        return hoodDegrees * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM;
+    }
+
+    private double toHoodDegreesFromLaunchAngle(double launchAngleDegrees) {
+        double clampedLaunchAngle = MathUtil.clamp(
+            launchAngleDegrees,
+            Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES,
+            Constants.Turret.Vertical.MAX_LAUNCH_ANGLE_DEGREES
+        );
+        // The bottom hood stop already shoots upward, so launch angle is offset from hood travel.
+        return clampedLaunchAngle - Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES;
     }
 }

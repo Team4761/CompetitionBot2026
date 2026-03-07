@@ -13,7 +13,7 @@ public class ShootAtAngleAtSpeedCommand extends Command{
     /**
      * @param sub The turret subsystem holding the shooter components
      * @param speed % of max speed (0-1)
-     * @param angle angle at witch you will shoot (vertical angle)
+     * @param angle launch angle in degrees above horizontal
      */
     public ShootAtAngleAtSpeedCommand(TurretSubsystem sub, double angle, double speed) {
         this.turretSubsystem = sub;

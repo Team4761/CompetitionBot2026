@@ -89,11 +89,15 @@ public class Constants {
         }
 
         public class Vertical {
-            public static final double CONVERSION_FACTOR_MtoH = 325.0 / 18.0; // Motor rotations -> hood rotations
-            public static final double CONVERSION_FACTOR_HtoM = 18.0 / 325.0; // Hood rotations -> motor rotations
+            public static final double CONVERSION_FACTOR_HtoM = 325.0 / 18.0; // Hood rotations -> motor rotations
+            public static final double CONVERSION_FACTOR_MtoH = 18.0 / 325.0; // Motor rotations -> hood rotations
 
-            public static final double ANGLE_LIM_LEFT = -31.0; // Units: degrees
-            public static final double ANGLE_LIM_RIGHT = 0.0; // Units: degrees
+            public static final double MIN_HOOD_ANGLE_DEGREES = 0.0; // Units: degrees from bottom stop
+            public static final double MAX_HOOD_ANGLE_DEGREES = 31.0; // Units: safe degrees from bottom stop
+
+            public static final double MIN_LAUNCH_ANGLE_DEGREES = 22.0; // Units: degrees from horizontal at bottom stop
+            public static final double MAX_LAUNCH_ANGLE_DEGREES =
+                MIN_LAUNCH_ANGLE_DEGREES + MAX_HOOD_ANGLE_DEGREES; // Units: degrees from horizontal
         }
 
         public class Offset {
