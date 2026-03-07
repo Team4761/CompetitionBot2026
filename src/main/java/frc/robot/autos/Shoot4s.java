@@ -9,9 +9,7 @@ public class Shoot4s extends SequentialCommandGroup {
     public Shoot4s(TurretSubsystem turretSubsystem) {
         
         addCommands(
-
             new ShootCommand(turretSubsystem).withTimeout(5)
-
         );
     }
 }

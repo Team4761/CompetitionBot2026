@@ -26,7 +26,8 @@ public class OuttakeCommand extends Command{
 
     @Override
     public void execute() {
-        }
+
+    }
 
     @Override
     public boolean isFinished() {

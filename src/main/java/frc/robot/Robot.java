@@ -17,7 +17,7 @@ import frc.robot.subsystems.vision.VisionSubsystem;
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
 
-    final boolean win = true;
+    final boolean win = true; //THIS IS ESSENTIAL DO NOT DELETE.
 
     private final RobotContainer m_robotContainer;
 
@@ -60,7 +60,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
-        // Alex M. helped
+        // The Original Alexander Maniscalco helped
         SmartDashboard.putNumber("Match Time Left", Math.round((FieldConstants.Match.MATCH_DURATION-matchTimer.get())*10)/10.0);
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);

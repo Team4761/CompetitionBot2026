@@ -9,9 +9,7 @@ public class LongRangeShoot3s extends SequentialCommandGroup{
     public LongRangeShoot3s(TurretSubsystem turretSubsystem) {
     
         addCommands(
-
             new ShootAtAngleAtSpeedCommand(turretSubsystem, 0, 1).withTimeout(4)
-
         ); 
     }
 }

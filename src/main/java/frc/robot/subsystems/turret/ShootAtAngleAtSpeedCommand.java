@@ -6,7 +6,6 @@ import frc.robot.Constants;
 
 public class ShootAtAngleAtSpeedCommand extends Command{
 
-
     private final TurretSubsystem turretSubsystem;
     private final double shootSpeed;
     private final double shootAngle;

@@ -8,7 +8,6 @@ public class ExtendDownCommand extends Command {
 
     public ExtendDownCommand(IntakeSubsystem sub) {
         this.intakeSubsystem = sub;
-
     }
     /* 
     public void initialize(){

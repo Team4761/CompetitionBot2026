@@ -40,7 +40,9 @@ public class VisionSubsystem extends SubsystemBase {
         if (observation.isPresent()) {
             this.angleToAprilCode = observation.get().getAngleDegrees();
             this.distToAprilCode = observation.get().getDistanceMeters();
-        } else {
+        }
+        
+        else {
             this.angleToAprilCode = 0;
             this.distToAprilCode = 0;
         }
@@ -57,6 +59,7 @@ public class VisionSubsystem extends SubsystemBase {
         if (this.angleToAprilCode == 0 && this.distToAprilCode == 0) {
             color = new Color(255,50,50);
         }
+
         else {
             color = new Color(255,255,50);
             if (readyToFire) {
