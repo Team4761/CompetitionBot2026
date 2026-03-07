@@ -106,20 +106,21 @@ public class RobotContainer {
                 -1 * applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND),
                 -1 * applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND)))
         ));
+        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         controller_drive.y().whileTrue(new IntakeCommand(intake));
         controller_drive.x().whileTrue(new OuttakeCommand(intake));
 
         // Operator controller bindings
-        controller_drive.rightTrigger().whileTrue(new ShootCommand(turret));
+        controller_turret.rightTrigger().whileTrue(new ShootCommand(turret));
         
         turret.setDefaultCommand(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_turret.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_turret.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
-        controller_turret.x().whileTrue(new ExtendAtSpeedCommand(intake, -0.5));
+        controller_turret.start().whileTrue(new ExtendAtSpeedCommand(intake, -0.5));
         
         // Reset the field-centric heading on left bumper press.
-        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
