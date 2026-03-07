@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.ExtendDownMoveAndGather;
-import frc.robot.autos.Shoot4s;
+import frc.robot.autos.LongRangeShoot3s;
+import frc.robot.autos.Shoot3s;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.climber.ClimbCommand;
@@ -162,30 +164,30 @@ public class RobotContainer {
     private void configAutos() {
         /*
          * Current Autos we want to have:
-         * Do Nothing 
-         * Shoot
-         * Shoot Long
+         * Do Nothing  √
+         * Shoot √
+         * Shoot Long √
          * Shoot, Go to Corner, Shoot [TODO]
-         * Go to Depot, Pickup, Shoot [TODO]
+         * Go to Depot, Pickup, Shoot [TODO] (kind of done we need to test extend down move and gather)
          * Shoot Long, Go under Trench, Intake From Middle [TODO]
          * Climb (maybe) [TODO]
          */
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.addOption(
-            "Test move",
-            new DriveFwd2s(swerve)
+            "Long Range Shoot 3s",
+            new LongRangeShoot3s(turret)
         );
         autoChooser.addOption(
-            "Shoot",
-            new ShootCommand(turret)
+            "Shoot 3s",
+            new Shoot3s(turret)
+        );
+        autoChooser.addOption(
+            "Close Range Shoot 3s",
+            new CloseRangeShoot3s(turret)
         );
         autoChooser.addOption(
             "Drive for 2 seconds",
             new DriveFwd2s(swerve)
-        );
-        autoChooser.addOption(
-            "Shoot4s",
-            new Shoot4s(turret)
         );
         autoChooser.addOption(
             "Extand Down Move And Gather",
