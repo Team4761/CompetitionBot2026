@@ -9,26 +9,23 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DoNothingCommand;
+import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
+import frc.robot.subsystems.intake.IntakeCommand;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
-public class DriveFwd2s extends SequentialCommandGroup {
+public class OutpostAuto extends SequentialCommandGroup{
+
     private static final double AUTO_SPEED_MPS =
         0.35 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
-    public DriveFwd2s(CommandSwerveDrivetrain drivetrain) {
-        final var idle = new SwerveRequest.Idle();
+    public OutpostAuto(IntakeSubsystem intakeSubsystem,CommandSwerveDrivetrain drivetrain){
 
+        final var idle = new SwerveRequest.Idle();
+        
         addCommands(
-            new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
-            drivetrain.runOnce(drivetrain::seedFieldCentric),
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(AUTO_SPEED_MPS)
-                    .withVelocityY(0.0)
-                    .withRotationalRate(0.0)
-            ).withTimeout(2.0),
-            drivetrain.applyRequest(() -> idle).withTimeout(0.1)
         );
     }
 }

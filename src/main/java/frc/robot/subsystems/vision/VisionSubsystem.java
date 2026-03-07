@@ -11,7 +11,7 @@ public class VisionSubsystem extends SubsystemBase {
     private final SmartCameraNetwork smartCamera = SmartCameraNetwork.Builder.newInstance().build();
     private double angleToAprilCode = 0;
     private double distToAprilCode = 0;
-    private boolean tracking = false;
+    private boolean tracking = true;
     private boolean readyToFire = false;
 
     public void disenableTracker() {
@@ -65,6 +65,11 @@ public class VisionSubsystem extends SubsystemBase {
             if (readyToFire) {
                 color = new Color(50,255,50);
             }
+            if (!tracking)
+            {
+                color = new Color(255,50,255);
+            }
+
         }
         return color;
     }
