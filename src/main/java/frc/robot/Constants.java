@@ -112,6 +112,8 @@ public class Constants {
 
         public static final double CONVERSION_FACTOR_MtoE = 14 / 64; // Motor rotations -> extender rotations
         public static final double CONVERSION_FACTOR_EtoM = 64 / 14; // extender rotations -> Motor rotations
+
+        public static final double SECONDS_IT_TAKES_TO_RETRACT_AT_FULL_SPEED = 1;//temp value[FIXME]
     }
 
     public class RelativeHubLocation {

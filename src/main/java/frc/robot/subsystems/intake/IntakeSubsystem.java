@@ -15,7 +15,7 @@ public class IntakeSubsystem extends SubsystemBase{
             .port(Constants.Intake.INTAKE_EXTENDER_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0) // Temp Values
             .outputRange(-1.0, 1.0) // Duty cycle output limits
-            .angleLimits(-1, -1) // Temp Values
+            .angleLimits(-1, -1) // [FIXME]Temp Values
             .mode(SmartKrakenMotor.MotorMode.WRAPPED)
             .build();
         this.intakeMotor = SmartKrakenMotor.Builder.newInstance()
