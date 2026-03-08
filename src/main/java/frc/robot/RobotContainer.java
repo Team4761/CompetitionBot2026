@@ -41,6 +41,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
+import frc.robot.subsystems.intake.ExtendOrRetractCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
@@ -73,6 +74,9 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+
+    //for toggleing direction of intake
+    private double extendSpeed = 0.5;
 
     public RobotContainer() {
         configureBindings();
@@ -148,8 +152,13 @@ public class RobotContainer {
         controller_operator.leftTrigger().whileFalse(new ElasticManualOverrideCommand(turret, () -> false));
         // Climber & Intake Extension
         
-        controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
-        controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released
+        //what we had previosly
+        /*controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
+        controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released*/
+
+        controller_operator.start().onTrue(new ExtendOrRetractCommand(intake, extendSpeed)); //extend or retract intake
+        controller_operator.start().onFalse(Commands.runOnce(() -> { extendSpeed = extendSpeed * -1;}));//toggle whether it goes up or down
+        
         controller_operator.y().whileTrue(new ClimbCommand(climber, 0));
        
         drivetrain.registerTelemetry(logger::telemeterize);
