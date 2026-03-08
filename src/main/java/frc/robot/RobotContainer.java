@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Set;
+
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
@@ -33,6 +35,7 @@ import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.OuttakeCommand;
+import frc.robot.subsystems.intake.RetractCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
@@ -41,10 +44,13 @@ import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
+import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.ExtendOrRetractCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
+    private static final double INTAKE_EXTEND_SPEED = 1;
+
     private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final CommandSwerveDrivetrain swerve = TunerConstants.createDrivetrain();
     private static final VisionSubsystem vision = new VisionSubsystem();
@@ -75,8 +81,8 @@ public class RobotContainer {
 
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-    //for toggleing direction of intake
-    private double extendSpeed = 0.5;
+    // Tracks which intake state
+    private boolean isIntakeExtended = true;
 
     public RobotContainer() {
         configureBindings();
@@ -156,8 +162,20 @@ public class RobotContainer {
         /*controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
         controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released*/
 
-        controller_operator.start().onTrue(new ExtendOrRetractCommand(intake, extendSpeed)); //extend or retract intake
-        controller_operator.start().onFalse(Commands.runOnce(() -> { extendSpeed = extendSpeed * -1;}));//toggle whether it goes up or down
+        controller_operator.start().onTrue(
+            Commands.defer(
+                () -> {
+                    if (this.isIntakeExtended) {
+                        this.isIntakeExtended = false;
+                        return new RetractCommand(intake);
+                    } else {
+                        this.isIntakeExtended = true;
+                        return new ExtendCommand(intake);
+                    }
+                },
+                Set.of(intake)
+            )
+        );
         
         controller_operator.y().whileTrue(new ClimbCommand(climber, 0));
        

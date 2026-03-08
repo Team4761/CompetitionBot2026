@@ -22,6 +22,7 @@ public class SmartKrakenMotor {
     private double minAngle;
     private double maxAngle;
     private MotorMode mode;
+    private boolean coastingEnabled = false;
 
     private double currentAngle = 0.0;
 
@@ -44,7 +45,8 @@ public class SmartKrakenMotor {
     }
 
     public void setSpeedPercent(double speedPercent) {
-        this.motor.setControl(this.dutyCycleRequest.withOutput(speedPercent));
+        // Duty cycle is percent output: -1.0 full reverse, 0.0 stop, 1.0 full forward.
+        this.motor.setControl(this.dutyCycleRequest.withOutput(clampDutyCycle(speedPercent)));
     }
 
     public void setSpeed(double speedRPM) {
@@ -99,9 +101,28 @@ public class SmartKrakenMotor {
 
     public void stopTurning() {
         this.motor.setControl(this.dutyCycleRequest.withOutput(0.0));
+        if (!this.coastingEnabled) {
+            this.motor.setControl(
+                this.positionRequest.withPosition(this.motor.getPosition().getValueAsDouble())
+            );
+        }
+    }
+
+    public void enableCoasting() {
+        this.coastingEnabled = true;
+        this.motor.setControl(this.dutyCycleRequest.withOutput(0.0));
+    }
+
+    public void disableCoasting() {
+        this.coastingEnabled = false;
+        this.currentAngle = this.motor.getPosition().getValueAsDouble() * 360.0;
         this.motor.setControl(
             this.positionRequest.withPosition(this.motor.getPosition().getValueAsDouble())
         );
+    }
+
+    private static double clampDutyCycle(double output) {
+        return Math.max(-1.0, Math.min(1.0, output));
     }
 
     public static class Builder {
@@ -121,7 +142,12 @@ public class SmartKrakenMotor {
 
         public Builder port(int port) { this.port = port; return this; }
         public Builder PID(double p, double i, double d) { this.p = p; this.i = i; this.d = d; return this; }
-        public Builder outputRange(double minOutput, double maxOutput) { this.minOutput = minOutput; this.maxOutput = maxOutput; return this; }
+        public Builder outputRange(double minOutput, double maxOutput) {
+            // TalonFX duty cycle limits are valid only in the [-1.0, 1.0] range.
+            this.minOutput = clampDutyCycle(minOutput);
+            this.maxOutput = clampDutyCycle(maxOutput);
+            return this;
+        }
         public Builder angleLimits(double minAngle, double maxAngle) { this.minAngle = minAngle; this.maxAngle = maxAngle; return this; }
         public Builder mode(MotorMode mode) { this.mode = mode; return this; }
         
