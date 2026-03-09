@@ -32,7 +32,7 @@ public class TurretSubsystem extends SubsystemBase {
             .build();
         this.horizontalMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.HORIZONTAL_MOTOR_PORT)
-            .PID(0.2, 0.0, 0.001)
+            .PID(0.5, 0.0, 0.001)
             .outputRange(-1, 1)
             .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT, 
                         Constants.Turret.Horizontal.ANGLE_LIM_RIGHT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT)
@@ -40,7 +40,7 @@ public class TurretSubsystem extends SubsystemBase {
             .build();
         this.verticalMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.VERTICAL_MOTOR_PORT)
-            .PID(0.2, 0.0, 0.0)
+            .PID(0.5, 0.0, 0.0)
             .outputRange(-1, 1)
             .angleLimits(
                 Constants.Turret.Vertical.MIN_HOOD_ANGLE_DEGREES * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM,
