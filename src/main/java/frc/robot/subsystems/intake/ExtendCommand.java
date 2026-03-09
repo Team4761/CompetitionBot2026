@@ -1,7 +1,9 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 
 public class ExtendCommand extends Command {
@@ -14,12 +16,14 @@ public class ExtendCommand extends Command {
     
     public void initialize(){
         timer.restart();
-        intakeSubsystem.setExtenderMotorAngle(95);
-        intakeSubsystem.enableExtenderCoasting();
+        System.out.println("TURNING");
+        this.intakeSubsystem.turnExtenderMotorAngle(-30);
+        Timer.delay(0.2);
+        this.intakeSubsystem.turnExtenderMotorAngle(-30);
         Timer.delay(0.1);
-        intakeSubsystem.runExtenderMotor(-0.1);
-        Timer.delay(1.0);
-        intakeSubsystem.disableExtenderCoasting();
+        this.intakeSubsystem.disableExtenderCoasting();
+        Timer.delay(0.1);
+        this.intakeSubsystem.enableExtenderCoasting();
     }
 
     public void execute() {

@@ -15,15 +15,16 @@ public class IntakeSubsystem extends SubsystemBase{
             .port(Constants.Intake.INTAKE_EXTENDER_MOTOR_PORT)
             .PID(0.5, 0.0, 0.0) // Temp Values
             .outputRange(-1.0, 1.0) // Duty cycle output limits
-            .angleLimits(-1, -1) // [FIXME] Temp Values
-            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
+            .angleLimits(Constants.Intake.MIN_EXTENSION_ANGLE * Constants.Intake.CONVERSION_FACTOR_MtoE, 
+                    Constants.Intake.MAX_EXTENSION_ANGLE * Constants.Intake.CONVERSION_FACTOR_MtoE)
+            .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
             .build();
         this.intakeMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Intake.MAIN_INTAKE_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0) // Temp Values
             .outputRange(-1.0, 1.0) // Duty cycle output limits
             .angleLimits(-1, -1) // Temp Values
-            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
+            .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
             .build();
     }
 
@@ -42,7 +43,9 @@ public class IntakeSubsystem extends SubsystemBase{
     public void setExtenderMotorAngle(double angle) {
         intakeExtenderMotor.set(angle * Constants.Intake.CONVERSION_FACTOR_MtoE);
     }
-
+    public void turnExtenderMotorAngle(double angle) {
+        intakeExtenderMotor.turn(angle * Constants.Intake.CONVERSION_FACTOR_MtoE);
+    }
     public void enableExtenderCoasting(){
         intakeExtenderMotor.enableCoasting();
     }

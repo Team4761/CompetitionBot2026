@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class DoNothingCommand extends Command{
 
-    public DoNothingCommand() {
-        
-    }
+    public DoNothingCommand() {}
+    public boolean isFinished() { return true; }
+    public void end() {}
 }

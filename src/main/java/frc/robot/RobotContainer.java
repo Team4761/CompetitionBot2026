@@ -30,8 +30,7 @@ import frc.robot.autos.Shoot3s;
 import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.climber.ClimbCommand;
-import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.DoNothingCommand;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.OuttakeCommand;
@@ -43,9 +42,8 @@ import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
+import frc.robot.util.SmartCameraNetwork;
 import frc.robot.subsystems.intake.ExtendCommand;
-import frc.robot.subsystems.intake.ExtendOrRetractCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
@@ -56,8 +54,9 @@ public class RobotContainer {
     private static final VisionSubsystem vision = new VisionSubsystem();
     private static final TurretSubsystem turret = new TurretSubsystem();
     private static final GyroSubsystem gyro = new GyroSubsystem();
-    private static final ClimberSubsystem climber = new ClimberSubsystem();
     private static final Orchestra orchestra = new Orchestra("output.chrp");
+
+    //private static final SmartCameraNetwork camNetwork = new SmartCameraNetwork(null);
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
@@ -82,14 +81,12 @@ public class RobotContainer {
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
     // Tracks which intake state
-    private boolean isIntakeExtended = true;
+    private boolean isIntakeExtended = false;
 
     public RobotContainer() {
         configureBindings();
         configAutos();
     }
-
-
 
     private void configureBindings() {
 
@@ -140,11 +137,15 @@ public class RobotContainer {
         
         
         // Construct the TurretAimChangeCommand directly [FIXME]
-        new TurretAimChangeCommand(
+        
+        turret.setDefaultCommand(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
-            () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND));
+            () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
+        ));
         // Manual Override
+
+        //new TurretLockCommand(turret, gyro, drivetrain, null);
         
         controller_operator.leftTrigger().and(controller_operator.leftStick().or(controller_operator.rightStick())).whileTrue(
             new TurretAimChangeCommand(
@@ -165,9 +166,11 @@ public class RobotContainer {
         controller_operator.start().onTrue(
             Commands.defer(
                 () -> {
+                    System.out.println(this.isIntakeExtended);
                     if (this.isIntakeExtended) {
                         this.isIntakeExtended = false;
                         return new RetractCommand(intake);
+                        //return new DoNothingCommand();
                     } else {
                         this.isIntakeExtended = true;
                         return new ExtendCommand(intake);
@@ -176,8 +179,6 @@ public class RobotContainer {
                 Set.of(intake)
             )
         );
-        
-        controller_operator.y().whileTrue(new ClimbCommand(climber, 0));
        
         drivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -234,7 +235,6 @@ public class RobotContainer {
     public void init() {
         new TurretLockCommand(turret, gyro, drivetrain, vision.smartCamera);
     }
-    public static ClimberSubsystem getClimberSubsystem() { return climber; }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }
