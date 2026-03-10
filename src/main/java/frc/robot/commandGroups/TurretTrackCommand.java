@@ -33,7 +33,7 @@ public class TurretTrackCommand extends Command {
         Optional<TargetObservation> observation = cameraNetwork.getBestObservation(fiducialId);
 
         if (observation.isEmpty()) {
-            turretSubsystem.setHorizontalMotor(0.0);
+            turretSubsystem.stopHorizontal();
             angleStepLimiter.reset(0.0);
             return;
         }

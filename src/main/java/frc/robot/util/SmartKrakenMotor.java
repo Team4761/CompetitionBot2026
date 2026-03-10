@@ -96,7 +96,7 @@ public class SmartKrakenMotor {
     }
 
     public double getAngle() {
-        return this.motor.getPosition().getValueAsDouble();
+        return this.motor.getPosition().getValueAsDouble() * 360.0;
     }
 
     public void stopTurning() {

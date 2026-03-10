@@ -15,9 +15,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.gyro.GyroSubsystem;
+import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.util.SmartCameraNetwork;
 import frc.robot.util.SmartCameraNetwork.TargetObservation;
 
@@ -28,21 +28,25 @@ public class TurretLockCommand extends Command {
     private static final int HEIGHT_COUPLING_ITERATIONS = 5;
 
     private final TurretSubsystem turretSubsystem;
-    private final GyroSubsystem gyroSubsystem;
     private final CommandSwerveDrivetrain drivetrain;
+    private final VisionSubsystem visionSubsystem;
     private final SmartCameraNetwork cameraNetwork;
     private final SlewRateLimiter angleStepLimiter;
     private double previousOmegaRadPerSec = 0.0;
     private double previousTimestampSec = 0.0;
     private boolean hasPreviousOmega = false;
     
-    public TurretLockCommand(TurretSubsystem turretSubsystem, GyroSubsystem gyroSubsystem, CommandSwerveDrivetrain drivetrain, SmartCameraNetwork cameraNetwork) {
+    public TurretLockCommand(
+        TurretSubsystem turretSubsystem,
+        CommandSwerveDrivetrain drivetrain,
+        VisionSubsystem visionSubsystem
+    ) {
         this.turretSubsystem = turretSubsystem;
-        this.gyroSubsystem = gyroSubsystem;
-        this.cameraNetwork = cameraNetwork;
         this.drivetrain = drivetrain;
+        this.visionSubsystem = visionSubsystem;
+        this.cameraNetwork = visionSubsystem.smartCamera;
         this.angleStepLimiter = new SlewRateLimiter(Constants.Turret.Horizontal.MAX_TRACK_RATE_DEGREES_PER_SEC);
-        addRequirements(turretSubsystem, gyroSubsystem);
+        addRequirements(turretSubsystem);
     }
 
     @Override
@@ -53,11 +57,15 @@ public class TurretLockCommand extends Command {
 
     @Override
     public void execute() {
+        if (!visionSubsystem.isTracking()) {
+            holdCurrentAim();
+            return;
+        }
+
         Optional<HashMap<Integer,SmartCameraNetwork.TargetObservation>> optionalObservations = cameraNetwork.getAllAprilTags();
 
         if (optionalObservations.isEmpty()) {
-            turretSubsystem.setHorizontalMotor(0.0);
-            angleStepLimiter.reset(0.0);
+            holdCurrentAim();
             return;
         }
 
@@ -75,8 +83,7 @@ public class TurretLockCommand extends Command {
             }
         }
         if (bestID == -1) {
-            turretSubsystem.setHorizontalMotor(0.0);
-            angleStepLimiter.reset(0.0);
+            holdCurrentAim();
             return;
         }
 
@@ -140,8 +147,7 @@ public class TurretLockCommand extends Command {
 
             flightTime = solveFlightTimeSeconds(x, y, z, turretVelocityX, turretVelocityY, speedMagnitude);
             if (flightTime.isEmpty()) {
-                turretSubsystem.setHorizontalMotor(0.0);
-                angleStepLimiter.reset(0.0);
+                holdCurrentAim();
                 return;
             }
 
@@ -176,6 +182,12 @@ public class TurretLockCommand extends Command {
     @Override
     public void end(boolean isInterrupted) {
         turretSubsystem.stopHorizontal();
+    }
+
+    private void holdCurrentAim() {
+        turretSubsystem.stopHorizontal();
+        turretSubsystem.stopVertical();
+        angleStepLimiter.reset(0.0);
     }
 
     private static OptionalDouble solveFlightTimeSeconds(

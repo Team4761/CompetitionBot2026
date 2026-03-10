@@ -9,6 +9,8 @@ public class ShootAtAngleAtSpeedCommand extends Command{
     private final TurretSubsystem turretSubsystem;
     private final double shootSpeed;
     private final double shootAngle;
+    private boolean feedersStarted;
+    private final Timer shotTimer = new Timer();
 
     /**
      * @param sub The turret subsystem holding the shooter components
@@ -27,17 +29,19 @@ public class ShootAtAngleAtSpeedCommand extends Command{
 
     @Override
     public void initialize() {
+        feedersStarted = false;
+        shotTimer.restart();
         this.turretSubsystem.setSpitterMotorSpeed(shootSpeed * Constants.Turret.ShootConfig.SPITTER_SPEED);
-        Timer.delay(Constants.Turret.ShootConfig.KICKER_INIT_DELAY);
-        this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED * shootSpeed); 
-        this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED * shootSpeed);
-
         this.turretSubsystem.setVerticalMotor(shootAngle);
     }
 
     @Override
     public void execute() {
-        // Keep motors running
+        if (!feedersStarted && shotTimer.hasElapsed(Constants.Turret.ShootConfig.KICKER_INIT_DELAY)) {
+            this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED * shootSpeed);
+            this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED * shootSpeed);
+            feedersStarted = true;
+        }
     }
 
     @Override
@@ -47,6 +51,7 @@ public class ShootAtAngleAtSpeedCommand extends Command{
 
     @Override
     public void end(boolean isInterrupted) {
+        shotTimer.stop();
         this.turretSubsystem.stopSpitter();
         this.turretSubsystem.stopSpindexer();
         this.turretSubsystem.stopKicker();

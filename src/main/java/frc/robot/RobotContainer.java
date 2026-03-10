@@ -19,9 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DriveFwd2s;
@@ -36,7 +34,6 @@ import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
-import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
@@ -44,7 +41,6 @@ import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.SmartCameraNetwork;
 import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
@@ -52,7 +48,7 @@ public class RobotContainer {
     private static final double INTAKE_EXTEND_SPEED = 1;
 
     private static final IntakeSubsystem intake = new IntakeSubsystem();
-    private static final CommandSwerveDrivetrain swerve = TunerConstants.createDrivetrain();
+    private static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private static final VisionSubsystem vision = new VisionSubsystem();
     private static final TurretSubsystem turret = new TurretSubsystem();
     private static final GyroSubsystem gyro = new GyroSubsystem();
@@ -78,7 +74,8 @@ public class RobotContainer {
     private final SlewRateLimiter rotationLimiter =
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    private final TurretLockCommand turretLockCommand =
+        new TurretLockCommand(turret, drivetrain, vision);
 
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -91,6 +88,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        turret.setDefaultCommand(turretLockCommand);
 
         // Driver controller bindings
 
@@ -101,7 +99,7 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> {
                 double xInput = -1 * applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
                 double yInput = -1 * applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
-                double turnInput = shapeTurnInput(-1 * applyDeadband(controller_drive.getRightX(), Constants.Controller.ROTATION_INPUT_DEADBAND));
+                double turnInput = shapeTurnInput(-controller_drive.getRightX());
                 return drive.withVelocityX(xInput * MaxSpeed)
                     .withVelocityY(yInput * MaxSpeed)
                     .withRotationalRate(rotationLimiter.calculate(turnInput * MaxAngularRate)); // smoothed turn request
@@ -132,9 +130,8 @@ public class RobotContainer {
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
         ));
-        controller_operator.leftTrigger().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // [BEN] please implement IgnoreSafeties here
         controller_operator.leftTrigger().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED));
-        controller_operator.leftTrigger().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
+        controller_operator.leftTrigger().and(controller_operator.back()).onTrue(new DisenableTrackerCommand(vision));
         controller_operator.leftTrigger().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftTrigger().onFalse(new ElasticManualOverrideCommand(() -> false));
         // Climber & Intake Extension
@@ -201,11 +198,11 @@ public class RobotContainer {
         );
         autoChooser.addOption(
             "Drive for 2 seconds",
-            new DriveFwd2s(swerve)
+            new DriveFwd2s(drivetrain)
         );
         autoChooser.addOption(
             "Extand Down Move And Gather",
-            new ExtendDownMoveAndGather(intake,swerve)
+            new ExtendDownMoveAndGather(intake, drivetrain)
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -215,12 +212,9 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
-    public void init() {
-        new TurretLockCommand(turret, gyro, drivetrain, vision.smartCamera);
-    }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }
     public static TurretSubsystem getTurretSubsystem() { return turret; }
-    public static CommandSwerveDrivetrain getDrivetrain() { return swerve; }
+    public static CommandSwerveDrivetrain getDrivetrain() { return drivetrain; }
 }

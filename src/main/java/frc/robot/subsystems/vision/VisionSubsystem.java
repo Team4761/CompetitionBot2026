@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.SmartCameraNetwork;
 import frc.robot.util.SmartCameraNetwork.TargetObservation;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class VisionSubsystem extends SubsystemBase {
@@ -35,8 +36,28 @@ public class VisionSubsystem extends SubsystemBase {
         return distToAprilCode - Constants.Vision.BACKUP_DIST;
     }
 
+    @Override
+    public void periodic() {
+        processAprilTags();
+    }
+
     public void processAprilTags() {
-        Optional<TargetObservation> observation = smartCamera.getBestObservation(22);
+        Optional<TargetObservation> observation = Optional.empty();
+        if (Constants.Vision.TRACKED_TAG_ID > 0) {
+            observation = smartCamera.getBestObservation(Constants.Vision.TRACKED_TAG_ID);
+        } else {
+            Optional<HashMap<Integer, TargetObservation>> aprilTags = smartCamera.getAllAprilTags();
+            if (aprilTags.isPresent()) {
+                double nearestDistance = Double.POSITIVE_INFINITY;
+                for (TargetObservation candidate : aprilTags.get().values()) {
+                    if (candidate.getDistanceMeters() < nearestDistance) {
+                        observation = Optional.of(candidate);
+                        nearestDistance = candidate.getDistanceMeters();
+                    }
+                }
+            }
+        }
+
         if (observation.isPresent()) {
             this.angleToAprilCode = observation.get().getAngleDegrees();
             this.distToAprilCode = observation.get().getDistanceMeters();
