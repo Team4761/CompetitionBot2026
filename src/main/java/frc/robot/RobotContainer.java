@@ -120,15 +120,6 @@ public class RobotContainer {
         //run intake/outtake
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
-        //music
-        orchestra.addInstrument(swerve.getModule(0).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(0).getSteerMotor());
-        orchestra.addInstrument(swerve.getModule(1).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(1).getSteerMotor());
-        orchestra.addInstrument(swerve.getModule(2).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(2).getSteerMotor());
-        orchestra.addInstrument(swerve.getModule(3).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(3).getSteerMotor());
         controller_drive.a().and(controller_drive.b()).and(controller_drive.x()).and(controller_drive.y()).and(controller_drive.start()).and(controller_drive.back()).whileTrue(
             new InstantCommand(() -> orchestra.play()));
         // Operator controller bindings
