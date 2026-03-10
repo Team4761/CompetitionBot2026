@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Set;
+
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DriveFwd2s;
@@ -28,11 +31,12 @@ import frc.robot.autos.Shoot3s;
 import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.climber.ClimbCommand;
-import frc.robot.subsystems.climber.ClimberSubsystem;
+import frc.robot.subsystems.DoNothingCommand;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
+import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
@@ -40,18 +44,21 @@ import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.subsystems.intake.ExtendAtSpeedCommand;
-import frc.robot.subsystems.intake.ExtendOrRetractCommand;
+import frc.robot.util.SmartCameraNetwork;
+import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
+    private static final double INTAKE_EXTEND_SPEED = 1;
+
     private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final CommandSwerveDrivetrain swerve = TunerConstants.createDrivetrain();
     private static final VisionSubsystem vision = new VisionSubsystem();
     private static final TurretSubsystem turret = new TurretSubsystem();
     private static final GyroSubsystem gyro = new GyroSubsystem();
-    private static final ClimberSubsystem climber = new ClimberSubsystem();
     private static final Orchestra orchestra = new Orchestra("output.chrp");
+
+    //private static final SmartCameraNetwork camNetwork = new SmartCameraNetwork(null);
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
@@ -75,15 +82,13 @@ public class RobotContainer {
 
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
-    //for toggleing direction of intake
-    private double extendSpeed = 0.5;
+    // Tracks which intake state
+    private boolean isIntakeExtended = false;
 
     public RobotContainer() {
         configureBindings();
         configAutos();
     }
-
-
 
     private void configureBindings() {
 
@@ -117,28 +122,25 @@ public class RobotContainer {
         //run intake/outtake
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
-        //music
-        orchestra.addInstrument(swerve.getModule(0).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(0).getSteerMotor());
-        orchestra.addInstrument(swerve.getModule(1).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(1).getSteerMotor());
-        orchestra.addInstrument(swerve.getModule(2).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(2).getSteerMotor());
-        orchestra.addInstrument(swerve.getModule(3).getDriveMotor());
-        orchestra.addInstrument(swerve.getModule(3).getSteerMotor());
         controller_drive.a().and(controller_drive.b()).and(controller_drive.x()).and(controller_drive.y()).and(controller_drive.start()).and(controller_drive.back()).whileTrue(
             new InstantCommand(() -> orchestra.play()));
+        controller_drive.rightBumper().whileTrue(new JostleCommand(intake));
         // Operator controller bindings
 
         controller_operator.rightTrigger().whileTrue(new ShootCommand(turret));
         
         
+        
         // Construct the TurretAimChangeCommand directly [FIXME]
-        new TurretAimChangeCommand(
+        
+        turret.setDefaultCommand(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
-            () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND));
+            () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
+        ));
         // Manual Override
+
+        //new TurretLockCommand(turret, gyro, drivetrain, null);
         
         controller_operator.leftTrigger().and(controller_operator.leftStick().or(controller_operator.rightStick())).whileTrue(
             new TurretAimChangeCommand(
@@ -156,10 +158,25 @@ public class RobotContainer {
         /*controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
         controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released*/
 
-        controller_operator.start().onTrue(new ExtendOrRetractCommand(intake, extendSpeed)); //extend or retract intake
-        controller_operator.start().onFalse(Commands.runOnce(() -> { extendSpeed = extendSpeed * -1;}));//toggle whether it goes up or down
         
-        controller_operator.y().whileTrue(new ClimbCommand(climber, 0));
+        controller_operator.rightBumper().whileTrue(new JostleCommand(intake));
+        
+        
+        controller_operator.start().onTrue(
+            Commands.defer(
+                () -> {
+                    System.out.println(this.isIntakeExtended);
+                    if (this.isIntakeExtended) {
+                        this.isIntakeExtended = false;
+                        return new DoNothingCommand();
+                    } else {
+                        this.isIntakeExtended = true;
+                        return new ExtendCommand(intake);
+                    }
+                },
+                Set.of(intake)
+            )
+        );
        
         drivetrain.registerTelemetry(logger::telemeterize);
     }
@@ -216,7 +233,6 @@ public class RobotContainer {
     public void init() {
         new TurretLockCommand(turret, gyro, drivetrain, vision.smartCamera);
     }
-    public static ClimberSubsystem getClimberSubsystem() { return climber; }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }

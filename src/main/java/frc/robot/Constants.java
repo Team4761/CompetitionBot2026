@@ -73,6 +73,9 @@ public class Constants {
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 
             public static final double KICKER_INIT_DELAY = 1; // Units: seconds
+
+            public static final double TURRET_HORIZONTAL_MULTIPLIER = 2.0;
+            public static final double TURRET_VERTICAL_MULTIPLIER = 1.2;
         }
 
         public class Horizontal {
@@ -110,10 +113,15 @@ public class Constants {
         public static final int INTAKE_EXTENDER_MOTOR_PORT = 55; // Type: kraken
         public static final int MAIN_INTAKE_MOTOR_PORT = 57; // Type: kraken
 
-        public static final double CONVERSION_FACTOR_MtoE = 14 / 64; // Motor rotations -> extender rotations
-        public static final double CONVERSION_FACTOR_EtoM = 64 / 14; // extender rotations -> Motor rotations
+        public static final double CONVERSION_FACTOR_MtoE = 13.1875; // Motor rotations -> extender rotations
+        public static final double CONVERSION_FACTOR_EtoM = 1 / 13.1875; // extender rotations -> Motor rotations
 
-        public static final double SECONDS_IT_TAKES_TO_RETRACT_AT_FULL_SPEED = 1;//temp value[FIXME]
+        public static final double MIN_EXTENSION_ANGLE = -105.0; // Units: degrees
+        public static final double MAX_EXTENSION_ANGLE = 0.0; // Units: degrees
+
+        public static final double RETRACTION_SPEED = 1.0; // Units: percent (0-1)
+
+        public static final double SECONDS_IT_TAKES_TO_RETRACT_AT_FULL_SPEED = 5.0; // temp value [FIXME]
     }
 
     public class RelativeHubLocation {
