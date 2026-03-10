@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DriveFwd2s;
@@ -33,8 +34,9 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.DoNothingCommand;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
-import frc.robot.subsystems.intake.RetractCommand;
+import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
@@ -120,9 +122,6 @@ public class RobotContainer {
         //run intake/outtake
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
-        controller_drive.a().and(controller_drive.b()).and(controller_drive.x()).and(controller_drive.y()).and(controller_drive.start()).and(controller_drive.back()).whileTrue(
-            new InstantCommand(() -> orchestra.play()
-        ));
         
         // Operator controller bindings
         controller_operator.rightTrigger().whileTrue(new ShootCommand(turret));
@@ -144,14 +143,17 @@ public class RobotContainer {
         /*controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
         controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released*/
 
+        
+        controller_operator.rightBumper().whileTrue(new JostleCommand(intake));
+        
+        
         controller_operator.start().onTrue(
             Commands.defer(
                 () -> {
                     System.out.println(this.isIntakeExtended);
                     if (this.isIntakeExtended) {
                         this.isIntakeExtended = false;
-                        return new RetractCommand(intake);
-                        //return new DoNothingCommand();
+                        return new DoNothingCommand();
                     } else {
                         this.isIntakeExtended = true;
                         return new ExtendCommand(intake);
