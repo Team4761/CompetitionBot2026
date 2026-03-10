@@ -10,8 +10,6 @@ public class Constants {
     // Controller
     public static final int CONTROLLER_PORT = 0; // Port on the Driverstation
 
-    public static final String TEAM = "BLUE"; // Type: enum("BLUE", "RED")
-
     public class Robot {
         public static final double ROBOT_WIDTH = Units.inchesToMeters(27.0); // Units: meters
         public static final double ROBOT_LENGTH = Units.inchesToMeters(27.0); // Units: meters
@@ -67,7 +65,7 @@ public class Constants {
 
         public class ShootConfig {
             public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
-            
+
             public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 0.75; // Units: percent (0-1)
             public static final double INTAKE_SPEED = 0.5; // Units: percent (0-1)
@@ -153,7 +151,7 @@ public class Constants {
 
         // [FIXME]: make init for it use Elastic dashboard instead of constant
         public static final Map<Integer, Translation2d> MY_APRIL_POS =
-            "BLUE".equals(TEAM) ? BLUE_APRIL_POS : RED_APRIL_POS;
+            "BLUE".equals(Field.ALLIANCE_COLOR) ? BLUE_APRIL_POS : RED_APRIL_POS;
 
         public static final double Z_POS = 48.6; // Units: in.
         public static final double CENTER_OFFSET_MARGIN = 20.85; // Units: in.

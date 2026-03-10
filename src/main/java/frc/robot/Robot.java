@@ -69,6 +69,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+        // Set up the SmartDashboard options for the alliance color and starting position
+        SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
+        SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
         SmartDashboard.putBoolean("Manual Turret Control", false);
         teamChooser.addOption("BLUE", "BLUE");
         teamChooser.addOption("RED", "RED");
@@ -79,6 +82,26 @@ public class Robot extends TimedRobot {
         positionChooser.setDefaultOption("CENTER", "CENTER");
         SmartDashboard.putData("Team", teamChooser);
         SmartDashboard.putData("Position", positionChooser);
+        SmartDashboard.putString("Driver Controller Bindings", 
+            "Left Joystick: Move the Robot (field oriented)\n" +
+            "Right Joystick: Turn (Right Clockwise, Left Counter-Clockwise)\n" +
+            "Right Trigger: Run the Intake\n" +
+            "Left Trigger: Run the Outtake\n" +
+            "Back Button: Reset Field Orientation"
+        );
+        SmartDashboard.putString("Operator Controller Bindings", 
+            "Right Trigger: Shoot (Hold to Shoot)\n" +
+            "Right Bumper: Jostle the Intake\n" +
+            "Start Button: Extend the Intake, if not already extended\n" +
+            "Left Trigger: Initiate Manual Override (Hold to Override)\n" +
+            "Manual Override Controls (While Manual Override is Active):\n" +
+            "MO: Left Joystick: Control the Turret's Vertical Aim\n" +
+            "MO: Right Joystick: Control the Turret's Horizontal Aim\n" +
+            "MO: Right Trigger: Shoot Wihout Safeties (Hold to Shoot)\n" +
+            "MO: B Button: Run the Spindexer Backwards\n" +
+            "MO: Back Button: Disable Vision Tracking\n"
+
+        );
     }
 
     @Override

@@ -2,10 +2,17 @@ package frc.robot.subsystems.turret;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
+/**
+ * This command spins the kicker.
+ */
 public class KickerSpinCommand extends Command{
     private double spinSpeed;
     private TurretSubsystem turretSubsystem;
-
+    /**
+     * 
+     * @param sub The turret subsystem
+     * @param speed The speed to run the kicker
+     */
     public KickerSpinCommand(TurretSubsystem sub, double speed) {
         this.spinSpeed = speed;
         this.turretSubsystem = sub;
