@@ -6,8 +6,12 @@ package frc.robot;
 
 import com.ctre.phoenix6.HootAutoReplay;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -32,12 +36,23 @@ public class Robot extends TimedRobot {
         TELEOP_FOURTH_SHIFT,
         ENDGAME
     }
+    private enum TEAM {
+        RED,
+        BLUE
+    }
+    private enum POSITION {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
 
     private MatchPhase currentPhase;
     private Timer phaseTimer;
     private double phaseDuration;
     private VisionSubsystem visionSubsystem = new VisionSubsystem();
-
+    private SendableChooser<String> teamChooser = new SendableChooser<>();
+    private SendableChooser<String> positionChooser = new SendableChooser<>();
+    
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
         .withTimestampReplay()
@@ -55,6 +70,15 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         SmartDashboard.putBoolean("Manual Turret Control", false);
+        teamChooser.addOption("BLUE", "BLUE");
+        teamChooser.addOption("RED", "RED");
+        teamChooser.setDefaultOption("BLUE", "BLUE");
+        positionChooser.addOption("LEFT", "LEFT");
+        positionChooser.addOption("CENTER", "CENTER");
+        positionChooser.addOption("RIGHT", "RIGHT");
+        positionChooser.setDefaultOption("CENTER", "CENTER");
+        SmartDashboard.putData("Team", teamChooser);
+        SmartDashboard.putData("Position", positionChooser);
     }
 
     @Override
@@ -86,6 +110,9 @@ public class Robot extends TimedRobot {
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;
+        Constants.Field.ALLIANCE_COLOR = teamChooser.getSelected();
+        Constants.Field.STARTING_POSITION = positionChooser.getSelected();
+        System.out.println("Alliance: " + teamChooser.getSelected() + ", Starting Position: " +  positionChooser.getSelected());
 
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);

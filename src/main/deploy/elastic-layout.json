@@ -53,7 +53,7 @@
             }
           },
           {
-            "title": "Field",
+            "title": "Pose",
             "x": 0.0,
             "y": 0.0,
             "width": 768.0,
@@ -159,7 +159,7 @@
           {
             "title": "Auto Chooser",
             "x": 768.0,
-            "y": 0.0,
+            "y": 128.0,
             "width": 256.0,
             "height": 128.0,
             "type": "ComboBox Chooser",
@@ -170,7 +170,7 @@
             }
           },
           {
-            "title": "Field",
+            "title": "Pose",
             "x": 0.0,
             "y": 0.0,
             "width": 768.0,
@@ -191,16 +191,40 @@
             }
           },
           {
+            "title": "Team",
+            "x": 768.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Split Button Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Team",
+              "period": 0.06
+            }
+          },
+          {
             "title": "April Tag Status",
             "x": 768.0,
-            "y": 256.0,
+            "y": 0.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 128.0,
             "type": "Single Color View",
             "properties": {
               "topic": "/SmartDashboard/April Tag Status",
               "period": 0.06,
               "data_type": "string"
+            }
+          },
+          {
+            "title": "Position",
+            "x": 768.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Split Button Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Position",
+              "period": 0.06
             }
           }
         ]

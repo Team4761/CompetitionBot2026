@@ -67,9 +67,10 @@ public class Constants {
 
         public class ShootConfig {
             public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
+            
             public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
-            public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
-            public static final double INTAKE_SPEED = 0.3; // Units: percent (0-1)
+            public static final double SPITTER_SPEED = 0.75; // Units: percent (0-1)
+            public static final double INTAKE_SPEED = 0.5; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 
             public static final double KICKER_INIT_DELAY = 1; // Units: seconds
@@ -95,8 +96,8 @@ public class Constants {
             public static final double CONVERSION_FACTOR_HtoM = 325.0 / 18.0; // Hood rotations -> motor rotations
             public static final double CONVERSION_FACTOR_MtoH = 18.0 / 325.0; // Motor rotations -> hood rotations
 
-            public static final double MIN_HOOD_ANGLE_DEGREES = 0.0; // Units: degrees from bottom stop
-            public static final double MAX_HOOD_ANGLE_DEGREES = 31.0; // Units: safe degrees from bottom stop
+            public static final double MIN_HOOD_ANGLE_DEGREES = -31.0; // Units: degrees from bottom stop
+            public static final double MAX_HOOD_ANGLE_DEGREES = 0.0; // Units: safe degrees from bottom stop
 
             public static final double MIN_LAUNCH_ANGLE_DEGREES = 22.0; // Units: degrees from horizontal at bottom stop
             public static final double MAX_LAUNCH_ANGLE_DEGREES =
@@ -156,5 +157,10 @@ public class Constants {
 
         public static final double Z_POS = 48.6; // Units: in.
         public static final double CENTER_OFFSET_MARGIN = 20.85; // Units: in.
+    }
+    public class Field {
+        public static String ALLIANCE_COLOR = "BLUE"; // Type: enum("BLUE", "RED")
+        public static String STARTING_POSITION = "CENTER"; // Type: enum("LEFT", "CENTER", "RIGHT")
+
     }
 }
