@@ -17,6 +17,7 @@ public class RetractCommand extends Command{
      */
     public RetractCommand(IntakeSubsystem sub) {
         this.intakeSubsystem = sub;
+        addRequirements(sub);
     }
 
     @Override

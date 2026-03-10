@@ -3,32 +3,10 @@ package frc.robot.subsystems.turret;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-public class ElasticManualOverrideCommand extends Command{
-    private TurretSubsystem turretSubsystem;
-    private BooleanSupplier override;
-    public ElasticManualOverrideCommand(TurretSubsystem sub, BooleanSupplier override) {
-        this.turretSubsystem = sub;
-        this.override = override;
-        addRequirements(sub);
-    }
-
-    @Override
-    public void initialize() {
-    }
-
-    @Override
-    public void execute() {
-        SmartDashboard.putBoolean("Manual Turret Control", override.getAsBoolean());
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    public void end(boolean isInterrupted) {
+public class ElasticManualOverrideCommand extends InstantCommand{
+    public ElasticManualOverrideCommand(BooleanSupplier override) {
+        super(() -> SmartDashboard.putBoolean("Manual Turret Control", override.getAsBoolean()));
     }
 }

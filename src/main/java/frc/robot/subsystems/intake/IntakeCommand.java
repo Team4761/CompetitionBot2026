@@ -13,6 +13,7 @@ public class IntakeCommand extends Command{
      */
     public IntakeCommand(IntakeSubsystem sub) {
         this.intakeSubsystem = sub;
+        addRequirements(sub);
     }
 
     @Override

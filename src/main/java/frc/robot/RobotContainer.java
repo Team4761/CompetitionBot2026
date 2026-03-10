@@ -121,33 +121,23 @@ public class RobotContainer {
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
         controller_drive.a().and(controller_drive.b()).and(controller_drive.x()).and(controller_drive.y()).and(controller_drive.start()).and(controller_drive.back()).whileTrue(
-            new InstantCommand(() -> orchestra.play()));
+            new InstantCommand(() -> orchestra.play()
+        ));
+        
         // Operator controller bindings
-
         controller_operator.rightTrigger().whileTrue(new ShootCommand(turret));
-        
-        
-        // Construct the TurretAimChangeCommand directly [FIXME]
-        
-        turret.setDefaultCommand(new TurretAimChangeCommand(
+
+        // Manual Override
+        controller_operator.leftTrigger().whileTrue(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
         ));
-        // Manual Override
-
-        //new TurretLockCommand(turret, gyro, drivetrain, null);
-        
-        controller_operator.leftTrigger().and(controller_operator.leftStick().or(controller_operator.rightStick())).whileTrue(
-            new TurretAimChangeCommand(
-                turret,
-                () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
-                () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)));
         controller_operator.leftTrigger().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // [BEN] please implement IgnoreSafeties here
         controller_operator.leftTrigger().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED));
         controller_operator.leftTrigger().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
-        controller_operator.leftTrigger().whileTrue(new ElasticManualOverrideCommand(turret, () -> true));
-        controller_operator.leftTrigger().whileFalse(new ElasticManualOverrideCommand(turret, () -> false));
+        controller_operator.leftTrigger().onTrue(new ElasticManualOverrideCommand(() -> true));
+        controller_operator.leftTrigger().onFalse(new ElasticManualOverrideCommand(() -> false));
         // Climber & Intake Extension
         
         //what we had previosly

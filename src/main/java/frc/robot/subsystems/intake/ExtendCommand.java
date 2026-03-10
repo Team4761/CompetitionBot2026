@@ -12,6 +12,7 @@ public class ExtendCommand extends Command {
 
     public ExtendCommand(IntakeSubsystem sub) {
         this.intakeSubsystem = sub;
+        addRequirements(sub);
     }
     
     public void initialize(){

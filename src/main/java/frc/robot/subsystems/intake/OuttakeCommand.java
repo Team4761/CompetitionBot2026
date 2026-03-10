@@ -12,6 +12,7 @@ public class OuttakeCommand extends Command{
      */
     public OuttakeCommand(IntakeSubsystem sub) {
         this.intakeSubsystem = sub;
+        addRequirements(sub);
     }
 
     private double speed = (-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED_RPM);
