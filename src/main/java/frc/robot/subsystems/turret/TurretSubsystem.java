@@ -70,6 +70,8 @@ public class TurretSubsystem extends SubsystemBase {
     public void setVerticalMotor(double launchAngleDegrees) {
         verticalMotor.set(toVerticalMotorDegrees(toHoodDegreesFromLaunchAngle(launchAngleDegrees)));
     }
+    public double getHorizontalMotorAngle() { return horizontalMotor.getAngle();}
+    public double getVerticalMotorAngle() { return verticalMotor.getAngle();}
 
     public void stopHorizontal() { horizontalMotor.stopTurning(); }
     public void stopVertical() { verticalMotor.stopTurning(); }

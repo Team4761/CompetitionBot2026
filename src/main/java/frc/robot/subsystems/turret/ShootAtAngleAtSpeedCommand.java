@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 
+/**
+ * This command is utilized more for autonomous. Controls the hood and shooter. Sets a firing angle and shoots.
+ */
 public class ShootAtAngleAtSpeedCommand extends Command{
 
     private final TurretSubsystem turretSubsystem;

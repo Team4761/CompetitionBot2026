@@ -38,6 +38,7 @@ import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
+import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
@@ -137,6 +138,7 @@ public class RobotContainer {
         controller_operator.leftTrigger().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
         controller_operator.leftTrigger().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftTrigger().onFalse(new ElasticManualOverrideCommand(() -> false));
+        controller_operator.a().whileTrue(new ElasticRetrieveDataCommand(turret));
         // Climber & Intake Extension
         
         //what we had previosly

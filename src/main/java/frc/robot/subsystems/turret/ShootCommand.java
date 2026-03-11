@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 
+/*
+ * Generalized shoot command. It shoots in an arc.
+ */
 public class ShootCommand extends Command {
     private final TurretSubsystem turretSubsystem;
 
