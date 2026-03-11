@@ -188,3 +188,4 @@ compile_commands.json
 
 # Mine
 /.gradle-user-home/
+/.gradle-user/

@@ -1,7 +1,7 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.DoNothingCommand;
+import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.subsystems.turret.*;
 
 public class Shoot3s extends SequentialCommandGroup {

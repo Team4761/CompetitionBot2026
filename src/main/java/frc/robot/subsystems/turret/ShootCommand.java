@@ -9,6 +9,8 @@ import frc.robot.Constants;
  */
 public class ShootCommand extends Command {
     private final TurretSubsystem turretSubsystem;
+    private final Timer feederDelayTimer = new Timer();
+    private boolean feedersStarted;
 
     /**
      * @param sub The turret subsystem holding the shooter components
@@ -25,15 +27,19 @@ public class ShootCommand extends Command {
 
     @Override
     public void initialize() {
+        feedersStarted = false;
+        feederDelayTimer.restart();
         this.turretSubsystem.setSpitterMotorSpeed(Constants.Turret.ShootConfig.SPITTER_SPEED);
-        Timer.delay(Constants.Turret.ShootConfig.KICKER_INIT_DELAY);
-        this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED); 
-        this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED);
     }
 
     @Override
     public void execute() {
-        // Keep motors running
+        // Delay feeding without stalling the scheduler thread.
+        if (!feedersStarted && feederDelayTimer.hasElapsed(Constants.Turret.ShootConfig.KICKER_INIT_DELAY)) {
+            this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
+            this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED);
+            feedersStarted = true;
+        }
     }
 
     @Override
@@ -43,6 +49,7 @@ public class ShootCommand extends Command {
 
     @Override
     public void end(boolean isInterrupted) {
+        feederDelayTimer.stop();
         this.turretSubsystem.stopSpitter();
         this.turretSubsystem.stopSpindexer();
         this.turretSubsystem.stopKicker();

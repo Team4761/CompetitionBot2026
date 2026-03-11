@@ -28,10 +28,10 @@ import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
 import frc.robot.autos.Shoot3s;
+import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.DoNothingCommand;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.JostleCommand;
@@ -53,7 +53,7 @@ public class RobotContainer {
     private static final double INTAKE_EXTEND_SPEED = 1;
 
     private static final IntakeSubsystem intake = new IntakeSubsystem();
-    private static final CommandSwerveDrivetrain swerve = TunerConstants.createDrivetrain();
+    private static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private static final VisionSubsystem vision = new VisionSubsystem();
     private static final TurretSubsystem turret = new TurretSubsystem();
     private static final GyroSubsystem gyro = new GyroSubsystem();
@@ -78,8 +78,6 @@ public class RobotContainer {
     private final CommandXboxController controller_operator = new CommandXboxController(1);
     private final SlewRateLimiter rotationLimiter =
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
-
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
     private final SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -203,11 +201,11 @@ public class RobotContainer {
         );
         autoChooser.addOption(
             "Drive for 2 seconds",
-            new DriveFwd2s(swerve)
+            new DriveFwd2s(drivetrain)
         );
         autoChooser.addOption(
             "Extand Down Move And Gather",
-            new ExtendDownMoveAndGather(intake,swerve)
+            new ExtendDownMoveAndGather(intake,drivetrain)
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -224,5 +222,5 @@ public class RobotContainer {
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }
     public static TurretSubsystem getTurretSubsystem() { return turret; }
-    public static CommandSwerveDrivetrain getDrivetrain() { return swerve; }
+    public static CommandSwerveDrivetrain getDrivetrain() { return drivetrain; }
 }

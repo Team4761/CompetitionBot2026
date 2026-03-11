@@ -7,8 +7,8 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import frc.robot.subsystems.DoNothingCommand;
 
 public class TurnMotors extends SequentialCommandGroup {
     private static final double AUTO_TURN_RATE_RAD_PER_SEC =
