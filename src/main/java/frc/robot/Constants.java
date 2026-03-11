@@ -69,13 +69,13 @@ public class Constants {
             public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
             public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
-            public static final double INTAKE_SPEED = 0.3; // Units: percent (0-1)
+            public static final double INTAKE_SPEED = 0.4; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 
             public static final double KICKER_INIT_DELAY = 1; // Units: seconds
 
-            public static final double TURRET_HORIZONTAL_MULTIPLIER = 2.0;
-            public static final double TURRET_VERTICAL_MULTIPLIER = 1.2;
+            public static final double TURRET_HORIZONTAL_MULTIPLIER = 2.5;
+            public static final double TURRET_VERTICAL_MULTIPLIER = 1.5;
         }
 
         public class Horizontal {
@@ -95,8 +95,8 @@ public class Constants {
             public static final double CONVERSION_FACTOR_HtoM = 325.0 / 18.0; // Hood rotations -> motor rotations
             public static final double CONVERSION_FACTOR_MtoH = 18.0 / 325.0; // Motor rotations -> hood rotations
 
-            public static final double MIN_HOOD_ANGLE_DEGREES = 0.0; // Units: degrees from bottom stop
-            public static final double MAX_HOOD_ANGLE_DEGREES = 31.0; // Units: safe degrees from bottom stop
+            public static final double MIN_HOOD_ANGLE_DEGREES = -31.0; // Units: degrees from bottom stop
+            public static final double MAX_HOOD_ANGLE_DEGREES = 0.0; // Units: safe degrees from bottom stop
 
             public static final double MIN_LAUNCH_ANGLE_DEGREES = 22.0; // Units: degrees from horizontal at bottom stop
             public static final double MAX_LAUNCH_ANGLE_DEGREES =
