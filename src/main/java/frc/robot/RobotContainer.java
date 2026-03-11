@@ -153,10 +153,10 @@ public class RobotContainer {
                     System.out.println(this.isIntakeExtended);
                     if (this.isIntakeExtended) {
                         this.isIntakeExtended = false;
-                        return new DoNothingCommand();
+                        return new JostleCommand(intake);
                     } else {
                         this.isIntakeExtended = true;
-                        return new ExtendCommand(intake);
+                        return new DoNothingCommand();
                     }
                 },
                 Set.of(intake)
