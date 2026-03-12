@@ -14,7 +14,7 @@ import frc.robot.subsystems.intake.IntakeCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.JostleCommand;
 
-public class ExtendDownMoveAndGather  extends SequentialCommandGroup{
+public class ExtendDownMoveAndGather extends SequentialCommandGroup{
 
     private static final double AUTO_SPEED_MPS =
         0.35 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
@@ -38,7 +38,7 @@ public class ExtendDownMoveAndGather  extends SequentialCommandGroup{
                         .withRotationalRate(0.0)
                 ).withTimeout(10.0)),
             drivetrain.applyRequest(() -> idle).withTimeout(0.1),
-            new JostleCommand(intakeSubsystem)
+            new JostleCommand(intakeSubsystem).withTimeout(1)
 
         );
         */
