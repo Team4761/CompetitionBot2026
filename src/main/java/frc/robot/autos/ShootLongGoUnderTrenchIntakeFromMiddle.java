@@ -80,7 +80,7 @@ public class ShootLongGoUnderTrenchIntakeFromMiddle extends SequentialCommandGro
                         .withRotationalRate(0.2)
             ).withTimeout(10.0)),
             drivetrain.applyRequest(() -> idle).withTimeout(0.1),
-            new JostleCommand(intakeSubsystem)
+            new JostleCommand(intakeSubsystem).withTimeout(1)
         );
     }
 }
