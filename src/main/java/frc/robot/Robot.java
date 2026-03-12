@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     private MatchPhase currentPhase;
     private Timer phaseTimer;
     private double phaseDuration;
-    private VisionSubsystem visionSubsystem = new VisionSubsystem();
+    private final VisionSubsystem visionSubsystem;
     private SendableChooser<String> teamChooser = new SendableChooser<>();
     private SendableChooser<String> positionChooser = new SendableChooser<>();
     
@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
+        visionSubsystem = RobotContainer.getVisionSubsystem();
         matchTimer = new Timer();
         currentPhase = MatchPhase.AUTONOMOUS;
         phaseTimer = new Timer();
@@ -116,6 +117,7 @@ public class Robot extends TimedRobot {
         //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire purple is tracking disabled
         //make sure to to right click and click on show as single color veiw
         SmartDashboard.putString("April Tag Status", (visionSubsystem.seesAprilTag()).toHexString());
+        //SmartDashboard.putNumber("Camera Calculation Values", visionSubsytem.getCalcValues());[TODO] (ehh not really just ben needs to finish his part)
     }
 
     @Override
