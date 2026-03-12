@@ -12,7 +12,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 
-public class ExtendDownMoveAndGather  extends SequentialCommandGroup{
+public class ExtendDownMoveAndGather extends SequentialCommandGroup{
 
     private static final double AUTO_SPEED_MPS =
         0.35 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
