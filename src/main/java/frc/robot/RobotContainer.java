@@ -28,6 +28,7 @@ import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
 import frc.robot.autos.Shoot3s;
+import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
 import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
@@ -180,10 +181,10 @@ public class RobotContainer {
          * Current Autos we want to have:
          * Do Nothing  √
          * Shoot √
-         * Shoot Long √
+        * Shoot Long √  
          * Shoot, Go to Outpost, Shoot [TODO]
          * Go to Depot, Pickup, Shoot [TODO] (kind of done we need to test extend down move and gather)
-         * Shoot Long, Go under Trench, Intake From Middle [TODO]
+         * Shoot Long, Go under Trench, Intake From Middle √
          * Climb (maybe) [TODO]
          */
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
@@ -204,8 +205,12 @@ public class RobotContainer {
             new DriveFwd2s(drivetrain)
         );
         autoChooser.addOption(
-            "Extand Down Move And Gather",
+            "Extend Down Move And Gather",
             new ExtendDownMoveAndGather(intake,drivetrain)
+        );
+        autoChooser.addOption(
+            "Shoot Long Go Under Trench Intake From Middle",
+            new ShootLongGoUnderTrenchIntakeFromMiddle(intake,drivetrain,turret)
         );
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
