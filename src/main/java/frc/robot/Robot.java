@@ -74,6 +74,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
         SmartDashboard.putBoolean("Manual Turret Control", false);
+        SmartDashboard.putBoolean(TurretLockCommand.ENABLED_DASHBOARD_KEY, false);
         teamChooser.addOption("BLUE", "BLUE");
         teamChooser.addOption("RED", "RED");
         teamChooser.setDefaultOption("BLUE", "BLUE");
@@ -131,7 +132,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_robotContainer.init();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;
