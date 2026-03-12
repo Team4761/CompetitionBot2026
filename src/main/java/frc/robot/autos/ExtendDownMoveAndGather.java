@@ -38,7 +38,7 @@ public class ExtendDownMoveAndGather  extends SequentialCommandGroup{
                         .withRotationalRate(0.0)
                 ).withTimeout(10.0)),
             drivetrain.applyRequest(() -> idle).withTimeout(0.1),
-            new JostleCommand(intakeSubsystem)
+            new JostleCommand(intakeSubsystem).withTimeout(1)
 
         );
     }
