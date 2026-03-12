@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
     private MatchPhase currentPhase;
     private Timer phaseTimer;
     private double phaseDuration;
-    private VisionSubsystem visionSubsystem = new VisionSubsystem();
+    private final VisionSubsystem visionSubsystem;
     private SendableChooser<String> teamChooser = new SendableChooser<>();
     private SendableChooser<String> positionChooser = new SendableChooser<>();
     
@@ -60,6 +60,7 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
+        visionSubsystem = RobotContainer.getVisionSubsystem();
         matchTimer = new Timer();
         currentPhase = MatchPhase.AUTONOMOUS;
         phaseTimer = new Timer();

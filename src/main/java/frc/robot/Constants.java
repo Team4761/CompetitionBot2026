@@ -15,7 +15,7 @@ public class Constants {
         public static final double ROBOT_LENGTH = Units.inchesToMeters(27.0); // Units: meters
         public static final double ROBOT_HEIGHT_WITHOUT_TURRET = Units.inchesToMeters(19.375); // Units: meters
 
-        public static final Function<Double, Double> ROBOT_HEIGHT_WITH_TURRET = (theta) -> ROBOT_HEIGHT_WITHOUT_TURRET + Units.inchesToMeters(Math.sin(theta) * 4.5); // Units: meters
+        public static final Function<Double, Double> ROBOT_HEIGHT_WITH_TURRET = (theta) -> ROBOT_HEIGHT_WITHOUT_TURRET + Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5); // Units: meters
     }
 
     public class Controller {
@@ -36,17 +36,12 @@ public class Constants {
     }
 
     public class Vision {
-        public static final String DEFAULT_CAM = "good cam";
-        
-        public static final double ANGLE_DEADBAND = 2.00; // Type: Degrees
-        public static final double ANGLE_CONVERSION_FACTOR = .04; // 1/25
-        
-        public static final double FOLLOW_SPEED = 0.5; // Type: Meters
-        public static final double BACKUP_DIST = .7; // Type: Meters
+        public static final String DEFAULT_CAMERA_NAME = "goodCam"; // Type: string
 
-        public static final double DISTANCE_CONVERSION_FACTOR = 0.333; // 1/3
-
-        public static final int TRACKED_TAG_ID = 0; 
+        public static final double ANGLE_DEADBAND = 2.0; // Units: degrees
+        public static final double CAMERA_OFFSET_FROM_TURRET_X = Units.inchesToMeters(9.5); // Units: meters
+        public static final double CAMERA_OFFSET_FROM_TURRET_Y = Units.inchesToMeters(0.0); // Units: meters
+        public static final Function<Double, Double> CAMERA_OFFSET_FROM_TURRET_Z = (theta) -> Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5); // Units: meters
     }
 
     public class Climber {

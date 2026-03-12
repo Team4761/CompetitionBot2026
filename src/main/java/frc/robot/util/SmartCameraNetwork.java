@@ -124,7 +124,7 @@ public class SmartCameraNetwork {
 
     private static CameraEntry defaultCamera() {
         Transform3d robotToCamera = new Transform3d();
-        return new CameraEntry(Constants.Vision.DEFAULT_CAM, new PhotonCamera(Constants.Vision.DEFAULT_CAM), robotToCamera);
+        return new CameraEntry(Constants.Vision.DEFAULT_CAMERA_NAME, new PhotonCamera(Constants.Vision.DEFAULT_CAMERA_NAME), robotToCamera);
     }
 
     private static class CameraEntry {
