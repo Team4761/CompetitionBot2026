@@ -46,7 +46,6 @@ import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.util.SmartCameraNetwork;
 import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
@@ -55,12 +54,10 @@ public class RobotContainer {
 
     private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private static final VisionSubsystem vision = new VisionSubsystem();
+    private static final VisionSubsystem vision = new VisionSubsystem(drivetrain);
     private static final TurretSubsystem turret = new TurretSubsystem();
     private static final GyroSubsystem gyro = new GyroSubsystem();
     private static final Orchestra orchestra = new Orchestra("output.chrp");
-
-    //private static final SmartCameraNetwork camNetwork = new SmartCameraNetwork(null);
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
@@ -146,18 +143,16 @@ public class RobotContainer {
 
         
         controller_operator.rightBumper().whileTrue(new JostleCommand(intake));
-        
-        
         controller_operator.start().onTrue(
             Commands.defer(
                 () -> {
                     System.out.println(this.isIntakeExtended);
                     if (this.isIntakeExtended) {
                         this.isIntakeExtended = false;
-                        return new DoNothingCommand();
+                        return new JostleCommand(intake);
                     } else {
                         this.isIntakeExtended = true;
-                        return new ExtendCommand(intake);
+                        return new DoNothingCommand();
                     }
                 },
                 Set.of(intake)
@@ -221,7 +216,7 @@ public class RobotContainer {
     }
 
     public void init() {
-        new TurretLockCommand(turret, gyro, drivetrain, vision.smartCamera);
+        new TurretLockCommand(turret, vision);
     }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
