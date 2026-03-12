@@ -89,6 +89,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
+        turret.setDefaultCommand(new TurretLockCommand(turret, vision));
 
         // Driver controller bindings
 
@@ -218,9 +219,6 @@ public class RobotContainer {
         return autoChooser.getSelected();
     }
 
-    public void init() {
-        new TurretLockCommand(turret, vision);
-    }
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
     public static VisionSubsystem getVisionSubsystem() { return vision; }

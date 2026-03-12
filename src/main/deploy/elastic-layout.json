@@ -78,7 +78,7 @@
             "x": 768.0,
             "y": 256.0,
             "width": 256.0,
-            "height": 256.0,
+            "height": 128.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Manual Turret Control",
@@ -88,6 +88,19 @@
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
+            }
+          },
+          {
+            "title": "Turret Lock Enabled",
+            "x": 768.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Turret Lock Enabled",
+              "period": 0.06,
+              "data_type": "boolean"
             }
           },
           {
@@ -1358,6 +1371,19 @@
               "false_color": 4294198070,
               "true_icon": "None",
               "false_icon": "None"
+            }
+          },
+          {
+            "title": "Turret Lock Enabled",
+            "x": 896.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Turret Lock Enabled",
+              "period": 0.06,
+              "data_type": "boolean"
             }
           },
           {
