@@ -59,9 +59,9 @@ public class Constants {
         public static final int KICKER_MOTOR_PORT = 44; // Type: flex/vortex
 
         public class ShootConfig {
-            public static final double SPINDEXER_SPEED = 0.2; // Units: percent (0-1)
+            public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
 
-            public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
+            public static final double KICKER_SPEED = 0.6; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
             public static final double INTAKE_SPEED = 0.4; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)

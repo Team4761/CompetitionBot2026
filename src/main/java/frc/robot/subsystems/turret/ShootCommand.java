@@ -48,7 +48,7 @@ public class ShootCommand extends Command {
     }
 
     @Override
-    public void end(boolean isInterrupted) {
+    public void end(boolean isInterrupted){
         feederDelayTimer.stop();
         this.turretSubsystem.stopSpitter();
         this.turretSubsystem.stopSpindexer();

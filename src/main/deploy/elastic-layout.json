@@ -102,6 +102,34 @@
               "period": 0.06,
               "data_type": "string"
             }
+          },
+          {
+            "title": "Turret Vision Horizontal Turn Degrees",
+            "x": 1024.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Turret Vision Horizontal Turn Degrees",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Turret Vision Vertical Launch Degrees",
+            "x": 1024.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Turret Vision Vertical Launch Degrees",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
           }
         ]
       }

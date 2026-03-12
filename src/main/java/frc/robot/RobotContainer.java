@@ -27,6 +27,7 @@ import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
+import frc.robot.autos.OutpostAuto;
 import frc.robot.autos.Shoot3s;
 import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
 import frc.robot.baseCommands.DoNothingCommand;
@@ -179,8 +180,7 @@ public class RobotContainer {
         * Shoot Long √  
          * Shoot, Go to Outpost, Shoot [TODO]
          * Go to Depot, Pickup, Shoot [TODO] (kind of done we need to test extend down move and gather)
-         * Shoot Long, Go under Trench, Intake From Middle √
-         * Climb (maybe) [TODO]
+         * Shoot Long, Go under Trench, Intake From Middle [TODO]
          */
         autoChooser.setDefaultOption("Do Nothing", Commands.none());
         autoChooser.addOption(
@@ -207,7 +207,10 @@ public class RobotContainer {
             "Shoot Long Go Under Trench Intake From Middle",
             new ShootLongGoUnderTrenchIntakeFromMiddle(intake,drivetrain,turret)
         );
-
+        autoChooser.addOption(
+            "Outpost Auto",
+            new OutpostAuto(turret, vision, drivetrain)
+        );
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 

@@ -129,8 +129,9 @@ public class VisionSubsystem extends SubsystemBase {
             if (readyToFire) {
                 color = new Color(50, 255, 50);
             }
-            if (!tracking) {
-                color = new Color(255, 50, 255);
+            if (!tracking)
+            {
+                color = new Color(127,50,255);
             }
         }
         return color;

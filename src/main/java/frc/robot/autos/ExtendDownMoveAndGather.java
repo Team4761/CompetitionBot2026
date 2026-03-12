@@ -25,7 +25,7 @@ public class ExtendDownMoveAndGather  extends SequentialCommandGroup{
     public ExtendDownMoveAndGather(IntakeSubsystem intakeSubsystem,CommandSwerveDrivetrain drivetrain){
 
         final var idle = new SwerveRequest.Idle();
-        
+        /* 
         addCommands(
             new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
             //new ExtendAtSpeedCommand(intakeSubsystem, 12).withTimeout(3),
@@ -41,5 +41,6 @@ public class ExtendDownMoveAndGather  extends SequentialCommandGroup{
             new JostleCommand(intakeSubsystem)
 
         );
+        */
     }
 }
