@@ -149,11 +149,10 @@ public class RobotContainer {
             Commands.defer(
                 () -> {
                     System.out.println(this.isIntakeExtended);
-                    if (this.isIntakeExtended) {
-                        this.isIntakeExtended = false;
-                        return new JostleCommand(intake);
-                    } else {
+                    if (!this.isIntakeExtended) {
                         this.isIntakeExtended = true;
+                        return new ExtendCommand(intake);
+                    } else {
                         return new DoNothingCommand();
                     }
                 },
