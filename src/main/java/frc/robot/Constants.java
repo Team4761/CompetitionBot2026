@@ -61,7 +61,7 @@ public class Constants {
         public class ShootConfig {
             public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
 
-            public static final double KICKER_SPEED = 0.6; // Units: percent (0-1)
+            public static final double KICKER_SPEED = 0.4; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
             public static final double INTAKE_SPEED = 0.4; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)

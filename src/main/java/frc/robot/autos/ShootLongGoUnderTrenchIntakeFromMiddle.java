@@ -14,7 +14,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.JostleCommand;
-import frc.robot.subsystems.turret.ShootAtAngleAtSpeedCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 
 
@@ -47,7 +46,7 @@ public class ShootLongGoUnderTrenchIntakeFromMiddle extends SequentialCommandGro
 
                         make corrections so it sees those tags at those angles
                     */
-                    new ShootAtAngleAtSpeedCommand(turretSubsystem, 0.0, 1.0).withTimeout(4),
+                    //new ShootAtAngleAtSpeedCommand(turretSubsystem, 0.0, 1.0).withTimeout(4),
                     drivetrain.runOnce(drivetrain::seedFieldCentric),
                     drivetrain.applyRequest(() ->
                         drive.withVelocityX(0.0)
@@ -101,47 +100,47 @@ public class ShootLongGoUnderTrenchIntakeFromMiddle extends SequentialCommandGro
                         or 
                         if sees april tag 25 at 45 and 24 at -45
 
-                        make corrections so it sees those tags at those angles
-                    */
-                    new ShootAtAngleAtSpeedCommand(turretSubsystem, 0.0, 1.0).withTimeout(4),
-                    drivetrain.runOnce(drivetrain::seedFieldCentric),
-                    drivetrain.applyRequest(() ->
-                        drive.withVelocityX(0.0)
-                            .withVelocityY(0.0)
-                            .withRotationalRate(-0.5)
-                    ).withTimeout(1.0),//this time may need to be tweaked to be exactly -45
-                    drivetrain.applyRequest(() -> idle).withTimeout(0.1),
-                    /* check if 
-                        previos april tag was 10 or 11
-                            sees april tag 12 at at 0 degrees around the vertical axis(applies to all other angles)
-                        previos tag was 8 or 9
-                            sees april tag 7 at 0 
-                        previos tag was 26 or 27
-                            sees april tag 28 at 0
-                        previos tag was 25 or 24
-                            sees tag 23 at 0
-                        
-                            make corrections if the april tag is visible but not a 0
-                    */
-                    drivetrain.runOnce(drivetrain::seedFieldCentric),
-                    drivetrain.applyRequest(() ->
-                        drive.withVelocityX(AUTO_SPEED_MPS)
-                            .withVelocityY(0.0)
-                            .withRotationalRate(0.0)
-                    ).withTimeout(10.0),//this time may need to be tweaked
-                    drivetrain.applyRequest(() -> idle).withTimeout(0.1),
-                    
-                    new IntakeCommand(intakeSubsystem).withTimeout(10),
-                    drivetrain.runOnce(drivetrain::seedFieldCentric),
-                    drivetrain.applyRequest(() ->
-                        drive.withVelocityX(AUTO_SPEED_MPS)
-                            .withVelocityY(0.0)
-                            .withRotationalRate(0.2)//so that it can cover more area of the center
-                    ).withTimeout(10.0),
-                    drivetrain.applyRequest(() -> idle).withTimeout(0.1),
-                    new JostleCommand(intakeSubsystem)
-                );
-            }
-        }
+                 make corrections so it sees those tags at those angles
+            */
+            //new ShootAtAngleAtSpeedCommand(turretSubsystem, 0.0, 1.0).withTimeout(4),
+            drivetrain.runOnce(drivetrain::seedFieldCentric),
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(0.0)
+                    .withVelocityY(0.0)
+                    .withRotationalRate(0.5)
+            ).withTimeout(1.0),//this time may need to be tweaked to be exactly 45
+            drivetrain.applyRequest(() -> idle).withTimeout(0.1),
+            /* check if 
+                previos april tag was 10 or 11
+                    sees april tag 12 at at 0 degrees around the vertical axis(applies to all other angles)
+                previos tag was 8 or 9
+                    sees april tag 7 at 0 
+                previos tag was 26 or 27
+                    sees april tag 28 at 0
+                previos tag was 25 or 24
+                    sees tag 23 at 0
+                
+                    make corrections if the april tag is visible but not a 0
+            */
+            drivetrain.runOnce(drivetrain::seedFieldCentric),
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(AUTO_SPEED_MPS)
+                    .withVelocityY(0.0)
+                    .withRotationalRate(0.0)
+            ).withTimeout(10.0),//this time may need to be tweaked
+            drivetrain.applyRequest(() -> idle).withTimeout(0.1),
+            
+            new IntakeCommand(intakeSubsystem).withTimeout(10),
+            drivetrain.runOnce(drivetrain::seedFieldCentric),
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(AUTO_SPEED_MPS)
+                    .withVelocityY(0.0)
+                    .withRotationalRate(0.2)
+            ).withTimeout(10.0),
+            drivetrain.applyRequest(() -> idle).withTimeout(0.1),
+            new JostleCommand(intakeSubsystem)
+        );
+    }
+}
     }
 }

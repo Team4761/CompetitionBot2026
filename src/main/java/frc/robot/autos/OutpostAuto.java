@@ -15,7 +15,6 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
-import frc.robot.subsystems.turret.ShootAtAngleAtSpeedCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
@@ -35,7 +34,7 @@ public class OutpostAuto extends SequentialCommandGroup{
             new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
             drivetrain.runOnce(drivetrain::seedFieldCentric), // reset field heading// driv
             new InstantCommand(() -> turret.setHorizontalMotor(-80)).withTimeout(1), // this set command could use side hub AprilTags
-            new ShootAtAngleAtSpeedCommand(turret, 0, 1).withTimeout(4),
+            //new ShootAtAngleAtSpeedCommand(turret, 0, 1).withTimeout(4),
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(-1.0 * AUTO_SPEED_MPS)
                 .withVelocityY(0.0)
