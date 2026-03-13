@@ -66,4 +66,12 @@ public class IntakeSubsystem extends SubsystemBase{
     public void stopIntakeMotor() {
         intakeMotor.stopTurning();
     }
+
+    public void enableIntakeCoasting() {
+        intakeMotor.enableCoasting();
+    }
+
+    public void disableIntakeCoasting() {
+        intakeMotor.disableCoasting();
+    }
 }

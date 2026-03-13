@@ -18,6 +18,7 @@ public class IntakeCommand extends Command{
 
     @Override
     public void initialize() {
+        intakeSubsystem.disableIntakeCoasting();
         intakeSubsystem.turnIntakeMotor(Constants.Turret.ShootConfig.INTAKE_SPEED);
     }
 
@@ -36,6 +37,7 @@ public class IntakeCommand extends Command{
     //stop the motor when it is interrupted idk if necceary
     @Override
     public void end(boolean isInterrupted) {
+        intakeSubsystem.enableIntakeCoasting();
         intakeSubsystem.stopIntakeMotor();
     }
 }
