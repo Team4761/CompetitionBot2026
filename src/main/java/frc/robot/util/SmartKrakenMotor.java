@@ -99,6 +99,10 @@ public class SmartKrakenMotor {
         return this.motor.getPosition().getValueAsDouble();
     }
 
+    public double getSpeedRPM() {
+        return this.motor.getVelocity().getValueAsDouble() * 60.0;
+    }
+
     public void stopTurning() {
         this.motor.setControl(this.dutyCycleRequest.withOutput(0.0));
         if (!this.coastingEnabled) {

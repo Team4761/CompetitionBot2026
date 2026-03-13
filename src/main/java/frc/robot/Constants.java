@@ -49,7 +49,8 @@ public class Constants {
     }
 
     public class Turret {
-        public static final double MAX_SPEED_MEASURED_MpS = 15.0; // Units: m/s
+        public static final double MAX_SPEED_MEASURED_MpS = 13.5; // Units: m/s
+        public static final double MAX_RPM = 5700.0; // Units: RPM
 
         public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken 
         public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken 

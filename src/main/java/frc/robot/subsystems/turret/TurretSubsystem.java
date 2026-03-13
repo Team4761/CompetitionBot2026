@@ -93,4 +93,8 @@ public class TurretSubsystem extends SubsystemBase {
         // The bottom hood stop already shoots upward, so launch angle is offset from hood travel.
         return clampedLaunchAngle - Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES;
     }
+
+    public double getSpitterRPM() {
+        return spitterMotor.getSpeedRPM();
+    }
 }
