@@ -41,6 +41,8 @@ import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
+import frc.robot.subsystems.turret.KickerSpinCommand;
+import frc.robot.subsystems.turret.ShootAtAngleAtSpeedCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
@@ -123,19 +125,21 @@ public class RobotContainer {
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
         
         // Operator controller bindings
-        controller_operator.rightTrigger().whileTrue(new ShootCommand(turret));
+        controller_operator.leftTrigger().whileTrue(new ShootAtAngleAtSpeedCommand(turret, 31, 1));
 
         // Manual Override
-        controller_operator.leftTrigger().whileTrue(new TurretAimChangeCommand(
+        controller_operator.leftBumper().whileTrue(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
         ));
-        controller_operator.leftTrigger().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // [BEN] please implement IgnoreSafeties here
-        controller_operator.leftTrigger().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED));
-        controller_operator.leftTrigger().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
-        controller_operator.leftTrigger().onTrue(new ElasticManualOverrideCommand(() -> true));
-        controller_operator.leftTrigger().onFalse(new ElasticManualOverrideCommand(() -> false));
+        controller_operator.rightTrigger().whileTrue(new ShootAtAngleAtSpeedCommand(turret, 0, 1));
+        controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // [BEN] please implement IgnoreSafeties here
+        controller_operator.leftBumper().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED));
+        controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -Constants.Turret.ShootConfig.KICKER_SPEED));
+        controller_operator.leftBumper().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
+        controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));
+        controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
         controller_operator.a().whileTrue(new ElasticRetrieveDataCommand(turret));
         // Climber & Intake Extension
         
