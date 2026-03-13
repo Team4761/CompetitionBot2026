@@ -42,7 +42,7 @@ import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
 import frc.robot.subsystems.turret.KickerSpinCommand;
-import frc.robot.subsystems.turret.ShootAtAngleAtSpeedCommand;
+import frc.robot.subsystems.turret.ShootAtAngleCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
@@ -125,7 +125,7 @@ public class RobotContainer {
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
         
         // Operator controller bindings
-        controller_operator.leftTrigger().whileTrue(new ShootAtAngleAtSpeedCommand(turret, 31, 1));
+        controller_operator.leftTrigger().whileTrue(new ShootAtAngleCommand(turret, 31.0));
 
         // Manual Override
         controller_operator.leftBumper().whileTrue(new TurretAimChangeCommand(
@@ -133,7 +133,7 @@ public class RobotContainer {
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
         ));
-        controller_operator.rightTrigger().whileTrue(new ShootAtAngleAtSpeedCommand(turret, 0, 1));
+        controller_operator.rightTrigger().whileTrue(new ShootAtAngleCommand(turret, 0.0));
         controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // [BEN] please implement IgnoreSafeties here
         controller_operator.leftBumper().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED));
         controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -Constants.Turret.ShootConfig.KICKER_SPEED));
