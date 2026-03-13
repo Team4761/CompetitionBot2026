@@ -13,7 +13,6 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.IntakeCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.JostleCommand;
-import frc.robot.subsystems.turret.ShootAtAngleAtSpeedCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 
 
@@ -44,7 +43,7 @@ public class ShootLongGoUnderTrenchIntakeFromMiddle extends SequentialCommandGro
 
                  make corrections so it sees those tags at those angles
             */
-            new ShootAtAngleAtSpeedCommand(turretSubsystem, 0.0, 1.0).withTimeout(4),
+            //new ShootAtAngleAtSpeedCommand(turretSubsystem, 0.0, 1.0).withTimeout(4),
             drivetrain.runOnce(drivetrain::seedFieldCentric),
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(0.0)

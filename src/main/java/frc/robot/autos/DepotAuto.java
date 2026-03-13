@@ -24,8 +24,6 @@ public class DepotAuto extends SequentialCommandGroup{
 
     public DepotAuto(IntakeSubsystem intakeSubsystem,CommandSwerveDrivetrain drivetrain){
 
-    }
-
         final var idle = new SwerveRequest.Idle();
 
         //theoretically, if distances were arbitrary, this would work fine, assuming we start in the center
