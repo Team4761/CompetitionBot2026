@@ -68,8 +68,8 @@ public class Constants {
 
             public static final double KICKER_INIT_DELAY = 1; // Units: seconds
 
-            public static final double TURRET_HORIZONTAL_MULTIPLIER = 2.5;
-            public static final double TURRET_VERTICAL_MULTIPLIER = 1.5;
+            public static final double TURRET_HORIZONTAL_MULTIPLIER = 3.25;
+            public static final double TURRET_VERTICAL_MULTIPLIER = 1.95;
         }
 
         public class Horizontal {
