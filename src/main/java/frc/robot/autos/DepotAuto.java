@@ -24,7 +24,7 @@ public class DepotAuto extends SequentialCommandGroup{
 
     public DepotAuto(IntakeSubsystem intakeSubsystem,CommandSwerveDrivetrain drivetrain){
 
-    }
+    
 
         final var idle = new SwerveRequest.Idle();
 
