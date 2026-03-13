@@ -29,7 +29,7 @@ public class ShootCommandSTUTTER extends Command {
     public void initialize() {
         feedersStarted = false;
         feederDelayTimer.restart();
-        this.turretSubsystem.setSpitterMotorSpeed(Constants.Turret.ShootConfig.SPITTER_SPEED);
+        this.turretSubsystem.setSpitterMotorSpeedRPM(Constants.Turret.ShootConfig.SPITTER_SPEED);
     }
 
     @Override
