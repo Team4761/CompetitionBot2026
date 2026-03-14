@@ -61,7 +61,6 @@ public class Constants {
 
     public class Turret {
         public static final double MAX_SPEED_MEASURED_MpS = 13.5; // Units: m/s
-        public static final double MAX_RPM = 5700.0; // Units: RPM
 
         public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken 
         public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken 
@@ -74,7 +73,7 @@ public class Constants {
             public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
 
             public static final double KICKER_SPEED = 0.4; // Units: percent (0-1)
-            public static final double SPITTER_SPEED = 1; // Units: percent (0-1)
+            public static final double SPITTER_SPEED = 5000.0; // Units: rpm (0-6000)
             public static final double INTAKE_SPEED = 0.4; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 

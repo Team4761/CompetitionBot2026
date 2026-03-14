@@ -1,9 +1,9 @@
 package frc.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.baseCommands.DoNothingCommand;
-import frc.robot.baseCommands.drivetrain.DriveRelativeMetersCommand;
-import frc.robot.baseCommands.drivetrain.RotateRelativeDegreesCommand;
+import frc.robot.coreCommands.DoNothingCommand;
+import frc.robot.coreCommands.drivetrain.DriveRelativeMetersCommand;
+import frc.robot.coreCommands.drivetrain.RotateRelativeDegreesCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class PoseDriveExampleAuto extends SequentialCommandGroup {

@@ -6,23 +6,23 @@ import edu.wpi.first.wpilibj2.command.Command;
  * Spins the Spitter; the last wheel before the FUEL is ejected out of the shooter.
  */
 public class SpitterSpinCommand extends Command{
-    private double spinSpeed;
+    private double spinRPM;
     private TurretSubsystem turretSubsystem;
 
     /**
      * 
      * @param sub The turret subsystem
-     * @param speed The speed to run the spitter
+     * @param RPM The RPM to run the spitter
      */
-    public SpitterSpinCommand(TurretSubsystem sub, double speed) {
-        this.spinSpeed = speed;
+    public SpitterSpinCommand(TurretSubsystem sub, double RPM) {
+        this.spinRPM = RPM;
         this.turretSubsystem = sub;
         addRequirements(sub);
     }
 
     @Override
     public void initialize() {
-        this.turretSubsystem.setSpitterMotorSpeed(spinSpeed);
+        this.turretSubsystem.setSpitterMotorSpeedRPM(this.spinRPM);
     }
 
     @Override
