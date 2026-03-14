@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
-//import frc.robot.autos.DepotAuto;
+import frc.robot.autos.DepotAuto;
 import frc.robot.autos.DriveFwd2s;
 //import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
@@ -38,7 +38,7 @@ import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.gyro.GyroSubsystem;
-import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.intake.IntakeSubsystem; 
 import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
@@ -213,10 +213,10 @@ public class RobotContainer {
         //     "Shoot Long Go Under Trench Intake From Middle",
         //     () -> new ShootLongGoUnderTrenchIntakeFromMiddle(intake, drivetrain, turret)
         // );
-        // autoChooser.addOption(
-        //     "Depot Auto",
-        //     () -> new DepotAuto(intake, drivetrain)
-        // );
+        autoChooser.addOption(
+            "Depot Auto",
+            () -> new DepotAuto(intake, drivetrain)
+        );
         // autoChooser.addOption(
         //     "Outpost Auto",
         //     () -> new OutpostAuto(turret, vision, drivetrain)
