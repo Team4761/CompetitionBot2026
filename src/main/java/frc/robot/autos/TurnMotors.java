@@ -7,7 +7,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.baseCommands.DoNothingCommand;
+import frc.robot.coreCommands.DoNothingCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class TurnMotors extends SequentialCommandGroup {
