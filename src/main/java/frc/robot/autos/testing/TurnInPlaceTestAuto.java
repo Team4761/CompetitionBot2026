@@ -1,4 +1,4 @@
-package frc.robot.autos;
+package frc.robot.autos.testing;
 
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
@@ -9,12 +9,12 @@ import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.baseCommands.drivetrain.RotateRelativeDegreesCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
-public class TurnMotors extends SequentialCommandGroup {
+public class TurnInPlaceTestAuto extends SequentialCommandGroup {
     private static final double AUTO_TURN_DEGREES = Units.radiansToDegrees(
         0.35 * RotationsPerSecond.of(0.75).in(RadiansPerSecond) * 2.0
     );
 
-    public TurnMotors(CommandSwerveDrivetrain drivetrain) {
+    public TurnInPlaceTestAuto(CommandSwerveDrivetrain drivetrain) {
         addCommands(
             new DoNothingCommand(),
             drivetrain.runOnce(drivetrain::seedFieldCentric),

@@ -1,21 +1,19 @@
-package frc.robot.autos;
-
-import static edu.wpi.first.units.Units.MetersPerSecond;
+package frc.robot.autos.testing;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.FieldConstants;
+import frc.robot.autos.AutoSettings;
 import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.baseCommands.drivetrain.DriveToRelativePoseCommand;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
-import frc.robot.subsystems.vision.VisionSubsystem;
 
-public class OutpostAuto extends SequentialCommandGroup {
-    private static final double OUTPOST_BACKUP_DISTANCE_METERS =
-        0.35 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 3.0;
+public class OutpostLaneShotTestAuto extends SequentialCommandGroup {
+    private static final double OUTPOST_APPROACH_DISTANCE_METERS =
+        FieldConstants.Trench.TRENCH_DISTANCE_FROM_ALLIANCE_WALL - Constants.Robot.ROBOT_LENGTH;
     private static final double OUTPOST_WAIT_SECONDS = 6.0;
     private static final double TRACKING_PREP_ANGLE_DEGREES = -80.0;
     private static final double OUTPOST_SHOT_ANGLE_DEGREES = -Math.toDegrees(
@@ -25,9 +23,8 @@ public class OutpostAuto extends SequentialCommandGroup {
         )
     );
 
-    public OutpostAuto(
+    public OutpostLaneShotTestAuto(
         TurretSubsystem turret,
-        VisionSubsystem vision,
         CommandSwerveDrivetrain drivetrain
     ) {
         AutoSettings settings = AutoSettings.fromDashboardSelections();
@@ -39,7 +36,7 @@ public class OutpostAuto extends SequentialCommandGroup {
             Commands.runOnce(() -> turret.setHorizontalMotor(TRACKING_PREP_ANGLE_DEGREES), turret),
             new DriveToRelativePoseCommand(
                 drivetrain,
-                -OUTPOST_BACKUP_DISTANCE_METERS,
+                OUTPOST_APPROACH_DISTANCE_METERS,
                 settings.shiftMetersTo(AutoSettings.StartingPosition.RIGHT),
                 0.0
             ),

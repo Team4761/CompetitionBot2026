@@ -112,6 +112,8 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().run(); 
         // The Original Alexander Maniscalco helped
         SmartDashboard.putNumber("Match Time Left", Math.round((FieldConstants.Match.MATCH_DURATION-matchTimer.get())*10)/10.0);
+        SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", RobotContainer.getTurretSubsystem().getHorizontalMotorAngle());
+        SmartDashboard.putNumber("TURRET VERTICAL ANGLE", RobotContainer.getTurretSubsystem().getVerticalMotorAngle());
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);
         //below has not been tested please test

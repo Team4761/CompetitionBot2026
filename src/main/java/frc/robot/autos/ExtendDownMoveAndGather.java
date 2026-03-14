@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
-import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.baseCommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.intake.ExtendCommand;
@@ -26,7 +25,6 @@ public class ExtendDownMoveAndGather extends SequentialCommandGroup {
         double gatherDistanceMeters
     ) {
         addCommands(
-            new DoNothingCommand(),
             new ExtendCommand(intakeSubsystem),
             Commands.deadline(
                 new DriveRelativeMetersCommand(drivetrain, gatherDistanceMeters, 0.0),

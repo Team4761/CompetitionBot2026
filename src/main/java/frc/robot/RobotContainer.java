@@ -4,9 +4,10 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Orchestra;
@@ -15,34 +16,34 @@ import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
-import frc.robot.autos.CloseRangeShoot3s;
-import frc.robot.autos.DepotAuto;
-import frc.robot.autos.DriveFwd2s;
-import frc.robot.autos.ExtendDownMoveAndGather;
-import frc.robot.autos.LongRangeShoot3s;
-import frc.robot.autos.OutpostAuto;
-import frc.robot.autos.PoseDriveExampleAuto;
-import frc.robot.autos.Shoot3s;
-import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
-import frc.robot.baseCommands.DoNothingCommand;
+import frc.robot.autos.competition.DepotCollectAuto;
+import frc.robot.autos.competition.PreloadShootAuto;
+import frc.robot.autos.competition.PreloadShootThenDepotCollectAuto;
+import frc.robot.autos.competition.PreloadShootThenTrenchCollectAuto;
+import frc.robot.autos.testing.CloseRangeShotTuningAuto;
+import frc.robot.autos.testing.DriveForwardDistanceTestAuto;
+import frc.robot.autos.testing.IntakeGatherTestAuto;
+import frc.robot.autos.testing.LongRangeShotTuningAuto;
+import frc.robot.autos.testing.OutpostLaneShotTestAuto;
+import frc.robot.autos.testing.RelativePoseDriveTestAuto;
+import frc.robot.autos.testing.ShootDurationTuningAuto;
+import frc.robot.autos.testing.TurnInPlaceTestAuto;
 import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.gyro.GyroSubsystem;
+import frc.robot.subsystems.intake.IntakeCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
-import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
 import frc.robot.subsystems.turret.KickerSpinCommand;
 import frc.robot.subsystems.turret.ShootAtAngleCommand;
 import frc.robot.subsystems.turret.ShootAtAngleDRIFTCommand;
@@ -53,7 +54,6 @@ import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
     private static final double INTAKE_EXTEND_SPEED = 1;
@@ -65,13 +65,13 @@ public class RobotContainer {
     private static final GyroSubsystem gyro = new GyroSubsystem();
     private static final Orchestra orchestra = new Orchestra("output.chrp");
 
-    private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
-    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
+    private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond);
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.Velocity) // Use closed-loop velocity control for smoother low-speed behavior
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1)
+            .withDriveRequestType(DriveRequestType.Velocity)
             .withSteerRequestType(SteerRequestType.MotionMagicExpo);
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -100,19 +100,16 @@ public class RobotContainer {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() -> {
                 double xInput = -1 * applyDeadband(controller_drive.getLeftY(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
                 double yInput = -1 * applyDeadband(controller_drive.getLeftX(), Constants.Controller.TRANSLATION_INPUT_DEADBAND);
                 double turnInput = shapeTurnInput(-1 * applyDeadband(controller_drive.getRightX(), Constants.Controller.ROTATION_INPUT_DEADBAND));
                 return drive.withVelocityX(xInput * MaxSpeed)
                     .withVelocityY(yInput * MaxSpeed)
-                    .withRotationalRate(rotationLimiter.calculate(turnInput * MaxAngularRate)); // smoothed turn request
+                    .withRotationalRate(rotationLimiter.calculate(turnInput * MaxAngularRate));
             })
         );
 
-        // Idle while the robot is disabled. This ensures the configured
-        // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
@@ -124,26 +121,24 @@ public class RobotContainer {
 
         //#region --- Driver Controller Bindings ---
 
-        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); // Reset the field-centric heading on left bumper press.
+        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
-        
+
         //#endregion
 
         //#region --- Operator Controller Bindings ---
 
-        // Normal bindings
-        controller_operator.leftTrigger().whileTrue(new ShootAtAngleCommand(turret, 31.0)); // Long shot
-        controller_operator.rightTrigger().whileTrue(new ShootAtAngleCommand(turret, 0.0)); // Short shot
-        
+        controller_operator.leftTrigger().whileTrue(new ShootAtAngleCommand(turret, 31.0));
+        controller_operator.rightTrigger().whileTrue(new ShootAtAngleCommand(turret, 0.0));
+
         controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, this.turret.getVerticalAngle()));
         controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, this.turret.getVerticalAngle()));
 
         controller_operator.rightBumper().whileTrue(new JostleCommand(intake));
 
-        // Manual Override
-        controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // Redundancy factor for shooting
-        
+        controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret));
+
         controller_operator.leftBumper().whileTrue(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
@@ -157,17 +152,12 @@ public class RobotContainer {
         controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
 
         //#endregion
-       
+
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
     private void configDefaultCommands() {
         turret.setDefaultCommand(new TurretLockCommand(turret, vision));
-
-        turret.setDefaultCommand(Commands.runOnce(() -> {
-            SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", turret.getHorizontalMotorAngle());
-            SmartDashboard.putNumber("TURRET VERTICAL ANGLE", turret.getVerticalMotorAngle());
-        }, turret));
     }
 
     private double shapeTurnInput(double rawTurn) {
@@ -180,51 +170,54 @@ public class RobotContainer {
     }
 
     private void configAutos() {
-        /*
-         * Current Autos we want to have:
-         * Do Nothing  √
-         * Shoot √
-        * Shoot Long √  
-         * Shoot, Go to Outpost, Shoot [TODO]
-         * Go to Depot, Pickup, Shoot [TODO] (kind of done we need to test extend down move and gather)
-         * Shoot Long, Go under Trench, Intake From Middle [TODO]
-         */
-        autoChooser.setDefaultOption("Do Nothing", Commands::none);
+        autoChooser.setDefaultOption("COMP - Do Nothing", Commands::none);
         autoChooser.addOption(
-            "Long Range Shoot 3s",
-            () -> new LongRangeShoot3s(turret)
+            "COMP - Preload Shoot",
+            () -> new PreloadShootAuto(turret)
         );
         autoChooser.addOption(
-            "Shoot 3s",
-            () -> new Shoot3s(turret)
+            "COMP - Preload Shoot + Depot Collect",
+            () -> new PreloadShootThenDepotCollectAuto(intake, drivetrain, turret)
         );
         autoChooser.addOption(
-            "Close Range Shoot 3s",
-            () -> new CloseRangeShoot3s(turret)
+            "COMP - Depot Collect",
+            () -> new DepotCollectAuto(intake, drivetrain)
         );
         autoChooser.addOption(
-            "Drive for 2 seconds",
-            () -> new DriveFwd2s(drivetrain)
+            "COMP - Preload Shoot + Trench Collect",
+            () -> new PreloadShootThenTrenchCollectAuto(intake, drivetrain, turret)
         );
         autoChooser.addOption(
-            "Pose Drive Example (+1m X, +0.5m Y, +90deg)",
-            () -> new PoseDriveExampleAuto(drivetrain)
+            "TEST - Long range shot tuning",
+            () -> new LongRangeShotTuningAuto(turret)
         );
         autoChooser.addOption(
-            "Extend Down Move And Gather",
-            () -> new ExtendDownMoveAndGather(intake, drivetrain)
+            "TEST - Close range shot tuning",
+            () -> new CloseRangeShotTuningAuto(turret)
         );
         autoChooser.addOption(
-            "Shoot Long Go Under Trench Intake From Middle",
-            () -> new ShootLongGoUnderTrenchIntakeFromMiddle(intake, drivetrain, turret)
+            "TEST - Shoot duration tuning",
+            () -> new ShootDurationTuningAuto(turret)
         );
         autoChooser.addOption(
-            "Depot Auto",
-            () -> new DepotAuto(intake, drivetrain)
+            "TEST - Drive forward distance",
+            () -> new DriveForwardDistanceTestAuto(drivetrain)
         );
         autoChooser.addOption(
-            "Outpost Auto",
-            () -> new OutpostAuto(turret, vision, drivetrain)
+            "TEST - Turn in place",
+            () -> new TurnInPlaceTestAuto(drivetrain)
+        );
+        autoChooser.addOption(
+            "TEST - Relative pose example",
+            () -> new RelativePoseDriveTestAuto(drivetrain)
+        );
+        autoChooser.addOption(
+            "TEST - Intake gather",
+            () -> new IntakeGatherTestAuto(intake, drivetrain)
+        );
+        autoChooser.addOption(
+            "TEST - Outpost lane / shot experiment",
+            () -> new OutpostLaneShotTestAuto(turret, drivetrain)
         );
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
