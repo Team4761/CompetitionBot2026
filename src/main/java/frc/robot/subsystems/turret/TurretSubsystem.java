@@ -97,4 +97,12 @@ public class TurretSubsystem extends SubsystemBase {
     public double getSpitterRPM() {
         return spitterMotor.getSpeedRPM();
     }
+
+    public double getHorizontalAngle() {
+        return horizontalMotor.getAngle();
+    }
+    
+    public double getVerticalAngle() {
+        return verticalMotor.getAngle();
+    }
 }

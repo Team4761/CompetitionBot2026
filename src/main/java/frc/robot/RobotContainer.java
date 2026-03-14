@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.Set;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -24,10 +25,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
+import frc.robot.autos.DepotAuto;
 import frc.robot.autos.DriveFwd2s;
 import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
 import frc.robot.autos.OutpostAuto;
+import frc.robot.autos.PoseDriveExampleAuto;
 import frc.robot.autos.Shoot3s;
 import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
 import frc.robot.baseCommands.DoNothingCommand;
@@ -38,18 +41,18 @@ import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
-import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
 import frc.robot.subsystems.turret.KickerSpinCommand;
 import frc.robot.subsystems.turret.ShootAtAngleCommand;
+import frc.robot.subsystems.turret.ShootAtAngleDRIFTCommand;
+import frc.robot.subsystems.turret.ShootAtAngleSTUTTERCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
-import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
@@ -80,7 +83,7 @@ public class RobotContainer {
     private final SlewRateLimiter rotationLimiter =
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
-    private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+    private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<>();
 
     // Tracks which intake state
     private boolean isIntakeExtended = false;
@@ -88,12 +91,11 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         configAutos();
+        configDefaultCommands();
     }
 
     private void configureBindings() {
-        turret.setDefaultCommand(new TurretLockCommand(turret, vision));
-
-        // Driver controller bindings
+        //#region --- Robot Config ---
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -118,53 +120,54 @@ public class RobotContainer {
         RobotModeTriggers.disabled().onTrue(
             drivetrain.runOnce(() -> rotationLimiter.reset(0.0)).ignoringDisable(true)
         );
-         // Reset the field-centric heading on left bumper press.
-        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-        //run intake/outtake
+        //#endregion
+
+        //#region --- Driver Controller Bindings ---
+
+        controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric)); // Reset the field-centric heading on left bumper press.
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
         
-        // Operator controller bindings
-        controller_operator.leftTrigger().whileTrue(new ShootAtAngleCommand(turret, 31.0));
+        //#endregion
+
+        //#region --- Operator Controller Bindings ---
+
+        // Normal bindings
+        controller_operator.leftTrigger().whileTrue(new ShootAtAngleCommand(turret, 31.0)); // Long shot
+        controller_operator.rightTrigger().whileTrue(new ShootAtAngleCommand(turret, 0.0)); // Short shot
+        
+        controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, this.turret.getVerticalAngle()));
+        controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, this.turret.getVerticalAngle()));
+
+        controller_operator.rightBumper().whileTrue(new JostleCommand(intake));
 
         // Manual Override
+        controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // Redundancy factor for shooting
+        
         controller_operator.leftBumper().whileTrue(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
         ));
-        controller_operator.rightTrigger().whileTrue(new ShootAtAngleCommand(turret, 0.0));
-        controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // [BEN] please implement IgnoreSafeties here
-        controller_operator.leftBumper().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -Constants.Turret.ShootConfig.SPINDEXER_SPEED));
-        controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -Constants.Turret.ShootConfig.KICKER_SPEED));
+
+        controller_operator.leftBumper().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -1 * Constants.Turret.ShootConfig.SPINDEXER_SPEED));
+        controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -1 * Constants.Turret.ShootConfig.KICKER_SPEED));
         controller_operator.leftBumper().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
         controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
-        controller_operator.a().whileTrue(new ElasticRetrieveDataCommand(turret));
-        // Climber & Intake Extension
-        
-        //what we had previosly
-        /*controller_operator.start().onTrue(new ExtendAtSpeedCommand(intake, -0.1)); // Go up when the start button is held, and go down when it's released
-        controller_operator.start().onFalse(new ExtendAtSpeedCommand(intake, 0.1)); // Go up when the start button is held, and go down when it's released*/
 
-        
-        controller_operator.rightBumper().whileTrue(new JostleCommand(intake));
-        controller_operator.start().onTrue(
-            Commands.defer(
-                () -> {
-                    System.out.println(this.isIntakeExtended);
-                    if (!this.isIntakeExtended) {
-                        this.isIntakeExtended = true;
-                        return new ExtendCommand(intake);
-                    } else {
-                        return new DoNothingCommand();
-                    }
-                },
-                Set.of(intake)
-            )
-        );
+        //#endregion
        
         drivetrain.registerTelemetry(logger::telemeterize);
+    }
+
+    private void configDefaultCommands() {
+        turret.setDefaultCommand(new TurretLockCommand(turret, vision));
+
+        turret.setDefaultCommand(Commands.runOnce(() -> {
+            SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", turret.getHorizontalMotorAngle());
+            SmartDashboard.putNumber("TURRET VERTICAL ANGLE", turret.getVerticalMotorAngle());
+        }, turret));
     }
 
     private double shapeTurnInput(double rawTurn) {
@@ -186,40 +189,49 @@ public class RobotContainer {
          * Go to Depot, Pickup, Shoot [TODO] (kind of done we need to test extend down move and gather)
          * Shoot Long, Go under Trench, Intake From Middle [TODO]
          */
-        autoChooser.setDefaultOption("Do Nothing", Commands.none());
+        autoChooser.setDefaultOption("Do Nothing", Commands::none);
         autoChooser.addOption(
             "Long Range Shoot 3s",
-            new LongRangeShoot3s(turret)
+            () -> new LongRangeShoot3s(turret)
         );
         autoChooser.addOption(
             "Shoot 3s",
-            new Shoot3s(turret)
+            () -> new Shoot3s(turret)
         );
         autoChooser.addOption(
             "Close Range Shoot 3s",
-            new CloseRangeShoot3s(turret)
+            () -> new CloseRangeShoot3s(turret)
         );
         autoChooser.addOption(
             "Drive for 2 seconds",
-            new DriveFwd2s(drivetrain)
+            () -> new DriveFwd2s(drivetrain)
+        );
+        autoChooser.addOption(
+            "Pose Drive Example (+1m X, +0.5m Y, +90deg)",
+            () -> new PoseDriveExampleAuto(drivetrain)
         );
         autoChooser.addOption(
             "Extend Down Move And Gather",
-            new ExtendDownMoveAndGather(intake,drivetrain)
+            () -> new ExtendDownMoveAndGather(intake, drivetrain)
         );
         autoChooser.addOption(
             "Shoot Long Go Under Trench Intake From Middle",
-            new ShootLongGoUnderTrenchIntakeFromMiddle(intake,drivetrain,turret)
+            () -> new ShootLongGoUnderTrenchIntakeFromMiddle(intake, drivetrain, turret)
+        );
+        autoChooser.addOption(
+            "Depot Auto",
+            () -> new DepotAuto(intake, drivetrain)
         );
         autoChooser.addOption(
             "Outpost Auto",
-            new OutpostAuto(turret, vision, drivetrain)
+            () -> new OutpostAuto(turret, vision, drivetrain)
         );
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        Supplier<Command> selectedAuto = autoChooser.getSelected();
+        return selectedAuto != null ? selectedAuto.get() : Commands.none();
     }
 
     public static GyroSubsystem getGyroSubsystem() { return gyro; }

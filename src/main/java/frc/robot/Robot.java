@@ -132,11 +132,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        Constants.Field.ALLIANCE_COLOR = teamChooser.getSelected();
+        Constants.Field.STARTING_POSITION = positionChooser.getSelected();
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;
-        Constants.Field.ALLIANCE_COLOR = teamChooser.getSelected();
-        Constants.Field.STARTING_POSITION = positionChooser.getSelected();
         System.out.println("Alliance: " + teamChooser.getSelected() + ", Starting Position: " +  positionChooser.getSelected());
 
         if (m_autonomousCommand != null) {

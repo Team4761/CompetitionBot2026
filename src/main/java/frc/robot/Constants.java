@@ -29,6 +29,17 @@ public class Constants {
 
     public class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
+
+        public class Auto {
+            public static final double TRANSLATION_KP = 2.5;
+            public static final double ROTATION_KP = 4.0;
+
+            public static final double MAX_TRANSLATION_SPEED_MPS = 2.0; // Units: meters per second
+            public static final double MAX_ROTATION_SPEED_RAD_PER_SEC = Units.degreesToRadians(180.0);
+
+            public static final double POSITION_TOLERANCE_METERS = 0.03;
+            public static final double ANGLE_TOLERANCE_DEGREES = 2.0;
+        }
     }
 
     public class Gyro {

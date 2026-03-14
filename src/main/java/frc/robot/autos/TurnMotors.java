@@ -3,32 +3,22 @@ package frc.robot.autos;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
-import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.swerve.SwerveRequest;
-
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.baseCommands.DoNothingCommand;
+import frc.robot.baseCommands.drivetrain.RotateRelativeDegreesCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class TurnMotors extends SequentialCommandGroup {
-    private static final double AUTO_TURN_RATE_RAD_PER_SEC =
-        0.35 * RotationsPerSecond.of(0.75).in(RadiansPerSecond);
-
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-        .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+    private static final double AUTO_TURN_DEGREES = Units.radiansToDegrees(
+        0.35 * RotationsPerSecond.of(0.75).in(RadiansPerSecond) * 2.0
+    );
 
     public TurnMotors(CommandSwerveDrivetrain drivetrain) {
-        final var idle = new SwerveRequest.Idle();
-
         addCommands(
-            new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
+            new DoNothingCommand(),
             drivetrain.runOnce(drivetrain::seedFieldCentric),
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(0.0)
-                    .withVelocityY(0.0)
-                    .withRotationalRate(AUTO_TURN_RATE_RAD_PER_SEC)
-            ).withTimeout(2.0),
-            drivetrain.applyRequest(() -> idle).withTimeout(0.1)
+            new RotateRelativeDegreesCommand(drivetrain, AUTO_TURN_DEGREES)
         );
     }
 }
