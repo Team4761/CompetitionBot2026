@@ -163,11 +163,6 @@ public class RobotContainer {
 
     private void configDefaultCommands() {
         turret.setDefaultCommand(new TurretLockCommand(turret, vision));
-
-        turret.setDefaultCommand(Commands.runOnce(() -> {
-            SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", turret.getHorizontalMotorAngle());
-            SmartDashboard.putNumber("TURRET VERTICAL ANGLE", turret.getVerticalMotorAngle());
-        }, turret));
     }
 
     private double shapeTurnInput(double rawTurn) {

@@ -155,9 +155,9 @@ public class Constants {
             4, new Translation2d(23.5, 0.0)
         );
 
-        // [FIXME]: make init for it use Elastic dashboard instead of constant
-        public static final Map<Integer, Translation2d> MY_APRIL_POS =
-            "BLUE".equals(Field.ALLIANCE_COLOR) ? BLUE_APRIL_POS : RED_APRIL_POS;
+        public static Map<Integer, Translation2d> hubAprilTagPositions() {
+            return "BLUE".equals(Field.ALLIANCE_COLOR) ? BLUE_APRIL_POS : RED_APRIL_POS;
+        }
 
         public static final double Z_POS = 48.6; // Units: in.
         public static final double CENTER_OFFSET_MARGIN = 20.85; // Units: in.

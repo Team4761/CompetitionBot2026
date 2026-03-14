@@ -156,8 +156,15 @@ public class VisionSubsystem extends SubsystemBase {
     }
 
     private Optional<HashMap<Integer, AprilTagObservation>> getAllAprilTags() {
+        var hubAprilTagPositions = Constants.RelativeHubLocation.hubAprilTagPositions();
         List<PhotonPipelineResult> unreadResults = camera.getAllUnreadResults();
         if (unreadResults.isEmpty()) {
+            if (currentAprilTagObservations.isPresent()) {
+                currentAprilTagObservations = filterForCurrentAlliance(
+                    currentAprilTagObservations.get(),
+                    hubAprilTagPositions
+                );
+            }
             return currentAprilTagObservations;
         }
 
@@ -165,7 +172,7 @@ public class VisionSubsystem extends SubsystemBase {
         HashMap<Integer, AprilTagObservation> observations = new HashMap<>();
         if (latestResult.hasTargets()) {
             for (PhotonTrackedTarget target : latestResult.getTargets()) {
-                if (!Constants.RelativeHubLocation.MY_APRIL_POS.containsKey(target.getFiducialId())) {
+                if (!hubAprilTagPositions.containsKey(target.getFiducialId())) {
                     continue;
                 }
 
@@ -230,7 +237,8 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         AprilTagObservation bestObservation = optionalObservation.get();
-        Translation2d hubOffset = Constants.RelativeHubLocation.MY_APRIL_POS.get(bestObservation.fiducialId());
+        Translation2d hubOffset =
+            Constants.RelativeHubLocation.hubAprilTagPositions().get(bestObservation.fiducialId());
         double tagToHubOpeningZMeters =
             Units.inchesToMeters(Constants.RelativeHubLocation.Z_POS) - FieldConstants.AprilTag.APRILTAG_HUB_HEIGHT;
 
@@ -292,6 +300,15 @@ public class VisionSubsystem extends SubsystemBase {
         }
 
         return Optional.of(new TurretAimSuggestion(horizontalErrorDegrees, launchAngleDegrees));
+    }
+
+    private static Optional<HashMap<Integer, AprilTagObservation>> filterForCurrentAlliance(
+        HashMap<Integer, AprilTagObservation> observations,
+        java.util.Map<Integer, Translation2d> hubAprilTagPositions
+    ) {
+        HashMap<Integer, AprilTagObservation> filteredObservations = new HashMap<>(observations);
+        filteredObservations.keySet().removeIf(tagId -> !hubAprilTagPositions.containsKey(tagId));
+        return filteredObservations.isEmpty() ? Optional.empty() : Optional.of(filteredObservations);
     }
 
     private void publishDashboardAim() {
