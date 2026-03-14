@@ -88,9 +88,9 @@ public class FieldConstants {
     }
 
     public class Match {
-        public static final double MATCH_DURATION = 160; // Units: seconds
+        public static final double MATCH_DURATION = 165; // Units: seconds
         public static final double AUTONOMOUS_DURATION = 20; // Units: seconds
-        public static final double TRANSITION_DURATION = 10; // Units: seconds
+        public static final double TRANSITION_DURATION = 15; // Units: seconds
         public static final double ALLIANCE_SHIFTS = 4; // amount of unit shifts
         public static final double ALLIANCE_SHIFT_DURATION = 25; // Units: seconds (how long each alliance shift lasts before switching)
         public static final double ENDGAME_DURATION = 30; // Units: seconds (the last 30 seconds of the match)

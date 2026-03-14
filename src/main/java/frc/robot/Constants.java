@@ -73,7 +73,7 @@ public class Constants {
             public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
 
             public static final double KICKER_SPEED = 0.4; // Units: percent (0-1)
-            public static final double SPITTER_SPEED = 5000.0; // Units: rpm (0-6000)
+            public static final double SPITTER_SPEED = 6000.0; // Units: rpm (0-6000)
             public static final double INTAKE_SPEED = 0.4; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 

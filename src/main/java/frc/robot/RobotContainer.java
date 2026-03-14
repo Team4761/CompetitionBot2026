@@ -25,15 +25,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
-import frc.robot.autos.DepotAuto;
+//import frc.robot.autos.DepotAuto;
 import frc.robot.autos.DriveFwd2s;
-import frc.robot.autos.ExtendDownMoveAndGather;
+//import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
-import frc.robot.autos.OutpostAuto;
+//import frc.robot.autos.OutpostAuto;
 import frc.robot.autos.PoseDriveExampleAuto;
 import frc.robot.autos.Shoot3s;
-import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
-import frc.robot.baseCommands.DoNothingCommand;
+import frc.robot.autos.DeployIntake;
+//import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
 import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -205,21 +205,25 @@ public class RobotContainer {
             "Pose Drive Example (+1m X, +0.5m Y, +90deg)",
             () -> new PoseDriveExampleAuto(drivetrain)
         );
+        // autoChooser.addOption(
+        //     "Extend Down Move And Gather",
+        //     () -> new ExtendDownMoveAndGather(intake, drivetrain)
+        // );
+        // autoChooser.addOption(
+        //     "Shoot Long Go Under Trench Intake From Middle",
+        //     () -> new ShootLongGoUnderTrenchIntakeFromMiddle(intake, drivetrain, turret)
+        // );
+        // autoChooser.addOption(
+        //     "Depot Auto",
+        //     () -> new DepotAuto(intake, drivetrain)
+        // );
+        // autoChooser.addOption(
+        //     "Outpost Auto",
+        //     () -> new OutpostAuto(turret, vision, drivetrain)
+        // );
         autoChooser.addOption(
-            "Extend Down Move And Gather",
-            () -> new ExtendDownMoveAndGather(intake, drivetrain)
-        );
-        autoChooser.addOption(
-            "Shoot Long Go Under Trench Intake From Middle",
-            () -> new ShootLongGoUnderTrenchIntakeFromMiddle(intake, drivetrain, turret)
-        );
-        autoChooser.addOption(
-            "Depot Auto",
-            () -> new DepotAuto(intake, drivetrain)
-        );
-        autoChooser.addOption(
-            "Outpost Auto",
-            () -> new OutpostAuto(turret, vision, drivetrain)
+            "Deploy intake",
+            () -> new DeployIntake(intake, turret)
         );
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

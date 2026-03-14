@@ -92,15 +92,16 @@ public class Robot extends TimedRobot {
             "Back Button: Reset Field Orientation"
         );
         SmartDashboard.putString("Operator Controller Bindings", 
-            "Right Trigger: Shoot (Hold to Shoot)\n" +
+            "Right Trigger: Short Shoot (Hold to Shoot)\n" +
+            "Left Trigger: Long Shoot (Hold to Shoot)\n" +
             "Right Bumper: Jostle the Intake\n" +
-            "Start Button: Extend the Intake, if not already extended\n" +
-            "Left Trigger: Initiate Manual Override (Hold to Override)\n" +
+            "Left Bumper: Initiate Manual Override (Hold to Override)\n" +
             "Manual Override Controls (While Manual Override is Active):\n" +
             "MO: Left Joystick: Control the Turret's Vertical Aim\n" +
             "MO: Right Joystick: Control the Turret's Horizontal Aim\n" +
             "MO: Right Trigger: Shoot Wihout Safeties (Hold to Shoot)\n" +
             "MO: B Button: Run the Spindexer Backwards\n" +
+            "MO: A Button: Run the Kicker/Upinator Backwards\n" +
             "MO: Back Button: Disable Vision Tracking\n"
 
         );
