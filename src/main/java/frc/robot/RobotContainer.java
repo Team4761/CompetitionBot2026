@@ -29,6 +29,8 @@ import frc.robot.autos.DepotAuto;
 import frc.robot.autos.DriveFwd2s;
 //import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
+import frc.robot.autos.MiddleBackupAuto;
+import frc.robot.autos.NeutralZoneAuto;
 //import frc.robot.autos.OutpostAuto;
 import frc.robot.autos.PoseDriveExampleAuto;
 import frc.robot.autos.Shoot3s;
@@ -152,6 +154,8 @@ public class RobotContainer {
 
         controller_operator.leftBumper().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -1 * Constants.Turret.ShootConfig.SPINDEXER_SPEED));
         controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -1 * Constants.Turret.ShootConfig.KICKER_SPEED));
+        controller_operator.leftBumper().and(controller_operator.y()).whileTrue(new SpindexSpinCommand(turret, Constants.Turret.ShootConfig.SPINDEXER_SPEED));
+        controller_operator.leftBumper().and(controller_operator.x()).whileTrue(new KickerSpinCommand(turret, Constants.Turret.ShootConfig.KICKER_SPEED));
         controller_operator.leftBumper().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
         controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
@@ -205,6 +209,10 @@ public class RobotContainer {
             "Pose Drive Example (+1m X, +0.5m Y, +90deg)",
             () -> new PoseDriveExampleAuto(drivetrain)
         );
+        autoChooser.addOption(
+            "Middle backup",
+            () -> new MiddleBackupAuto(drivetrain, turret, intake)
+        );
         // autoChooser.addOption(
         //     "Extend Down Move And Gather",
         //     () -> new ExtendDownMoveAndGather(intake, drivetrain)
@@ -224,6 +232,10 @@ public class RobotContainer {
         autoChooser.addOption(
             "Deploy intake",
             () -> new DeployIntake(intake, turret)
+        );
+        autoChooser.addOption(
+            "Neutral Auto",
+            () -> new NeutralZoneAuto(intake, turret, drivetrain)
         );
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

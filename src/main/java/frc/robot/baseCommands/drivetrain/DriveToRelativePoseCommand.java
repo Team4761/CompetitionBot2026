@@ -30,7 +30,13 @@ public class DriveToRelativePoseCommand extends Command {
     private final SwerveRequest.Idle idleRequest = new SwerveRequest.Idle();
 
     private Pose2d targetPose = Pose2d.kZero;
-
+    /**
+     * 
+     * @param drivetrain subsystem
+     * @param deltaXMeters FORWARDBACKWARD
+     * @param deltaYMeters LEFTRIGHT
+     * @param deltaDegrees - is clockwise, + is counter-clockwise
+     */
     public DriveToRelativePoseCommand(
         CommandSwerveDrivetrain drivetrain,
         double deltaXMeters,

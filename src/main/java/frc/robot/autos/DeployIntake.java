@@ -6,6 +6,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.basecommands.DoNothingCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -17,6 +18,7 @@ import frc.robot.subsystems.turret.ShootAtAngleCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.subsystems.turret.ShootWithPowerCommand;
 
 public class DeployIntake extends SequentialCommandGroup{
 
@@ -34,7 +36,7 @@ public class DeployIntake extends SequentialCommandGroup{
             new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
             new ExtendCommand(intakeSubsystem),
             //new TurretAimChangeCommand(turretSubsystem, () -> 0, () -> 15),
-            new ShootCommand(turretSubsystem).withTimeout(4)
+            new ShootWithPowerCommand(turretSubsystem, Constants.Turret.ShootConfig.AUTO_SPITTER_SPEED).withTimeout(4)
         );
         
     }

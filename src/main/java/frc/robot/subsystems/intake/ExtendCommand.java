@@ -42,7 +42,7 @@ public class ExtendCommand extends Command {
                 }
                 break;
             case ENABLE_COAST:
-                if (timer.hasElapsed(0.4)) {
+                if (timer.hasElapsed(1)) {
                     this.intakeSubsystem.enableExtenderCoasting();
                     step = ExtendSequenceStep.COMPLETE;
                 }

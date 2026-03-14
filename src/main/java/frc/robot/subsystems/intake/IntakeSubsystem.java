@@ -46,6 +46,9 @@ public class IntakeSubsystem extends SubsystemBase{
     public void turnExtenderMotorAngle(double angle) {
         intakeExtenderMotor.turn(angle * Constants.Intake.CONVERSION_FACTOR_MtoE);
     }
+    public double getExtenderMotorAngle() {
+        return intakeExtenderMotor.getAngle() * Constants.Intake.CONVERSION_FACTOR_EtoM;
+    }
     public void enableExtenderCoasting(){
         intakeExtenderMotor.enableCoasting();
     }
