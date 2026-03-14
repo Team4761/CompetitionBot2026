@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
-import frc.robot.coreCommands.DoNothingCommand;
+import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.baseCommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.baseCommands.drivetrain.RotateRelativeDegreesCommand;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
