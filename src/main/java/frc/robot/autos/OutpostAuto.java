@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.FieldConstants;
 import frc.robot.coreCommands.DoNothingCommand;
-import frc.robot.coreCommands.drivetrain.DriveToRelativePoseCommand;
+import frc.robot.baseCommands.drivetrain.DriveToRelativePoseCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.turret.ShootCommand;

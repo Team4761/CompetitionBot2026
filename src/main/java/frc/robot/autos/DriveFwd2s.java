@@ -4,7 +4,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.coreCommands.DoNothingCommand;
-import frc.robot.coreCommands.drivetrain.DriveRelativeMetersCommand;
+import frc.robot.baseCommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
