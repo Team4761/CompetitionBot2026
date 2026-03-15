@@ -45,11 +45,13 @@ import frc.robot.subsystems.intake.JostleCommand;
 import frc.robot.subsystems.intake.OuttakeCommand;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
+import frc.robot.subsystems.turret.INTERMITENTShootCommand;
 import frc.robot.subsystems.turret.KickerSpinCommand;
 import frc.robot.subsystems.turret.ShootAtAngleCommand;
 import frc.robot.subsystems.turret.ShootAtAngleDRIFTCommand;
 import frc.robot.subsystems.turret.ShootAtAngleSTUTTERCommand;
 import frc.robot.subsystems.turret.ShootCommand;
+import frc.robot.subsystems.turret.ShootWithPowerCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
@@ -135,8 +137,8 @@ public class RobotContainer {
         //#region --- Operator Controller Bindings ---
 
         // Normal bindings
-        controller_operator.leftTrigger().whileTrue(new ShootAtAngleCommand(turret, 31.0)); // Long shot
-        controller_operator.rightTrigger().whileTrue(new ShootAtAngleCommand(turret, 0.0)); // Short shot
+        controller_operator.leftTrigger().whileTrue(new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED)); // Long shot
+        controller_operator.rightTrigger().whileTrue(new INTERMITENTShootCommand(turret, Constants.Turret.ShootConfig.SPITTER_SPEED)); // Short shot
         
         controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, this.turret.getVerticalAngle()));
         controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, this.turret.getVerticalAngle()));
