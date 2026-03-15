@@ -5,9 +5,10 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -25,11 +26,16 @@ public class DriveToRelativePoseCommand extends Command {
     private final PIDController thetaController =
         new PIDController(Constants.Swerve.Auto.ROTATION_KP, 0.0, 0.0);
 
-    private final SwerveRequest.FieldCentric moveRequest = new SwerveRequest.FieldCentric()
+    private final SwerveRequest.RobotCentric moveRequest = new SwerveRequest.RobotCentric()
         .withDriveRequestType(DriveRequestType.Velocity);
     private final SwerveRequest.Idle idleRequest = new SwerveRequest.Idle();
+    private final Timer timeoutTimer = new Timer();
 
-    private Pose2d targetPose = Pose2d.kZero;
+    private Translation2d measuredTranslationMeters = new Translation2d();
+    private Rotation2d startHeading = Rotation2d.kZero;
+    private double lastTimestampSeconds = 0.0;
+    private double maxDurationSeconds = 0.0;
+
     /**
      * 
      * @param drivetrain subsystem
@@ -58,15 +64,11 @@ public class DriveToRelativePoseCommand extends Command {
 
     @Override
     public void initialize() {
-        Pose2d startPose = drivetrain.getState().Pose;
-        Translation2d fieldRelativeTranslation =
-            new Translation2d(deltaXMeters, deltaYMeters).rotateBy(startPose.getRotation());
-
-        targetPose = new Pose2d(
-            startPose.getTranslation().plus(fieldRelativeTranslation),
-            startPose.getRotation().plus(Rotation2d.fromDegrees(deltaDegrees))
-        );
-
+        measuredTranslationMeters = new Translation2d();
+        startHeading = drivetrain.getGyroHeading();
+        lastTimestampSeconds = Timer.getFPGATimestamp();
+        maxDurationSeconds = calculateMaxDurationSeconds();
+        timeoutTimer.restart();
         xController.reset();
         yController.reset();
         thetaController.reset();
@@ -74,41 +76,72 @@ public class DriveToRelativePoseCommand extends Command {
 
     @Override
     public void execute() {
-        Pose2d currentPose = drivetrain.getState().Pose;
+        double currentTimestampSeconds = Timer.getFPGATimestamp();
+        double deltaTimeSeconds = Math.max(0.0, currentTimestampSeconds - lastTimestampSeconds);
+        lastTimestampSeconds = currentTimestampSeconds;
 
-        double xVelocityMps = MathUtil.clamp(
-            xController.calculate(currentPose.getX(), targetPose.getX()),
+        Rotation2d relativeHeading = drivetrain.getGyroHeading().minus(startHeading);
+        ChassisSpeeds currentSpeeds = drivetrain.getState().Speeds;
+        Translation2d startRelativeVelocityMetersPerSecond =
+            new Translation2d(currentSpeeds.vxMetersPerSecond, currentSpeeds.vyMetersPerSecond)
+                .rotateBy(relativeHeading);
+
+        measuredTranslationMeters = measuredTranslationMeters.plus(
+            new Translation2d(
+                startRelativeVelocityMetersPerSecond.getX() * deltaTimeSeconds,
+                startRelativeVelocityMetersPerSecond.getY() * deltaTimeSeconds
+            )
+        );
+
+        double xVelocityStartFrameMps = MathUtil.clamp(
+            xController.calculate(measuredTranslationMeters.getX(), deltaXMeters),
             -Constants.Swerve.Auto.MAX_TRANSLATION_SPEED_MPS,
             Constants.Swerve.Auto.MAX_TRANSLATION_SPEED_MPS
         );
-        double yVelocityMps = MathUtil.clamp(
-            yController.calculate(currentPose.getY(), targetPose.getY()),
+        double yVelocityStartFrameMps = MathUtil.clamp(
+            yController.calculate(measuredTranslationMeters.getY(), deltaYMeters),
             -Constants.Swerve.Auto.MAX_TRANSLATION_SPEED_MPS,
             Constants.Swerve.Auto.MAX_TRANSLATION_SPEED_MPS
         );
         double rotationalRateRadPerSec = MathUtil.clamp(
             thetaController.calculate(
-                currentPose.getRotation().getRadians(),
-                targetPose.getRotation().getRadians()
+                relativeHeading.getRadians(),
+                Math.toRadians(deltaDegrees)
             ),
             -Constants.Swerve.Auto.MAX_ROTATION_SPEED_RAD_PER_SEC,
             Constants.Swerve.Auto.MAX_ROTATION_SPEED_RAD_PER_SEC
         );
 
+        Translation2d robotRelativeVelocityMetersPerSecond =
+            new Translation2d(xVelocityStartFrameMps, yVelocityStartFrameMps)
+                .rotateBy(relativeHeading.unaryMinus());
+
         drivetrain.setControl(
-            moveRequest.withVelocityX(xVelocityMps)
-                .withVelocityY(yVelocityMps)
+            moveRequest.withVelocityX(robotRelativeVelocityMetersPerSecond.getX())
+                .withVelocityY(robotRelativeVelocityMetersPerSecond.getY())
                 .withRotationalRate(rotationalRateRadPerSec)
         );
     }
 
     @Override
     public void end(boolean interrupted) {
+        timeoutTimer.stop();
         drivetrain.setControl(idleRequest);
     }
 
     @Override
     public boolean isFinished() {
-        return xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint();
+        return (xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint())
+            || timeoutTimer.hasElapsed(maxDurationSeconds);
+    }
+
+    private double calculateMaxDurationSeconds() {
+        double translationSeconds =
+            Math.hypot(deltaXMeters, deltaYMeters) / Constants.Swerve.Auto.MAX_TRANSLATION_SPEED_MPS;
+        double rotationSeconds =
+            Math.abs(Math.toRadians(deltaDegrees)) / Constants.Swerve.Auto.MAX_ROTATION_SPEED_RAD_PER_SEC;
+
+        // Failsafe so a dead sensor path cannot leave the robot driving forever.
+        return Math.max(0.75, (3.0 * Math.max(translationSeconds, rotationSeconds)) + 0.5);
     }
 }

@@ -14,14 +14,11 @@ import frc.robot.subsystems.turret.ShootWithPowerCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 
 public class MiddleBackupAuto extends SequentialCommandGroup {
-    private static final double AUTO_DISTANCE_METERS =
-        0.35 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond) * 0.25;
-
     public MiddleBackupAuto(CommandSwerveDrivetrain drivetrain, TurretSubsystem turret, IntakeSubsystem intake) {
         addCommands(
             new DoNothingCommand(),
             drivetrain.runOnce(drivetrain::seedFieldCentric), // [FIXME] This is an error. It field cetric's backwards
-            new DriveRelativeMetersCommand(drivetrain, -AUTO_DISTANCE_METERS, 0.0),
+            new DriveRelativeMetersCommand(drivetrain, 0.5, 0.0),
             new ExtendCommand(intake),
             new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.AUTO_SPITTER_SPEED).withTimeout(4)
         );

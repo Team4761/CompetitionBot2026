@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class DoNothingCommand extends Command{
 
     public DoNothingCommand() {/* Magic */}
+    @Override
     public boolean isFinished() { return true; }
-    public void end() {}
+
+    @Override
+    public void end(boolean interrupted) {}
 }
