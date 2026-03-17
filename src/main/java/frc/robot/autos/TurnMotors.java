@@ -7,7 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.basecommands.DoNothingCommand;
 import frc.robot.basecommands.drivetrain.RotateRelativeDegreesCommand;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class TurnMotors extends SequentialCommandGroup {
     private static final double AUTO_TURN_DEGREES = Units.radiansToDegrees(

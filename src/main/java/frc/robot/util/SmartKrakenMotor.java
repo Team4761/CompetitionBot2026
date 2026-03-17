@@ -19,6 +19,7 @@ public class SmartKrakenMotor {
     private final PositionDutyCycle positionRequest = new PositionDutyCycle(0);
     private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
     private final TalonFX motor;
+    private final double gearRatio;
     private double minAngle;
     private double maxAngle;
     private MotorMode mode;
@@ -42,19 +43,27 @@ public class SmartKrakenMotor {
         this.minAngle = builder.minAngle;
         this.maxAngle = builder.maxAngle;
         this.mode = builder.mode;
+        this.gearRatio = builder.gearRatio;
     }
 
-    public void setSpeedPercent(double speedPercent) {
+    public void setRawSpeedPercent(double speedPercent) {
         // Duty cycle is percent output: -1.0 full reverse, 0.0 stop, 1.0 full forward.
         this.motor.setControl(this.dutyCycleRequest.withOutput(clampDutyCycle(speedPercent)));
     }
 
-    public void setSpeed(double speedRPM) {
+    public void setRawSpeed(double speedRPM) {
         this.motor.setControl(new VelocityDutyCycle(speedRPM / 60.0));
     }
 
+    public void setSpeedPercent(double speedPercent) {
+        this.setRawSpeedPercent(speedPercent * this.gearRatio);
+    }
+
+    public void setSpeed(double speedRPM) {
+        this.setRawSpeed(speedRPM * this.gearRatio);
+    }
+
     public boolean turn(double degrees) {
-        //System.out.println("Degrees " + degrees + "\nCurrent Angle: " + this.currentAngle);
         double targetAngle = this.currentAngle + degrees;
         if (this.mode == MotorMode.WRAPPED) {
             targetAngle %= 360.0;
@@ -63,13 +72,11 @@ public class SmartKrakenMotor {
         if ((this.minAngle == -1 && this.maxAngle == -1)
             || (targetAngle >= this.minAngle && targetAngle <= this.maxAngle)) {
             this.currentAngle = targetAngle;
-            //System.out.println("CURRENTLY SETTING CONTROL REQUEST");
             this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 360));
             return true;
         }
         
         else {
-            //System.out.println("CREATING ERROR LOG");
             LOGGER.warning(String.format("Tried turning to angle: [%.2f] which is past angle limits min: [%.2f] max: [%.2f]", targetAngle, this.minAngle, this.maxAngle));
             return false;
         }
@@ -139,6 +146,7 @@ public class SmartKrakenMotor {
         private double minAngle;
         private double maxAngle;
         private MotorMode mode;
+        private double gearRatio = 1.0;
         
         public static Builder newInstance() { return new Builder(); }
         
@@ -154,6 +162,7 @@ public class SmartKrakenMotor {
         }
         public Builder angleLimits(double minAngle, double maxAngle) { this.minAngle = minAngle; this.maxAngle = maxAngle; return this; }
         public Builder mode(MotorMode mode) { this.mode = mode; return this; }
+        public Builder gearRatio(double gearRatio) { this.gearRatio = gearRatio; return this; }
         
         public SmartKrakenMotor build() { return new SmartKrakenMotor(this); }
     }

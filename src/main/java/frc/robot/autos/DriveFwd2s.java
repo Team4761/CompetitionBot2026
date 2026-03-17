@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.basecommands.DoNothingCommand;
 import frc.robot.basecommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class DriveFwd2s extends SequentialCommandGroup {
     private static final double AUTO_DISTANCE_METERS =

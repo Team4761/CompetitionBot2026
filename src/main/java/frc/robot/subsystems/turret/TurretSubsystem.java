@@ -37,6 +37,7 @@ public class TurretSubsystem extends SubsystemBase {
             .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT, 
                         Constants.Turret.Horizontal.ANGLE_LIM_RIGHT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT)
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
+            .gearRatio(Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT)
             .build();
         this.verticalMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.VERTICAL_MOTOR_PORT)
@@ -47,13 +48,14 @@ public class TurretSubsystem extends SubsystemBase {
                 Constants.Turret.Vertical.MAX_HOOD_ANGLE_DEGREES * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM
             )
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
+            .gearRatio(Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM)
             .build();
     }
 
-    public void setKickerMotorSpeed(double speed) { kickerMotor.setSpeedPercent(speed); }
-    public void setSpitterMotorSpeed(double speed) { spitterMotor.setSpeedPercent(speed); }
-    public void setSpitterMotorSpeedRPM(double rpm) { spitterMotor.setSpeed(rpm); }
-    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setSpeedPercent(speed); }
+    public void setKickerMotorSpeed(double speed) { kickerMotor.setRawSpeedPercent(speed); }
+    public void setSpitterMotorSpeed(double speed) { spitterMotor.setRawSpeedPercent(speed); }
+    public void setSpitterMotorSpeedRPM(double rpm) { spitterMotor.setRawSpeed(rpm); }
+    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setRawSpeedPercent(speed); }
 
     public void stopKicker() { kickerMotor.stopTurning(); }
     public void stopSpitter() { spitterMotor.stopTurning(); }

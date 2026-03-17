@@ -55,8 +55,17 @@ public class Constants {
         public static final Function<Double, Double> CAMERA_OFFSET_FROM_TURRET_Z = (theta) -> Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5); // Units: meters
     }
 
-    public class Climber {
-        public static final int CLIMBER_MOTOR_PORT = -1; // Type: kraken [FIXME]
+    public class Shooter {
+        public class Config {
+            public static final double MAX_SHOOTER_SPEED_RPM = 6000.0; // Units: rpm
+            public static final double DEFAULT_SHOOTER_SPEED_RPM = 5000.0; // Units: rpm
+        }
+
+        public class MotorPorts {
+            public static final int ROLLER = -1; // Type: flex/vortex [FIXME]
+            public static final int KICKER = -1; // Type: flex/vortex [FIXME]
+            public static final int SPITTER = -1; // Type: kraken [FIXME]
+        }
     }
 
     public class Turret {

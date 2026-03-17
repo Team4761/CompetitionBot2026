@@ -6,7 +6,7 @@ import frc.robot.basecommands.DoNothingCommand;
 import frc.robot.basecommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.basecommands.drivetrain.RotateRelativeDegreesCommand;
 import frc.robot.generated.TunerConstants;
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class PoseDriveExampleAuto extends SequentialCommandGroup {
     public PoseDriveExampleAuto(CommandSwerveDrivetrain drivetrain) {

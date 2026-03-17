@@ -18,6 +18,7 @@ public class IntakeSubsystem extends SubsystemBase{
             .angleLimits(Constants.Intake.MIN_EXTENSION_ANGLE * Constants.Intake.CONVERSION_FACTOR_MtoE, 
                     Constants.Intake.MAX_EXTENSION_ANGLE * Constants.Intake.CONVERSION_FACTOR_MtoE)
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
+            .gearRatio(Constants.Intake.CONVERSION_FACTOR_MtoE)
             .build();
         this.intakeMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Intake.MAIN_INTAKE_MOTOR_PORT)
@@ -31,7 +32,7 @@ public class IntakeSubsystem extends SubsystemBase{
     // sets the speed of the extender motor so it can be used in the extend and retract commands
     public void runExtenderMotor(double speed) {
         System.out.println("running extender motor");
-        intakeExtenderMotor.setSpeedPercent(speed);
+        intakeExtenderMotor.setRawSpeedPercent(speed);
     }
 
     // stops the extender motor so that it can be used in the extend command and retract command
@@ -58,11 +59,11 @@ public class IntakeSubsystem extends SubsystemBase{
     }
 
     public void turnIntakeMotor(double speed) {
-        intakeMotor.setSpeedPercent(speed);
+        intakeMotor.setRawSpeedPercent(speed);
     }
 
     public void turnIntakeMotorRPM(double speed) {
-        intakeMotor.setSpeed(speed);
+        intakeMotor.setRawSpeed(speed);
     }
 
     //stops the intake motor so that it can be use in intake and outtake commands

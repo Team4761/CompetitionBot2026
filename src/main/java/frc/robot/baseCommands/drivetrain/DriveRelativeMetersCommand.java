@@ -1,6 +1,6 @@
 package frc.robot.basecommands.drivetrain;
 
-import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class DriveRelativeMetersCommand extends DriveToRelativePoseCommand {
     public DriveRelativeMetersCommand(
