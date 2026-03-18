@@ -5,8 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class ExtendCommandCAUGHT extends Command {
     private enum ExtendSequenceStep {
-        ENABLE_COAST,
-        DISABLE_COAST,
         CATCH,
         REALEASE,
         COMPLETE
@@ -23,29 +21,17 @@ public class ExtendCommandCAUGHT extends Command {
     
     public void initialize(){
         timer.restart();
-        step = ExtendSequenceStep.ENABLE_COAST;
+        step = ExtendSequenceStep.CATCH;
         System.out.println("TURNING");
+        this.intakeSubsystem.enableExtenderCoasting();
         this.intakeSubsystem.turnExtenderMotorAngle(-30);//Start the intake falling
     }
 //The premis is to start the intake falling via gravity then catch it bu running the motor in the opposite dirction
     public void execute() {
         switch (step) {
-            case ENABLE_COAST:
-                if (timer.hasElapsed(0.2)) {
-                    this.intakeSubsystem.enableExtenderCoasting();//let fall
-                    step = ExtendSequenceStep.DISABLE_COAST;
-                }
-                break;
-            case DISABLE_COAST:
-                if (timer.hasElapsed(1)) {
-                    this.intakeSubsystem.disableExtenderCoasting();
-                    step = ExtendSequenceStep.CATCH;//start stopping the fall
-                }
-                break;
-            
             case CATCH:
-                if (timer.hasElapsed(1.1)) {
-                    this.intakeSubsystem.runExtenderMotor(-1);//catch at the bottom
+                if (timer.hasElapsed(0.3)) {
+                    this.intakeSubsystem.runExtenderMotor(-1);//catch / slow it down
                     step = ExtendSequenceStep.REALEASE;
                 }
                 break;
