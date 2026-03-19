@@ -233,7 +233,7 @@ public class RobotContainer {
         //     () -> new OutpostAuto(turret, vision, drivetrain)
         // );
         autoChooser.addOption(
-            "Deploy intake",
+            "Deploy intake",   
             () -> new DeployIntake(intake, turret)
         );
         autoChooser.addOption(
