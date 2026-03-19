@@ -32,11 +32,19 @@ public class ShooterSubsystem extends SubsystemBase {
     public void setKickerMotorSpeed(double speed) { kickerMotor.setRawSpeedPercent(speed); }
     public void setSpitterMotorSpeed(double speed) { spitterMotor.setRawSpeedPercent(speed); }
 
+    public void setSpitterAngle(double degrees) { spitterMotor.set(degrees); }
+
     public void setRollerMotorSpeedRPM(double rpm) { rollerMotor.setRawSpeed(rpm); }
     public void setKickerMotorSpeedRPM(double rpm) { kickerMotor.setRawSpeed(rpm); }
     public void setSpitterMotorSpeedRPM(double rpm) { spitterMotor.setRawSpeed(rpm); }
 
     public double getSpitterMotorRPM() { return spitterMotor.getSpeedRPM(); }
+
+    public double getSpitterAngle() { return spitterMotor.getAngle(); }
+
+    //useful code
+    //useful code
+    //useful code
 
     public void stopKicker() { kickerMotor.stopTurning(); }
     public void stopRoller() { rollerMotor.stopTurning(); }

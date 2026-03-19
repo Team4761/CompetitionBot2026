@@ -22,7 +22,6 @@ public class TurretSubsystem extends SubsystemBase {
         this.kickerMotor = SmartVortexMotor.Builder.newInstance()
             .port(Constants.Turret.KICKER_MOTOR_PORT)
             .build();
-
         this.spitterMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.SPITTER_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
