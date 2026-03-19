@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DepotAuto;
+import frc.robot.autos.DriveForward;
 import frc.robot.autos.DriveFwd2s;
 //import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
@@ -238,6 +239,10 @@ public class RobotContainer {
         autoChooser.addOption(
             "Neutral Auto",
             () -> new NeutralZoneAuto(intake, turret, drivetrain)
+        );
+        autoChooser.addOption(
+            "Drive Forward 1 Meter",
+            () -> new DriveForward(drivetrain)
         );
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
