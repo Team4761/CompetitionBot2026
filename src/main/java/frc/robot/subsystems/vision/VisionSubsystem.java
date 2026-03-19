@@ -31,7 +31,8 @@ public class VisionSubsystem extends SubsystemBase {
     private static final int HEIGHT_COUPLING_ITERATIONS = 5;
 
     private final CommandSwerveDrivetrain drivetrain;
-    private final PhotonCamera camera = new PhotonCamera(Constants.Vision.DEFAULT_CAMERA_NAME);
+    private final PhotonCamera camera1 = new PhotonCamera(Constants.Vision.DEFAULT_CAMERA_NAME);
+    private final PhotonCamera camera2 = new PhotonCamera(Constants.Vision.CAMERA_2_NAME);
     private final SlewRateLimiter angleStepLimiter =
         new SlewRateLimiter(Constants.Turret.Horizontal.MAX_TRACK_RATE_DEGREES_PER_SEC);
     private Optional<HashMap<Integer, AprilTagObservation>> currentAprilTagObservations = Optional.empty();
@@ -66,13 +67,8 @@ public class VisionSubsystem extends SubsystemBase {
         publishDashboardAim();
     }
 
-    public double getAngleToAprilCode() {
-        return angleToAprilCode;
-    }
-
-    public double getDistToAprilCode() {
-        return distToAprilCode;
-    }
+    public double getAngleToAprilCode() { return angleToAprilCode; }
+    public double getDistToAprilCode() { return distToAprilCode; }
 
     public void processAprilTags() {
         Optional<AprilTagObservation> observation = getBestHubObservation();
@@ -157,7 +153,8 @@ public class VisionSubsystem extends SubsystemBase {
 
     private Optional<HashMap<Integer, AprilTagObservation>> getAllAprilTags() {
         var hubAprilTagPositions = Constants.RelativeHubLocation.hubAprilTagPositions();
-        List<PhotonPipelineResult> unreadResults = camera.getAllUnreadResults();
+        List<PhotonPipelineResult> unreadResults = camera1.getAllUnreadResults();
+        unreadResults.addAll(camera2.getAllUnreadResults());
         if (unreadResults.isEmpty()) {
             if (currentAprilTagObservations.isPresent()) {
                 currentAprilTagObservations = filterForCurrentAlliance(

@@ -48,6 +48,7 @@ public class Constants {
 
     public class Vision {
         public static final String DEFAULT_CAMERA_NAME = "goodCam"; // Type: string
+        public static final String CAMERA_2_NAME = "badCam"; // Type: string (temp)
 
         public static final double ANGLE_DEADBAND = 2.0; // Units: degrees
         public static final double CAMERA_OFFSET_FROM_TURRET_X = Units.inchesToMeters(9.5); // Units: meters
