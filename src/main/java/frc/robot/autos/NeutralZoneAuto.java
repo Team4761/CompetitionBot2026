@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
 import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.basecommands.drivetrain.DriveCommand;
 import frc.robot.basecommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.basecommands.drivetrain.DriveToRelativePoseCommand;
 import frc.robot.basecommands.drivetrain.RotateRelativeDegreesCommand;
@@ -40,18 +41,25 @@ public class NeutralZoneAuto extends SequentialCommandGroup{
          
         addCommands(
             new DoNothingCommand(),//as a buffer so that the thing that happened las tyear doesent happen
-            new ExtendCommand(intakeSubsystem),
+            new ExtendCommand(intakeSubsystem),//replace with better extend command[TODO]
             //new TurretAimChangeCommand(turretSubsystem, () -> 0, () -> 15),
             new ShootWithPowerCommand(turretSubsystem, Constants.Turret.ShootConfig.AUTO_SPITTER_SPEED).withTimeout(4),
-            new RotateRelativeDegreesCommand(drivetrain, "LEFT".equals(Constants.Field.STARTING_POSITION) ? -60.0 : 60.0),
-            new DriveRelativeMetersCommand(drivetrain, neutralTraversalDistance, 0),
-            new RotateRelativeDegreesCommand(drivetrain, "LEFT".equals(Constants.Field.STARTING_POSITION) ? -90.0 : 90.0),
+            //new RotateRelativeDegreesCommand(drivetrain, "LEFT".equals(Constants.Field.STARTING_POSITION) ? -60.0 : 60.0),
+            new DriveCommand(drivetrain, 0, 0, "LEFT".equals(Constants.Field.STARTING_POSITION) ? -60.0 : 60.0),
+            //new DriveRelativeMetersCommand(drivetrain, neutralTraversalDistance, 0),
+            new DriveCommand(drivetrain, neutralTraversalDistance, 0, 0),
+            //new RotateRelativeDegreesCommand(drivetrain, "LEFT".equals(Constants.Field.STARTING_POSITION) ? -90.0 : 90.0),
+            new DriveCommand(drivetrain, 0, 0, "LEFT".equals(Constants.Field.STARTING_POSITION) ? -90.0 : 90.0),
             new IntakeCommand(intakeSubsystem).withTimeout(15),
-            new DriveRelativeMetersCommand(drivetrain, FieldConstants.Fuel.FUEL_BOUND_BOX_LENGTH+1, 0),
-            new DriveRelativeMetersCommand(drivetrain, -FieldConstants.Fuel.FUEL_BOUND_BOX_LENGTH-1, 0),
-            new DriveRelativeMetersCommand(drivetrain, 0, "LEFT".equals(Constants.Field.STARTING_POSITION) ? neutralTraversalDistance : -neutralTraversalDistance),
-            new RotateRelativeDegreesCommand(drivetrain, "LEFT".equals(Constants.Field.STARTING_POSITION) ? 30.0 : -30.0),
-            new ShootWithPowerCommand(turretSubsystem, Constants.Turret.ShootConfig.AUTO_SPITTER_SPEED)
+            //new DriveRelativeMetersCommand(drivetrain, FieldConstants.Fuel.FUEL_BOUND_BOX_LENGTH+1, 0),
+            new DriveCommand(drivetrain, FieldConstants.Fuel.FUEL_BOUND_BOX_LENGTH + 1, 0, 0),
+            //new DriveRelativeMetersCommand(drivetrain, -FieldConstants.Fuel.FUEL_BOUND_BOX_LENGTH-1, 0),
+            new DriveCommand(drivetrain, -1 * FieldConstants.Fuel.FUEL_BOUND_BOX_LENGTH - 1, 0, 0),
+            //new DriveRelativeMetersCommand(drivetrain, 0, "LEFT".equals(Constants.Field.STARTING_POSITION) ? neutralTraversalDistance : -neutralTraversalDistance),
+            new DriveCommand(drivetrain, 0, "LEFT".equals(Constants.Field.STARTING_POSITION) ? neutralTraversalDistance : -neutralTraversalDistance, 0),
+            //new RotateRelativeDegreesCommand(drivetrain, "LEFT".equals(Constants.Field.STARTING_POSITION) ? 30.0 : -30.0),
+            new DriveCommand(drivetrain, 0, 0, "LEFT".equals(Constants.Field.STARTING_POSITION) ? 30.0 : -30.0),
+            new ShootWithPowerCommand(turretSubsystem, Constants.Turret.ShootConfig.AUTO_SPITTER_SPEED).withTimeout(10)
             );
         
     }

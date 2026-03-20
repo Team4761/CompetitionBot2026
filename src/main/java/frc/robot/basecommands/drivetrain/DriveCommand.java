@@ -17,6 +17,13 @@ public class DriveCommand extends Command {
     private static Pose2d start;
     private static PIDController thetaPID;
     private static SwerveRequest.FieldCentric drive;
+    /**
+     * 
+     * @param drivetrain
+     * @param metersX // move in the directin your facing postive is forward negative backwards
+     * @param metersY // strafe positive is left negative is right
+     * @param degrees // turn degrees positive turn left/counter clockwise negative right/clockwise
+     */
     public DriveCommand(CommandSwerveDrivetrain drivetrain, double metersX, double metersY, double degrees) {
         this.drivetrain = drivetrain;
         this.metersX = metersX;// * Constants.Swerve.Auto.SWERVE_MULTIPLIER;
