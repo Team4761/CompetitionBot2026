@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.basecommands.drivetrain.DriveCommand;
 import frc.robot.basecommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -16,7 +17,7 @@ public class DriveFwd2s extends SequentialCommandGroup {
         addCommands(
             new DoNothingCommand(),
             drivetrain.runOnce(drivetrain::seedFieldCentric),
-            new DriveRelativeMetersCommand(drivetrain, AUTO_DISTANCE_METERS, 0.0)
+            new DriveCommand(drivetrain, AUTO_DISTANCE_METERS, 0,0)
         );
     }
 }

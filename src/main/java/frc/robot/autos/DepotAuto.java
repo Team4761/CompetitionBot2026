@@ -6,6 +6,7 @@ import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
 import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.basecommands.drivetrain.DriveCommand;
 import frc.robot.basecommands.drivetrain.DriveToRelativePoseCommand;
 
 public class DepotAuto extends SequentialCommandGroup {
@@ -20,7 +21,7 @@ public class DepotAuto extends SequentialCommandGroup {
         addCommands(
             new DoNothingCommand(),
             drivetrain.runOnce(drivetrain::seedFieldCentric),
-            new DriveToRelativePoseCommand(
+            new DriveCommand(
                 drivetrain,
                 DEPOT_APPROACH_DISTANCE_METERS,
                 settings.shiftMetersTo(AutoSettings.StartingPosition.LEFT),

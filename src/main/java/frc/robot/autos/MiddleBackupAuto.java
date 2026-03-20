@@ -4,6 +4,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.basecommands.drivetrain.DriveCommand;
 import frc.robot.basecommands.drivetrain.DriveRelativeMetersCommand;
 import frc.robot.basecommands.drivetrain.RotateRelativeDegreesCommand;
 import frc.robot.generated.TunerConstants;
@@ -18,7 +19,7 @@ public class MiddleBackupAuto extends SequentialCommandGroup {
         addCommands(
             new DoNothingCommand(),
             drivetrain.runOnce(drivetrain::seedFieldCentric), // [FIXME] This is an error. It field cetric's backwards
-            new DriveRelativeMetersCommand(drivetrain, 0.5, 0.0),
+            new DriveCommand(drivetrain, 0.5, 0.0, 0),
             new ExtendCommand(intake),
             new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.AUTO_SPITTER_SPEED).withTimeout(4)
         );
