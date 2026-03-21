@@ -179,7 +179,7 @@ public class ImageCompressor
         return compressedImage;//returns the array
     }
 
-    public static BufferedImage[] loadVideoAsMultipleImages(String motherPath, int startingNum, int numberOfFiles)
+    public static BufferedImage[] loadVideoAsMultipleImages(String motherPath, int startingNum, int numberOfFiles, boolean yesNo)
     {
         BufferedImage[] videoRoll = new BufferedImage[numberOfFiles];
         for (int i = 0; i < videoRoll.length; i++)
@@ -200,7 +200,7 @@ public class ImageCompressor
                 filePath = filePath + 0;
             }
             //System.out.println(filePath + g + motherPath.substring(motherPath.indexOf("frame") + 5));
-            videoRoll[i] = loadImage(filePath + g + motherPath.substring(motherPath.indexOf("frame") + 5), false);
+            videoRoll[i] = loadImage(filePath + g + motherPath.substring(motherPath.indexOf("frame") + 5), yesNo);
         }
         return videoRoll;
     }
@@ -235,7 +235,7 @@ public class ImageCompressor
         
         //example2
 
-        int[][][][] testVideoAsCompressedArrayComingToTheatersMarch32_2111 = compressVideo(loadVideoAsMultipleImages("C:/Users/alex/Documents/CODINF/RickrollFragments/frame.png", 1, 100),10,8);
+        int[][][][] testVideoAsCompressedArrayComingToTheatersMarch32_2111 = compressVideo(loadVideoAsMultipleImages("C:/Users/alex/Documents/CODINF/RickrollFragments/frame.png", 1, 100, true),10,8);
         for (int i = 0; i < testVideoAsCompressedArrayComingToTheatersMarch32_2111.length; i++)
         {
             for (int g = 0; g < testVideoAsCompressedArrayComingToTheatersMarch32_2111[i].length; g++)

@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.leds.LEDSubsystem;
 
 public class IntakeCommand extends Command{
     private IntakeSubsystem intakeSubsystem;
@@ -20,6 +21,7 @@ public class IntakeCommand extends Command{
     public void initialize() {
         intakeSubsystem.disableIntakeCoasting();
         intakeSubsystem.turnIntakeMotor(Constants.Turret.ShootConfig.INTAKE_SPEED);
+        LEDSubsystem.intakeTrue = 0.0;
     }
 
     //run the motor contiunously so that you can intake
@@ -39,5 +41,6 @@ public class IntakeCommand extends Command{
     public void end(boolean isInterrupted) {
         intakeSubsystem.enableIntakeCoasting();
         intakeSubsystem.stopIntakeMotor();
+        LEDSubsystem.intakeTrue = 1.0;
     }
 }

@@ -1,8 +1,10 @@
 package frc.robot.subsystems.intake;
 
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.SmartKrakenMotor;
+import frc.robot.subsystems.leds.LEDSubsystem;
 
 public class IntakeSubsystem extends SubsystemBase{
     // Make the code aware there should be 2 motors
@@ -77,5 +79,16 @@ public class IntakeSubsystem extends SubsystemBase{
 
     public void disableIntakeCoasting() {
         intakeMotor.disableCoasting();
+    }
+
+    public static Color intakeToElastic() {
+        Color color = null;
+        if (LEDSubsystem.intakeTrue == 1.0) {
+            color = new Color(255, 50, 50);
+        }
+        else{
+            color = new Color(50, 255, 50);
+        }
+        return color;
     }
 }

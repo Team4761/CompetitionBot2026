@@ -1,9 +1,10 @@
 package frc.robot.subsystems.turret;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-
+import frc.robot.subsystems.leds.LEDSubsystem;
 import frc.robot.util.SmartKrakenMotor;
 import frc.robot.util.SmartVortexMotor;
 
@@ -107,5 +108,16 @@ public class TurretSubsystem extends SubsystemBase {
     
     public double getVerticalAngle() {
         return verticalMotor.getAngle();
+    }
+
+    public static Color shooterToElastic() {
+        Color color = null;
+        if (LEDSubsystem.shootTrue == 1.1) {
+            color = new Color(255, 50, 50);
+        }
+        else{
+            color = new Color(50, 255, 50);
+        }
+        return color;
     }
 }

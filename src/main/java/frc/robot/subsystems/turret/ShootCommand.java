@@ -3,6 +3,7 @@ package frc.robot.subsystems.turret;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.leds.LEDSubsystem;
 
 /*
  * Generalized shoot command. It shoots in an arc.
@@ -39,6 +40,7 @@ public class ShootCommand extends Command {
             this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
             this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED);
             feedersStarted = true;
+            LEDSubsystem.shootTrue = 0.5;
         }
     }
 
@@ -53,5 +55,6 @@ public class ShootCommand extends Command {
         this.turretSubsystem.stopSpitter();
         this.turretSubsystem.stopSpindexer();
         this.turretSubsystem.stopKicker();
+        LEDSubsystem.shootTrue = 1.1;
     }
 }

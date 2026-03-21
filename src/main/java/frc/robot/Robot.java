@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commandGroups.TurretLockCommand;
+import frc.robot.subsystems.intake.IntakeSubsystem;
+import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class Robot extends TimedRobot {
@@ -121,6 +123,11 @@ public class Robot extends TimedRobot {
         //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire purple is tracking disabled
         //make sure to to right click and click on show as single color veiw
         SmartDashboard.putString("April Tag Status", (visionSubsystem.seesAprilTag()).toHexString());
+
+        //below are other elastic debugging functions that NEED TO BE TESTED (similar to april tag widget, but only displays true or false)
+        SmartDashboard.putString("Is Intake Running?", (IntakeSubsystem.intakeToElastic()).toHexString());
+        SmartDashboard.putString("Is Shooter Running?", (TurretSubsystem.shooterToElastic()).toHexString());
+
         //SmartDashboard.putNumber("Camera Calculation Values", visionSubsytem.getCalcValues());[TODO] (ehh not really just ben needs to finish his part)
     }
 

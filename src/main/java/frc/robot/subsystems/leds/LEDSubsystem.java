@@ -15,59 +15,78 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import static frc.robot.subsystems.leds.ImageCompressor.loadImage;
+import static frc.robot.subsystems.leds.ImageCompressor.loadVideoAsMultipleImages;
 import static frc.robot.subsystems.leds.ImageCompressor.compressImage;
+import static frc.robot.subsystems.leds.ImageCompressor.compressVideo;
+import frc.robot.subsystems.intake.IntakeCommand;
 
 
+@SuppressWarnings("unused")
 public class LEDSubsystem extends SubsystemBase {
     public static AddressableLED leds;
     public static AddressableLEDBuffer buffer;
-    // private AddressableLED rightSide;
-    // private AddressableLEDBuffer rightBuffer;
+
+    //no, the type "double" is not a mistake
+    //note: must make each false condition set it to a UNIQUE out of bounds spot
+    public static double intakeTrue = 1.0;
+    public static double shootTrue = 1.1;
 
     private LEDPattern previousPattern;
     private LEDPattern currentPattern;
         
-    // Also, per LED strip, there are 150 LEDs.
-    // Supposedly the LEDs function in GRB not RGB... We'll need to test this though.
+    // We will have a 16x1 strip
+
+    // IMPORTANT: If the LEDs are in GRB instead of RGB again, please infom me (Alex Maniscalco). I already have a fix for it
+    // also ask/tell me about any other problems or conflicts this subsystem makes
+
     /** Available LED patterns:
-     * <p> green-black discontinuous gradient
-     * <p> lights that move across the strip, and change to a random color when bounce off the edge
+     * <p> LEDs that have a certain part light up a certain color when one or more functions are being performed. also displays a color on elastic. 
+     *     Current functions needed: Shoot, Intake
      * <p> LED patterns that aren't finished:
-     * <p> lights that blink blanched almond when the robot is perfectly aligned in teleop (the only one with a debugging function)
+     * <p> Rickroll (any dimensions)
      */
     
     public LEDSubsystem() {
         // Comment out patterns that aren't being used
-        
 
         leds = new AddressableLED(Constants.LEDS_PORT);
-        buffer = new AddressableLEDBuffer(Constants.LEDS_NUMBER_OF_LEDS); // 150 LEDs in a straight line
+        buffer = new AddressableLEDBuffer(Constants.LEDS_NUMBER_OF_LEDS); // 16 LEDs in a straight line
         leds.setLength(Constants.LEDS_NUMBER_OF_LEDS);
         leds.start();
-
-        // rightSide = new AddressableLED(1);
-        // rightBuffer = new AddressableLEDBuffer(Constants.LEDS_NUMBER_OF_LEDS); // 150 LEDs in a straight line
-        // rightSide.setLength(Constants.LEDS_NUMBER_OF_LEDS);
-        // rightSide.start();
         
         currentPattern = RobocketsLEDPatterns.OFF;
         previousPattern = RobocketsLEDPatterns.OFF;
+
     }
 
-        // this is my most ambitious pattern yet... A Rick Roll!
-        // this might unfourtunately not be run at competitions due to uncertainties regarding processing power
-        //pattern.applyTo(buffer);
-        //leds.setData(buffer);
-        int[][][] testImageAsCompressed3dArrayComingToThearterMarch32_2111 = compressImage(loadImage("/C:/Users/alex/Pictures/wtf.png", false), 4, 5);{
-        for (int i = 0; i < testImageAsCompressed3dArrayComingToThearterMarch32_2111.length; i++)
+    // This pattern is for debugging. lights up a certain part of the LEDs with a color corresponding with a certain robot function, if said function is running.
+    LEDPattern debugFunctions = LEDPattern.steps(Map.of(intakeTrue, Color.kRed, shootTrue, Color.kBlue));
+        
+        
+
+    //int[][][][] testVideoAsCompressedArrayComingToTheatersMarch32_2111 = compressVideo(loadVideoAsMultipleImages("C:/Users/alex/Documents/CODINF/RickrollFragments/frame.png", 1, 100, true),32,8);
+    //public static double freme = 0;
+    public void periodic(){
+
+        
+        // This pattern emulates a Rickroll, with the height and width of it being adjustable
+        // this might unfourtunately not be run at competitions due to uncertainties regarding processing power, and the fact that it is way too slow to load
+        // find a way to take images on the fly rather than load them all beforehand
+        /**
+        for (int y = 0; y < testVideoAsCompressedArrayComingToTheatersMarch32_2111[(int) freme].length; y++)
+        {
+            for (int x = 0; x < testVideoAsCompressedArrayComingToTheatersMarch32_2111[(int) freme][y].length; x++)
             {
-                for (int f = 0; f < testImageAsCompressed3dArrayComingToThearterMarch32_2111[i].length; f++)
-                {
-                    buffer.setRGB(f + (i * Constants.LEDS_HEIGHT), testImageAsCompressed3dArrayComingToThearterMarch32_2111[i][f][0], testImageAsCompressed3dArrayComingToThearterMarch32_2111[i][f][1], testImageAsCompressed3dArrayComingToThearterMarch32_2111[i][f][2] );
-                }
+                buffer.setRGB(x + (y * Constants.LEDS_WIDTH), testVideoAsCompressedArrayComingToTheatersMarch32_2111[(int) freme][y][x][0], testVideoAsCompressedArrayComingToTheatersMarch32_2111[(int) freme][y][x][1], testVideoAsCompressedArrayComingToTheatersMarch32_2111[(int) freme][y][x][2]);
             }
-            leds.setData(buffer);
         }
+        if(freme < testVideoAsCompressedArrayComingToTheatersMarch32_2111.length-1){
+            freme += 0.5;
+        }
+        */
+        debugFunctions.applyTo(buffer);
+        leds.setData(buffer);
+    }
 
 
     public void setPattern(LEDPattern pattern) {

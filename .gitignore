@@ -189,3 +189,7 @@ compile_commands.json
 # Mine
 /.gradle-user-home/
 /.gradle-user/
+src/main/java/frc/robot/FieldConstants.java
+src/main/java/frc/robot/generated/TunerConstants.java
+src/main/java/frc/robot/subsystems/climber/ClimbCommand.java
+/src/main/java/frc/robot/subsystems/climber
