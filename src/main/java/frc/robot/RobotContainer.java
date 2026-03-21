@@ -13,6 +13,7 @@ import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -95,11 +96,17 @@ public class RobotContainer {
     private boolean isIntakeExtended = false;
 
     public RobotContainer() {
+        configPathPlanner();
         configureBindings();
         configAutos();
         configDefaultCommands();
     }
 
+
+    private void configPathPlanner() {
+        NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
+        
+    }
     private void configureBindings() {
         //#region --- Robot Config ---
 

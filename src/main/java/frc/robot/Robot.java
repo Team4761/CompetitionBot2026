@@ -147,6 +147,7 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         Constants.Field.ALLIANCE_COLOR = teamChooser.getSelected();
         Constants.Field.STARTING_POSITION = positionChooser.getSelected();
+        // The code
         double autoStartX;
         double autoStartY;
         Rotation2d autoStartRot;
