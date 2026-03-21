@@ -1,52 +1,111 @@
 package frc.robot.subsystems.turret;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.util.SmartKrakenMotor;
-import frc.robot.util.SmartKrakenMotor.Builder;
 
-/*
- * The Turret is the part of the robot that scores FUEL. There are 4 motors:
- * - Kicker Motor: 1 Kraken x60
- * - Shooter Motor 1: Kraken x60
- * - Pitch Motor: 1 Kraken x60 (up down shooty movement)
- * - Yaw Motor: 1 Kraken x60 (side to side shooty movement)
- */
+import frc.robot.util.SmartKrakenMotor;
+import frc.robot.util.SmartVortexMotor;
+
 public class TurretSubsystem extends SubsystemBase {
 
-    private SmartKrakenMotor kickerMotor; // Kicker Motor Controller
-    private SmartKrakenMotor shooterMotor; // Shooter Motor Controller
-    private SmartKrakenMotor pitchMotor; // Pitch Motor Controller
-    private SmartKrakenMotor yawMotor; // Yaw Motor Controller
+    private final SmartKrakenMotor spitterMotor;
+    private final SmartKrakenMotor horizontalMotor;
+    private final SmartKrakenMotor verticalMotor;
+    private final SmartVortexMotor spindexerMotor;
+    private final SmartVortexMotor kickerMotor;
 
     public TurretSubsystem() {
-        this.kickerMotor = Builder.newInstance().
-            port(Constants.Turret.KICKER_MOTOR_PORT).
-            PID(0.1, 0.0, 0.0). // Temp Values
-            outputRange(0, 360). // Temp Values
-            angleLimits(-1, -1). // Temp Values
-            build();
-        this.shooterMotor = Builder.newInstance().
-            port(Constants.Turret.SHOOTER_MOTOR_PORT).
-            PID(0.1, 0.0, 0.0). // Temp Values
-            outputRange(0, 360). // Temp Values
-            angleLimits(-1, -1). // Temp Values
-            build();
-        this.pitchMotor = Builder.newInstance().
-            port(Constants.Turret.PITCH_MOTOR_PORT).
-            PID(0.1, 0.0, 0.0). // Temp Values
-            outputRange(0, 360). // Temp Values
-            angleLimits(-1, -1). // Temp Values
-            build();
-        this.yawMotor = Builder.newInstance().
-            port(Constants.Turret.YAW_MOTOR_PORT).
-            PID(0.1, 0.0, 0.0). // Temp Values
-            outputRange(0, 360). // Temp Values
-            angleLimits(-1, -1). // Temp Values
-            build();
+        this.spindexerMotor = SmartVortexMotor.Builder.newInstance()
+            .port(Constants.Turret.SPINDEXER_MOTOR_PORT)
+            .build();
+        this.kickerMotor = SmartVortexMotor.Builder.newInstance()
+            .port(Constants.Turret.KICKER_MOTOR_PORT)
+            .build();
 
+        this.spitterMotor = SmartKrakenMotor.Builder.newInstance()
+            .port(Constants.Turret.SPITTER_MOTOR_PORT)
+            .PID(0.1, 0.0, 0.0)
+            .outputRange(-1, 1)
+            .angleLimits(-1, -1)
+            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
+            .build();
+        this.horizontalMotor = SmartKrakenMotor.Builder.newInstance()
+            .port(Constants.Turret.HORIZONTAL_MOTOR_PORT)
+            .PID(0.5, 0.0, 0.001)
+            .outputRange(-1, 1)
+            .angleLimits(Constants.Turret.Horizontal.ANGLE_LIM_LEFT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT, 
+                        Constants.Turret.Horizontal.ANGLE_LIM_RIGHT * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT)
+            .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
+            .gearRatio(Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT)
+            .build();
+        this.verticalMotor = SmartKrakenMotor.Builder.newInstance()
+            .port(Constants.Turret.VERTICAL_MOTOR_PORT)
+            .PID(0.5, 0.0, 0.0)
+            .outputRange(-1, 1)
+            .angleLimits(
+                Constants.Turret.Vertical.MIN_HOOD_ANGLE_DEGREES * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM,
+                Constants.Turret.Vertical.MAX_HOOD_ANGLE_DEGREES * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM
+            )
+            .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
+            .gearRatio(Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM)
+            .build();
     }
 
+    public void setKickerMotorSpeed(double speed) { kickerMotor.setRawSpeedPercent(speed); }
+    public void setSpitterMotorSpeed(double speed) { spitterMotor.setRawSpeedPercent(speed); }
+    public void setSpitterMotorSpeedRPM(double rpm) { spitterMotor.setRawSpeed(rpm); }
+    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setRawSpeedPercent(speed); }
+
+    public void stopKicker() { kickerMotor.stopTurning(); }
+    public void stopSpitter() { spitterMotor.stopTurning(); }
+    public void stopSpindexer() { spindexerMotor.stopTurning(); }
+
+    public void turnHorizontalMotor(double degrees) { 
+        double motorDegrees = toHorizontalMotorDegrees(degrees);
+        if (!horizontalMotor.turn(motorDegrees)) {
+            //horizontalMotor.set(0);
+            System.out.println(String.format("Failed to turn horizontal motor by [%.2f] degrees. Current angle: [%.2f]", degrees, horizontalMotor.getAngle()));
+        } 
+    }
+    public void setHorizontalMotor(double degrees) { horizontalMotor.set(toHorizontalMotorDegrees(degrees)); }
+    public void turnVerticalMotor(double degrees) { verticalMotor.turn(toVerticalMotorDegrees(degrees)); }
+    public void setVerticalMotor(double launchAngleDegrees) {
+        verticalMotor.set(toVerticalMotorDegrees(toHoodDegreesFromLaunchAngle(launchAngleDegrees)));
+    }
+    public double getHorizontalMotorAngle() { return horizontalMotor.getAngle();}
+    public double getVerticalMotorAngle() { return verticalMotor.getAngle();}
+
+    public void stopHorizontal() { horizontalMotor.stopTurning(); }
+    public void stopVertical() { verticalMotor.stopTurning(); }
+
+    private double toHorizontalMotorDegrees(double turretDegrees) {
+        return turretDegrees * Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT;
+    }
+
+    private double toVerticalMotorDegrees(double hoodDegrees) {
+        return hoodDegrees * Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM;
+    }
+
+    private double toHoodDegreesFromLaunchAngle(double launchAngleDegrees) {
+        double clampedLaunchAngle = MathUtil.clamp(
+            launchAngleDegrees,
+            Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES,
+            Constants.Turret.Vertical.MAX_LAUNCH_ANGLE_DEGREES
+        );
+        // The bottom hood stop already shoots upward, so launch angle is offset from hood travel.
+        return clampedLaunchAngle - Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES;
+    }
+
+    public double getSpitterRPM() {
+        return spitterMotor.getSpeedRPM();
+    }
+
+    public double getHorizontalAngle() {
+        return horizontalMotor.getAngle();
+    }
+    
+    public double getVerticalAngle() {
+        return verticalMotor.getAngle();
+    }
 }

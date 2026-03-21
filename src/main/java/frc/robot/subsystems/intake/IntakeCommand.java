@@ -1,5 +1,43 @@
 package frc.robot.subsystems.intake;
 
-public class IntakeCommand {
-    
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+
+public class IntakeCommand extends Command{
+    private IntakeSubsystem intakeSubsystem;
+
+    /**
+     * 
+     * @param sub is the subsystem the intake subsystem
+     * @param speed speed sets the speed to the input
+     */
+    public IntakeCommand(IntakeSubsystem sub) {
+        this.intakeSubsystem = sub;
+        addRequirements(sub);
+    }
+
+    @Override
+    public void initialize() {
+        intakeSubsystem.disableIntakeCoasting();
+        intakeSubsystem.turnIntakeMotor(Constants.Turret.ShootConfig.INTAKE_SPEED);
+    }
+
+    //run the motor contiunously so that you can intake
+    @Override
+    public void execute() {
+        
+    }
+
+    //stop the motor when it is done idk if necceary
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
+
+    //stop the motor when it is interrupted idk if necceary
+    @Override
+    public void end(boolean isInterrupted) {
+        intakeSubsystem.enableIntakeCoasting();
+        intakeSubsystem.stopIntakeMotor();
+    }
 }

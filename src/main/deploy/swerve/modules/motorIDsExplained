@@ -1,0 +1,7 @@
+general:
+    Motors relating to driving are in the ID range 10-20
+    The kicker's motor is ID 25
+    Motors relating to the turret are in the ID range 40-50
+    Motors relating to the intake are in the ID range 50-60
+
+that's all i know right now
