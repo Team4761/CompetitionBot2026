@@ -54,7 +54,7 @@ import frc.robot.subsystems.turret.ShootAtAngleDRIFTCommand;
 import frc.robot.subsystems.turret.ShootAtAngleSTUTTERCommand;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.ShootWithPowerCommand;
-import frc.robot.subsystems.turret.SpindexSpinCommand;
+import frc.robot.subsystems.turret.RollerSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
@@ -156,9 +156,9 @@ public class RobotContainer {
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
         ));
 
-        controller_operator.leftBumper().and(controller_operator.b()).whileTrue(new SpindexSpinCommand(turret, -1 * Constants.Turret.ShootConfig.SPINDEXER_SPEED));
+        controller_operator.leftBumper().and(controller_operator.b()).whileTrue(new RollerSpinCommand(turret, -1 * Constants.Turret.ShootConfig.ROLLER_SPEED));
         controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -1 * Constants.Turret.ShootConfig.KICKER_SPEED));
-        controller_operator.leftBumper().and(controller_operator.y()).whileTrue(new SpindexSpinCommand(turret, Constants.Turret.ShootConfig.SPINDEXER_SPEED));
+        controller_operator.leftBumper().and(controller_operator.y()).whileTrue(new RollerSpinCommand(turret, Constants.Turret.ShootConfig.ROLLER_SPEED));
         controller_operator.leftBumper().and(controller_operator.x()).whileTrue(new KickerSpinCommand(turret, Constants.Turret.ShootConfig.KICKER_SPEED));
         controller_operator.leftBumper().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
         controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));

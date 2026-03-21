@@ -38,7 +38,7 @@ public class ShootWithPowerCommand extends Command {
     public void execute() {
         // Delay feeding without stalling the scheduler thread.
         if (!feedersStarted && feederDelayTimer.hasElapsed(Constants.Turret.ShootConfig.KICKER_INIT_DELAY)) {
-            this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
+            this.turretSubsystem.setRollerMotorSpeed(Constants.Turret.ShootConfig.ROLLER_SPEED);
             this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED);
             feedersStarted = true;
         }
@@ -53,7 +53,7 @@ public class ShootWithPowerCommand extends Command {
     public void end(boolean isInterrupted){
         feederDelayTimer.stop();
         this.turretSubsystem.stopSpitter();
-        this.turretSubsystem.stopSpindexer();
+        this.turretSubsystem.stopRoller();
         this.turretSubsystem.stopKicker();
     }
 }

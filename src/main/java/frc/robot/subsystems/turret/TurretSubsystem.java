@@ -12,17 +12,16 @@ public class TurretSubsystem extends SubsystemBase {
     private final SmartKrakenMotor spitterMotor;
     private final SmartKrakenMotor horizontalMotor;
     private final SmartKrakenMotor verticalMotor;
-    private final SmartVortexMotor spindexerMotor;
+    private final SmartVortexMotor rollerMotor;
     private final SmartVortexMotor kickerMotor;
 
     public TurretSubsystem() {
-        this.spindexerMotor = SmartVortexMotor.Builder.newInstance()
-            .port(Constants.Turret.SPINDEXER_MOTOR_PORT)
+        this.rollerMotor = SmartVortexMotor.Builder.newInstance()
+            .port(Constants.Turret.ROLLER_MOTOR_PORT)
             .build();
         this.kickerMotor = SmartVortexMotor.Builder.newInstance()
             .port(Constants.Turret.KICKER_MOTOR_PORT)
             .build();
-
         this.spitterMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.SPITTER_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
@@ -54,12 +53,12 @@ public class TurretSubsystem extends SubsystemBase {
 
     public void setKickerMotorSpeed(double speed) { kickerMotor.setRawSpeedPercent(speed); }
     public void setSpitterMotorSpeed(double speed) { spitterMotor.setRawSpeedPercent(speed); }
-    public void setSpitterMotorSpeedRPM(double rpm) { spitterMotor.setRawSpeed(rpm); }
-    public void setSpindexerMotorSpeed(double speed) { spindexerMotor.setRawSpeedPercent(speed); }
+    public void setRollerMotorSpeedRPM(double rpm) { spitterMotor.setRawSpeed(rpm); }
+    public void setRollerMotorSpeed(double speed) { rollerMotor.setRawSpeedPercent(speed); }
 
     public void stopKicker() { kickerMotor.stopTurning(); }
     public void stopSpitter() { spitterMotor.stopTurning(); }
-    public void stopSpindexer() { spindexerMotor.stopTurning(); }
+    public void stopRoller() { rollerMotor.stopTurning(); }
 
     public void turnHorizontalMotor(double degrees) { 
         double motorDegrees = toHorizontalMotorDegrees(degrees);
@@ -108,4 +107,13 @@ public class TurretSubsystem extends SubsystemBase {
     public double getVerticalAngle() {
         return verticalMotor.getAngle();
     }
+
+    public void setSpitterAngle(double degrees) { spitterMotor.set(degrees); }
+
+    public void setKickerMotorSpeedRPM(double rpm) { kickerMotor.setRawSpeed(rpm); }
+    public void setSpitterMotorSpeedRPM(double rpm) { spitterMotor.setRawSpeed(rpm); }
+
+    public double getSpitterMotorRPM() { return spitterMotor.getSpeedRPM(); }
+
+    public double getSpitterAngle() { return spitterMotor.getAngle(); }
 }

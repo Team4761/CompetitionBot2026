@@ -75,11 +75,11 @@ public class Constants {
         public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken 
         public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken 
 
-        public static final int SPINDEXER_MOTOR_PORT = 43; // Type: flex/vortex
+        public static final int ROLLER_MOTOR_PORT = 43; // Type: flex/vortex
         public static final int KICKER_MOTOR_PORT = 44; // Type: flex/vortex
 
         public class ShootConfig {
-            public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
+            public static final double ROLLER_SPEED = 0.4; // Units: percent (0-1)
 
             public static final double KICKER_SPEED = 0.4; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 7000.0; // Units: rpm (0-6000)
