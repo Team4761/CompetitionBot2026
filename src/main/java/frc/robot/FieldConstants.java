@@ -73,6 +73,13 @@ public class FieldConstants {
         public static final double HUB_SIZE = Units.inchesToMeters(47.0); // Units: meters (length & width)
         public static final double HUB_HEIGHT = Units.inchesToMeters(72); // Units: meters
         public static final double HUB_OPENING_WIDTH = Units.inchesToMeters(41.7); // Units: meters
+        //public static final double HUB_BLUE_TO_BOTTOM_LEFT_CORNER = (Math.hypot(HUB_TO_ALLIANCE_WALL, Field.FIELD_WIDTH/2)); //distance from blue feild hub to bottome left corner on elastic deaboard map
+        //public static final double HUB_RED_TO_BOTTOM_LEFT_CORNER = (Math.hypot((Field.FIELD_LENGTH - HUB_TO_ALLIANCE_WALL), Field.FIELD_WIDTH/2)); // distance from reed hub to bottm left corner of elastic dashboard map
+        public static final double HUB_BLUE_X = HUB_TO_ALLIANCE_WALL;//x pos of blue hub compared to bottom left corner of elastic dashboard map
+        public static final double HUB_BLUE_Y = Field.FIELD_WIDTH/2;//y pos of blue hub compared to bottom left corner of elastic dashboard map
+        public static final double HUB_RED_X = Field.FIELD_LENGTH - HUB_TO_ALLIANCE_WALL;//x pos of red hub compared to bottom left corner of elastic dashboard map
+        public static final double HUB_RED_Y = Field.FIELD_WIDTH/2;//y pos of red hub compared to bottom left corner of elastic dashboard map
+
     }
 
     public class Outpost {
