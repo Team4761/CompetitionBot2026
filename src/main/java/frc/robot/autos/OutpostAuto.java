@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.FieldConstants;
 import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.basecommands.drivetrain.DriveCommand;
 import frc.robot.basecommands.drivetrain.DriveToRelativePoseCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
@@ -37,7 +38,7 @@ public class OutpostAuto extends SequentialCommandGroup {
             drivetrain.runOnce(drivetrain::seedFieldCentric),
             // this set command could use side hub AprilTags
             Commands.runOnce(() -> turret.setHorizontalMotor(TRACKING_PREP_ANGLE_DEGREES), turret),
-            new DriveToRelativePoseCommand(
+            new DriveCommand(
                 drivetrain,
                 -OUTPOST_BACKUP_DISTANCE_METERS,
                 settings.shiftMetersTo(AutoSettings.StartingPosition.RIGHT),
