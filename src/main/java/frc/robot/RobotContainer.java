@@ -13,6 +13,7 @@ import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
@@ -91,6 +92,7 @@ public class RobotContainer {
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
     private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<>();
+    private SendableChooser<Command> ppAutoChooser;
 
     // Tracks which intake state
     private boolean isIntakeExtended = false;
@@ -104,6 +106,8 @@ public class RobotContainer {
 
 
     private void configPathPlanner() {
+        ppAutoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("PathPlanner Auto Chooser", ppAutoChooser);
         NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
         
     }
@@ -260,7 +264,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        Supplier<Command> selectedAuto = autoChooser.getSelected();
+        Supplier<Command> selectedAuto = () -> ppAutoChooser.getSelected();
         return selectedAuto != null ? selectedAuto.get() : Commands.none();
     }
 
