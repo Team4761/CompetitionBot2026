@@ -146,7 +146,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        Constants.Field.ALLIANCE_COLOR = teamChooser.getSelected();
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+            Constants.Field.ALLIANCE_COLOR = "RED";
+        } else {
+            Constants.Field.ALLIANCE_COLOR = "BLUE";
+        }
         Constants.Field.STARTING_POSITION = positionChooser.getSelected();
         // The code
         double autoStartX;
