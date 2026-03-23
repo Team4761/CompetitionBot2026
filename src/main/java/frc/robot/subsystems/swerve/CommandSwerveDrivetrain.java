@@ -233,8 +233,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 autoRequest.withSpeeds(speeds) // Method that drives the robot
             ),
             new PPHolonomicDriveController(   // Holonomic path follower config
-                new PIDConstants(0., 0, 0),  // Translation PID constants
-                new PIDConstants(0, 0, 0)   // Rotation PID constants
+                new PIDConstants(0.05, 0, 0.02),  // Translation PID constants
+                new PIDConstants(35, 0, 0.5)   // Rotation PID constants
             ),
             config,                          // RobotConfig loaded from GUI
             () -> {

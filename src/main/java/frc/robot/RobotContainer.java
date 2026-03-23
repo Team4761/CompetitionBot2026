@@ -98,10 +98,10 @@ public class RobotContainer {
     private boolean isIntakeExtended = false;
 
     public RobotContainer() {
-        configPathPlanner();
         configureBindings();
         configAutos();
         configDefaultCommands();
+        configPathPlanner();
     }
 
 
