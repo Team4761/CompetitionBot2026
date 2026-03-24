@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtendIntakeComandCAUGHT"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RIGHT TRENCH Go to Neutral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RIGHT TRENCH Intake Neutral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RIGHT BUMP Exit Neutral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 12.0
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

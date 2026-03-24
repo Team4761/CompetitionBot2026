@@ -3,7 +3,7 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "New Folder"
+    "Auto Paths"
   ],
   "autoFolders": [
     "New Folder",
@@ -33,5 +33,7 @@
   "brModuleY": -0.273,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Intake\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.575,\"y\":0.0},\"size\":{\"width\":0.85,\"length\":0.25},\"borderRadius\":0.01,\"strokeWidth\":0.015,\"filled\":true}}"
+  ]
 }
