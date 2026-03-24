@@ -13,6 +13,8 @@ import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -26,6 +28,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DepotAuto;
+import frc.robot.autos.DriveBackward;
+import frc.robot.autos.DriveForward;
 import frc.robot.autos.DriveFwd2s;
 //import frc.robot.autos.ExtendDownMoveAndGather;
 import frc.robot.autos.LongRangeShoot3s;
@@ -88,6 +92,7 @@ public class RobotContainer {
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
     private final SendableChooser<Supplier<Command>> autoChooser = new SendableChooser<>();
+    private SendableChooser<Command> ppAutoChooser;
 
     // Tracks which intake state
     private boolean isIntakeExtended = false;
@@ -96,8 +101,16 @@ public class RobotContainer {
         configureBindings();
         configAutos();
         configDefaultCommands();
+        configPathPlanner();
     }
 
+
+    private void configPathPlanner() {
+        ppAutoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("PathPlanner Auto Chooser", ppAutoChooser);
+        NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
+        
+    }
     private void configureBindings() {
         //#region --- Robot Config ---
 
@@ -133,7 +146,7 @@ public class RobotContainer {
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
         
         //#endregion
-
+        
         //#region --- Operator Controller Bindings ---
 
         // Normal bindings
@@ -232,18 +245,26 @@ public class RobotContainer {
         //     () -> new OutpostAuto(turret, vision, drivetrain)
         // );
         autoChooser.addOption(
-            "Deploy intake",
+            "Deploy intake",   
             () -> new DeployIntake(intake, turret)
         );
         autoChooser.addOption(
             "Neutral Auto",
             () -> new NeutralZoneAuto(intake, turret, drivetrain)
         );
+        autoChooser.addOption(
+            "Drive Forward 1 Meter",
+            () -> new DriveForward(drivetrain)
+        );
+        autoChooser.addOption(
+            "Drive Backward MEters",
+             () -> new DriveBackward(drivetrain)
+        );
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public Command getAutonomousCommand() {
-        Supplier<Command> selectedAuto = autoChooser.getSelected();
+        Supplier<Command> selectedAuto = () -> ppAutoChooser.getSelected();
         return selectedAuto != null ? selectedAuto.get() : Commands.none();
     }
 

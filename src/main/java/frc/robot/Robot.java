@@ -6,16 +6,21 @@ package frc.robot;
 
 import com.ctre.phoenix6.HootAutoReplay;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commandGroups.TurretLockCommand;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class Robot extends TimedRobot {
@@ -50,8 +55,11 @@ public class Robot extends TimedRobot {
     private Timer phaseTimer;
     private double phaseDuration;
     private final VisionSubsystem visionSubsystem;
+    private final CommandSwerveDrivetrain drivetrain;
     private SendableChooser<String> teamChooser = new SendableChooser<>();
     private SendableChooser<String> positionChooser = new SendableChooser<>();
+    private Field2d field = new Field2d();
+    private Pose2d autoStartPosition = new Pose2d();
     
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
@@ -61,6 +69,7 @@ public class Robot extends TimedRobot {
     public Robot() {
         m_robotContainer = new RobotContainer();
         visionSubsystem = RobotContainer.getVisionSubsystem();
+        drivetrain = RobotContainer.getDrivetrain();
         matchTimer = new Timer();
         currentPhase = MatchPhase.AUTONOMOUS;
         phaseTimer = new Timer();
@@ -111,12 +120,14 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
+        field.setRobotPose(drivetrain.getState().Pose);
         // The Original Alexander Maniscalco helped
         SmartDashboard.putNumber("Match Time Left", Math.round((FieldConstants.Match.MATCH_DURATION-matchTimer.get())*10)/10.0);
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", RobotContainer.getTurretSubsystem().getHorizontalMotorAngle());
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", RobotContainer.getTurretSubsystem().getVerticalMotorAngle());
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);
+        SmartDashboard.putData("Field", field);
         //below has not been tested please test
         //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire purple is tracking disabled
         //make sure to to right click and click on show as single color veiw
@@ -135,12 +146,40 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        Constants.Field.ALLIANCE_COLOR = teamChooser.getSelected();
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+            Constants.Field.ALLIANCE_COLOR = "RED";
+        } else {
+            Constants.Field.ALLIANCE_COLOR = "BLUE";
+        }
         Constants.Field.STARTING_POSITION = positionChooser.getSelected();
+        // The code
+        double autoStartX;
+        double autoStartY;
+        Rotation2d autoStartRot;
+        if (Constants.Field.ALLIANCE_COLOR.equals("BLUE")) {
+            autoStartX = FieldConstants.Field.ALLIANCE_ZONE_LENGTH - Constants.Robot.ROBOT_WIDTH/2.0;
+            autoStartRot = new Rotation2d(0);
+        } else {
+            autoStartX = FieldConstants.Field.FIELD_LENGTH - (FieldConstants.Field.ALLIANCE_ZONE_LENGTH - Constants.Robot.ROBOT_WIDTH/2.0);
+            autoStartRot = new Rotation2d(Math.PI);
+        }
+        if (Constants.Field.STARTING_POSITION.equals("LEFT")) {
+            autoStartY = FieldConstants.Field.ALLIANCE_ZONE_WIDTH - FieldConstants.Trench.TRENCH_WIDTH/2.0;
+        } else if (Constants.Field.STARTING_POSITION.equals("CENTER")) {
+            autoStartY = FieldConstants.Field.ALLIANCE_ZONE_WIDTH/2.0;
+        } else {
+            autoStartY = FieldConstants.Trench.TRENCH_WIDTH/2.0;
+        }
+        autoStartPosition = new Pose2d(autoStartX, autoStartY,autoStartRot);
+        //drivetrain.setOperatorPerspectiveForward(autoStartRot); // This might be causing drifting issues.
+        drivetrain.resetPose(autoStartPosition);
+        field.setRobotPose(autoStartPosition);
+        SmartDashboard.putData("Field", field);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;
-        System.out.println("Alliance: " + teamChooser.getSelected() + ", Starting Position: " +  positionChooser.getSelected());
+        //System.out.println("Alliance: " + teamChooser.getSelected() + ", Starting Position: " +  positionChooser.getSelected());
 
         if (m_autonomousCommand != null) {
             CommandScheduler.getInstance().schedule(m_autonomousCommand);

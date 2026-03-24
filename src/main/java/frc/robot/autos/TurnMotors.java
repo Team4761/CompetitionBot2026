@@ -5,8 +5,9 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.baseCommands.DoNothingCommand;
-import frc.robot.baseCommands.drivetrain.RotateRelativeDegreesCommand;
+import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.basecommands.drivetrain.DriveCommand;
+import frc.robot.basecommands.drivetrain.RotateRelativeDegreesCommand;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class TurnMotors extends SequentialCommandGroup {
@@ -18,7 +19,7 @@ public class TurnMotors extends SequentialCommandGroup {
         addCommands(
             new DoNothingCommand(),
             drivetrain.runOnce(drivetrain::seedFieldCentric),
-            new RotateRelativeDegreesCommand(drivetrain, AUTO_TURN_DEGREES)
+            new DriveCommand(drivetrain, 0,0,AUTO_TURN_DEGREES)
         );
     }
 }

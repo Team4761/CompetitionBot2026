@@ -2,6 +2,7 @@ package frc.robot.subsystems.gyro;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -25,5 +26,5 @@ public class GyroSubsystem extends SubsystemBase{
     public double getZAcc() { return this.pigeon.getAccelerationZ().getValueAsDouble(); }
 
     public Rotation3d getR3d() { return this.pigeon.getRotation3d(); }
-
+    public Rotation2d getR2d() { return this.pigeon.getRotation2d(); }
 }

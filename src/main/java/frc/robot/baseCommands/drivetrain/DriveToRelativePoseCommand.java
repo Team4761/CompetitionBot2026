@@ -1,4 +1,4 @@
-package frc.robot.baseCommands.drivetrain;
+package frc.robot.basecommands.drivetrain;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -36,6 +36,26 @@ public class DriveToRelativePoseCommand extends Command {
     private double lastTimestampSeconds = 0.0;
     private double maxDurationSeconds = 0.0;
 
+
+    /**
+     * Current Plan:
+     * Our goal is to use SwerveControllerCommand to drive to a relative pose via Trajectory
+     * https://github.wpilib.org/allwpilib/docs/release/java/edu/wpi/first/wpilibj2/command/SwerveControllerCommand.html
+     * Currently, we're going to need a ProfiledPIDController for the rotation movement
+     * The return for this function is swerve states that will be put into our PIDs to control the robot directly
+     * HolonomicDriveController is a combination of two PIDControllers (x & y) + a ProfiledPIDController (Rotation)
+     * 
+     * Here are the parameters for SwerveController Command:
+     *   trajectory - The trajectory to follow.
+     *   pose - A function that supplies the robot pose - use one of the odometry classes to provide this.
+     *   kinematics - The kinematics for the robot drivetrain.
+     *   controller - The HolonomicDriveController for the drivetrain.
+     *   desiredRotation - The angle that the drivetrain should be facing. This is sampled at each time step.
+     *   outputModuleStates - The raw output module states from the position controllers.
+     *   requirements - The subsystems to require.
+     * This command will not return output voltages but rather raw module states from the position controllers which need to be put into a velocity PID.
+     * Note: The controllers will *not* set the outputVolts to zero upon completion of the path- this is left to the user, since it is not appropriate for paths with nonstationary endstates.
+     */
     /**
      * 
      * @param drivetrain subsystem

@@ -5,8 +5,8 @@ import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
-import frc.robot.baseCommands.DoNothingCommand;
-import frc.robot.baseCommands.drivetrain.DriveToRelativePoseCommand;
+import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.basecommands.drivetrain.DriveToRelativePoseCommand;
 
 public class DepotAuto extends SequentialCommandGroup {
     private static final double DEPOT_APPROACH_DISTANCE_METERS =
