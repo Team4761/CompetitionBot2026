@@ -12,7 +12,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.turret.ShootCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
-import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.subsystems.vision.OLDVisionSubsystem;
 
 public class OutpostAuto extends SequentialCommandGroup {
     private static final double OUTPOST_BACKUP_DISTANCE_METERS =
@@ -28,7 +28,7 @@ public class OutpostAuto extends SequentialCommandGroup {
 
     public OutpostAuto(
         TurretSubsystem turret,
-        VisionSubsystem vision,
+        OLDVisionSubsystem vision,
         CommandSwerveDrivetrain drivetrain
     ) {
         AutoSettings settings = AutoSettings.fromDashboardSelections();

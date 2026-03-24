@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.subsystems.vision.OLDVisionSubsystem;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
     private MatchPhase currentPhase;
     private Timer phaseTimer;
     private double phaseDuration;
-    private final VisionSubsystem visionSubsystem;
+    private final OLDVisionSubsystem visionSubsystem;
     private final CommandSwerveDrivetrain drivetrain;
     private SendableChooser<String> teamChooser = new SendableChooser<>();
     private SendableChooser<String> positionChooser = new SendableChooser<>();
