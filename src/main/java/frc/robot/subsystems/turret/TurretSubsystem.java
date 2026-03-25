@@ -82,6 +82,9 @@ public class TurretSubsystem extends SubsystemBase {
     public void setVerticalMotor(double launchAngleDegrees) {
         verticalMotor.set(toVerticalMotorDegrees(toHoodDegreesFromLaunchAngle(launchAngleDegrees)));
     }
+    public void setLaunchAngleDegrees(double launchAngleDegrees) {
+        verticalMotor.set(toVerticalMotorDegrees(toHoodDegreesFromBaselineLaunchAngle(launchAngleDegrees)));
+    }
     public double getHorizontalMotorAngle() { return motorRotationsToTurretDegrees(horizontalMotor.getAngle());}
     public double getVerticalMotorAngle() { return verticalMotor.getAngle();}
 
@@ -120,6 +123,19 @@ public class TurretSubsystem extends SubsystemBase {
         );
         // The bottom hood stop already shoots upward, so launch angle is offset from hood travel.
         return clampedLaunchAngle - Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES;
+    }
+
+    private double toHoodDegreesFromBaselineLaunchAngle(double launchAngleDegrees) {
+        double maxLaunchAngleDegrees = Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES
+            + (Constants.Turret.Vertical.MAX_HOOD_ANGLE_DEGREES - Constants.Turret.Vertical.MIN_HOOD_ANGLE_DEGREES);
+        double clampedLaunchAngle = MathUtil.clamp(
+            launchAngleDegrees,
+            Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES,
+            maxLaunchAngleDegrees
+        );
+        // The hood starts at a 22-degree launch angle at the mechanical stop and only moves upward from there.
+        return Constants.Turret.Vertical.MAX_HOOD_ANGLE_DEGREES
+            - (clampedLaunchAngle - Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES);
     }
 
     public double getSpitterRPM() {

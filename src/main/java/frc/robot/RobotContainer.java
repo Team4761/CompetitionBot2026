@@ -51,6 +51,7 @@ import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
 import frc.robot.subsystems.turret.INTERMITENTShootCommand;
+import frc.robot.subsystems.turret.CalculatedHubShotCommand;
 import frc.robot.subsystems.turret.KickerSpinCommand;
 import frc.robot.subsystems.turret.ShootAtAngleCommand;
 import frc.robot.subsystems.turret.ShootAtAngleDRIFTCommand;
@@ -154,6 +155,8 @@ public class RobotContainer {
         // Normal bindings
         controller_operator.leftTrigger().whileTrue(new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED)); // Long shot
         controller_operator.rightTrigger().whileTrue(new INTERMITENTShootCommand(turret, Constants.Turret.ShootConfig.SPITTER_SPEED)); // Short shot
+        controller_operator.b().and(controller_operator.leftBumper().negate())
+            .whileTrue(new CalculatedHubShotCommand(turret, drivetrain));
         
         controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, this.turret.getVerticalAngle()));
         controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, this.turret.getVerticalAngle()));
