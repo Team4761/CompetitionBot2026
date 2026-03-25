@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.Constants.Vision;
 import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DepotAuto;
 import frc.robot.autos.DriveBackward;
@@ -40,7 +41,7 @@ import frc.robot.autos.PoseDriveExampleAuto;
 import frc.robot.autos.Shoot3s;
 import frc.robot.autos.DeployIntake;
 //import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
-import frc.robot.commandGroups.TurretLockCommand;
+import frc.robot.commandGroups.TurretTrackCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem; 
@@ -59,16 +60,13 @@ import frc.robot.subsystems.turret.ShootWithPowerCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
-import frc.robot.subsystems.vision.DisenableTrackerCommand;
-import frc.robot.subsystems.vision.OLDVisionSubsystem;
+import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
-    private static final double INTAKE_EXTEND_SPEED = 1;
-
     private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private static final OLDVisionSubsystem vision = new OLDVisionSubsystem(drivetrain);
+    private static final VisionSubsystem vision = new VisionSubsystem(drivetrain);
     private static final TurretSubsystem turret = new TurretSubsystem();
     private static final GyroSubsystem gyro = new GyroSubsystem();
     private static final Orchestra orchestra = new Orchestra("output.chrp");
@@ -97,13 +95,17 @@ public class RobotContainer {
     // Tracks which intake state
     private boolean isIntakeExtended = false;
 
+    // Disables/enables vision tracking for the turret
+    private static boolean isVisionTrackingEnabled = true;
+    public static boolean isVisionTrackingEnabled() { return isVisionTrackingEnabled; }
+    public static void toggleVisionTracking() { isVisionTrackingEnabled = !isVisionTrackingEnabled; }
+
     public RobotContainer() {
         configureBindings();
         configAutos();
         configDefaultCommands();
         configPathPlanner();
     }
-
 
     private void configPathPlanner() {
         ppAutoChooser = AutoBuilder.buildAutoChooser();
@@ -171,7 +173,7 @@ public class RobotContainer {
         controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -1 * Constants.Turret.ShootConfig.KICKER_SPEED));
         controller_operator.leftBumper().and(controller_operator.y()).whileTrue(new SpindexSpinCommand(turret, Constants.Turret.ShootConfig.SPINDEXER_SPEED));
         controller_operator.leftBumper().and(controller_operator.x()).whileTrue(new KickerSpinCommand(turret, Constants.Turret.ShootConfig.KICKER_SPEED));
-        controller_operator.leftBumper().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
+        controller_operator.leftBumper().and(controller_operator.back()).onTrue(new InstantCommand(() -> RobotContainer.toggleVisionTracking()));
         controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
 
@@ -181,7 +183,7 @@ public class RobotContainer {
     }
 
     private void configDefaultCommands() {
-        turret.setDefaultCommand(new TurretLockCommand(turret, vision));
+        turret.setDefaultCommand(new TurretTrackCommand(turret, drivetrain));
     }
 
     private double shapeTurnInput(double rawTurn) {
@@ -270,7 +272,7 @@ public class RobotContainer {
 
     public static GyroSubsystem getGyroSubsystem() { return gyro; }
     public static IntakeSubsystem getIntakeSubsystem() { return intake; }
-    public static OLDVisionSubsystem getVisionSubsystem() { return vision; }
+    public static VisionSubsystem getVisionSubsystem() { return vision; }
     public static TurretSubsystem getTurretSubsystem() { return turret; }
     public static CommandSwerveDrivetrain getDrivetrain() { return drivetrain; }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems.turret;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -14,6 +15,8 @@ public class TurretSubsystem extends SubsystemBase {
     private final SmartKrakenMotor verticalMotor;
     private final SmartVortexMotor spindexerMotor;
     private final SmartVortexMotor kickerMotor;
+
+    private final PIDController horizontalPIDController;
 
     public TurretSubsystem() {
         this.spindexerMotor = SmartVortexMotor.Builder.newInstance()
@@ -50,6 +53,8 @@ public class TurretSubsystem extends SubsystemBase {
             .mode(SmartKrakenMotor.MotorMode.CONTINUOUS)
             .gearRatio(Constants.Turret.Vertical.CONVERSION_FACTOR_HtoM)
             .build();
+
+        this.horizontalPIDController = new PIDController(0.5, 0.0, 0.001);
     }
 
     public void setKickerMotorSpeed(double speed) { kickerMotor.setRawSpeedPercent(speed); }
@@ -64,7 +69,6 @@ public class TurretSubsystem extends SubsystemBase {
     public void turnHorizontalMotor(double degrees) { 
         double motorDegrees = toHorizontalMotorDegrees(degrees);
         if (!horizontalMotor.turn(motorDegrees)) {
-            //horizontalMotor.set(0);
             System.out.println(String.format("Failed to turn horizontal motor by [%.2f] degrees. Current angle: [%.2f]", degrees, horizontalMotor.getAngle()));
         } 
     }
@@ -73,8 +77,24 @@ public class TurretSubsystem extends SubsystemBase {
     public void setVerticalMotor(double launchAngleDegrees) {
         verticalMotor.set(toVerticalMotorDegrees(toHoodDegreesFromLaunchAngle(launchAngleDegrees)));
     }
-    public double getHorizontalMotorAngle() { return horizontalMotor.getAngle();}
+    public double getHorizontalMotorAngle() { return motorRotationsToTurretDegrees(horizontalMotor.getAngle());}
     public double getVerticalMotorAngle() { return verticalMotor.getAngle();}
+
+    public void stepHorizontalMotor(double targetDegrees) {
+        double clampedTargetDegrees = MathUtil.clamp(
+            targetDegrees,
+            Constants.Turret.Horizontal.ANGLE_LIM_LEFT,
+            Constants.Turret.Horizontal.ANGLE_LIM_RIGHT
+        );
+        double currentDegrees = getHorizontalMotorAngle();
+        double stepDegrees = horizontalPIDController.calculate(currentDegrees, clampedTargetDegrees);
+        stepDegrees = MathUtil.clamp(
+            stepDegrees,
+            -Constants.Turret.Horizontal.MAX_TRACK_STEP_DEGREES,
+            Constants.Turret.Horizontal.MAX_TRACK_STEP_DEGREES
+        );
+        turnHorizontalMotor(stepDegrees);
+    }
 
     public void stopHorizontal() { horizontalMotor.stopTurning(); }
     public void stopVertical() { verticalMotor.stopTurning(); }
@@ -102,10 +122,14 @@ public class TurretSubsystem extends SubsystemBase {
     }
 
     public double getHorizontalAngle() {
-        return horizontalMotor.getAngle();
+        return getHorizontalMotorAngle();
     }
     
     public double getVerticalAngle() {
         return verticalMotor.getAngle();
+    }
+
+    private double motorRotationsToTurretDegrees(double motorRotations) {
+        return motorRotations * 360.0 / Constants.Turret.Horizontal.CONVERSION_FACTOR_MtoT;
     }
 }

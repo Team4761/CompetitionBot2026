@@ -1,62 +1,46 @@
-// package frc.robot.commandGroups;
+package frc.robot.commandGroups;
 
-// import edu.wpi.first.math.MathUtil;
-// import edu.wpi.first.math.filter.SlewRateLimiter;
-// import edu.wpi.first.wpilibj2.command.Command;
-// import frc.robot.Constants;
-// import frc.robot.subsystems.turret.*;
-// import frc.robot.util.SmartCameraNetwork;
-// import frc.robot.util.SmartCameraNetwork.TargetObservation;
-// import java.util.Optional;
+import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 
-// public class TurretTrackCommand extends Command {
-//     private final TurretSubsystem turretSubsystem;
-//     private final SmartCameraNetwork cameraNetwork;
-//     private final int fiducialId;
-//     private final SlewRateLimiter angleStepLimiter;
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
-//     public TurretTrackCommand(TurretSubsystem turretSubsystem, SmartCameraNetwork cameraNetwork, int fiducialId) {
-//         this.turretSubsystem = turretSubsystem;
-//         this.cameraNetwork = cameraNetwork;
-//         this.fiducialId = fiducialId;
-//         this.angleStepLimiter = new SlewRateLimiter(Constants.Turret.Horizontal.MAX_TRACK_RATE_DEGREES_PER_SEC);
-//         addRequirements(turretSubsystem);
-//     }
+public class TurretTrackCommand extends Command {
+    private final TurretSubsystem turretSubsystem;
+    private final CommandSwerveDrivetrain drivetrainSubsystem;
 
-//     @Override
-//     public void initialize() {
-//         angleStepLimiter.reset(0.0);
-//     }
+    public TurretTrackCommand(
+        TurretSubsystem turretSubsystem,
+        CommandSwerveDrivetrain drivetrainSubsystem
+    ) {
+        this.turretSubsystem = turretSubsystem;
+        this.drivetrainSubsystem = drivetrainSubsystem;
+        // [NOTE]: This should only be used as default command, and doesn't require the system,
+        //         so that it can run in parallel with other commands that require the turret subsystem
+    }
 
-//     @Override
-//     public void execute() {
-//         Optional<TargetObservation> observation = cameraNetwork.getBestObservation(fiducialId);
+    @Override
+    public void initialize() {}
 
-//         if (observation.isEmpty()) {
-//             turretSubsystem.setHorizontalMotor(0.0);
-//             angleStepLimiter.reset(0.0);
-//             return;
-//         }
+    @Override
+    public void execute() {
+        if (RobotContainer.isVisionTrackingEnabled()) {
+            turretSubsystem.stepHorizontalMotor(drivetrainSubsystem.getHubAimErrorDegrees());
+        }
+        else {
+            turretSubsystem.stopHorizontal();
+        }
+    }
 
-//         double angleError = observation.get().getAngleDegrees();
-//         double desiredStep = 0.0;
+    @Override
+    public boolean isFinished() {
+        return false;
+    }
 
-//         if (Math.abs(angleError) > Constants.Vision.ANGLE_DEADBAND) {
-//             desiredStep = MathUtil.clamp(
-//                 angleError * Constants.Turret.Horizontal.ANGLE_TURN_PERCENTAGE,
-//                 -Constants.Turret.Horizontal.MAX_TRACK_STEP_DEGREES,
-//                 Constants.Turret.Horizontal.MAX_TRACK_STEP_DEGREES
-//             );
-//         }
-
-//         turretSubsystem.turnHorizontalMotor(angleStepLimiter.calculate(desiredStep));
-//     }
-
-//     @Override
-//     public boolean isFinished() { return false; }
-
-//     @Override
-//     public void end(boolean isInterrupted) {
-//         turretSubsystem.stopHorizontal();
-//     }
-// }
+    @Override
+    public void end(boolean isInterrupted) {
+        turretSubsystem.stopHorizontal();
+    }
+}

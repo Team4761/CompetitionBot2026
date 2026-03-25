@@ -19,9 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import frc.robot.subsystems.vision.OLDVisionSubsystem;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -54,7 +52,6 @@ public class Robot extends TimedRobot {
     private MatchPhase currentPhase;
     private Timer phaseTimer;
     private double phaseDuration;
-    private final OLDVisionSubsystem visionSubsystem;
     private final CommandSwerveDrivetrain drivetrain;
     private SendableChooser<String> teamChooser = new SendableChooser<>();
     private SendableChooser<String> positionChooser = new SendableChooser<>();
@@ -68,7 +65,6 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
-        visionSubsystem = RobotContainer.getVisionSubsystem();
         drivetrain = RobotContainer.getDrivetrain();
         matchTimer = new Timer();
         currentPhase = MatchPhase.AUTONOMOUS;
@@ -83,7 +79,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
         SmartDashboard.putBoolean("Manual Turret Control", false);
-        SmartDashboard.putBoolean(TurretLockCommand.ENABLED_DASHBOARD_KEY, false);
         teamChooser.addOption("BLUE", "BLUE");
         teamChooser.addOption("RED", "RED");
         teamChooser.setDefaultOption("BLUE", "BLUE");
@@ -131,7 +126,6 @@ public class Robot extends TimedRobot {
         //below has not been tested please test
         //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire purple is tracking disabled
         //make sure to to right click and click on show as single color veiw
-        SmartDashboard.putString("April Tag Status", (visionSubsystem.seesAprilTag()).toHexString());
         //SmartDashboard.putNumber("Camera Calculation Values", visionSubsytem.getCalcValues());[TODO] (ehh not really just ben needs to finish his part)
     }
 
