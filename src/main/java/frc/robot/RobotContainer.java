@@ -103,7 +103,7 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         configAutos();
-        configDefaultCommands();
+        configBackgroundCommands();
         configPathPlanner();
     }
 
@@ -182,8 +182,9 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
     }
 
-    private void configDefaultCommands() {
-        turret.setDefaultCommand(new TurretTrackCommand(turret, drivetrain));
+    private void configBackgroundCommands() {
+        RobotModeTriggers.autonomous().onTrue(new TurretTrackCommand(turret, drivetrain));
+        RobotModeTriggers.teleop().onTrue(new TurretTrackCommand(turret, drivetrain));
     }
 
     private double shapeTurnInput(double rawTurn) {

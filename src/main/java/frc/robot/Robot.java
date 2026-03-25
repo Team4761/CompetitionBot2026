@@ -8,9 +8,6 @@ import com.ctre.phoenix6.HootAutoReplay;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -109,20 +106,20 @@ public class Robot extends TimedRobot {
             "MO: Back Button: Disable Vision Tracking\n"
 
         );
+        SmartDashboard.putData("Field", field);
     }
 
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
-        field.setRobotPose(drivetrain.getState().Pose);
+        field.setRobotPose(drivetrain.getEstimatedPose());
         // The Original Alexander Maniscalco helped
         SmartDashboard.putNumber("Match Time Left", Math.round((FieldConstants.Match.MATCH_DURATION-matchTimer.get())*10)/10.0);
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", RobotContainer.getTurretSubsystem().getHorizontalMotorAngle());
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", RobotContainer.getTurretSubsystem().getVerticalMotorAngle());
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);
-        SmartDashboard.putData("Field", field);
         //below has not been tested please test
         //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire purple is tracking disabled
         //make sure to to right click and click on show as single color veiw
@@ -169,7 +166,6 @@ public class Robot extends TimedRobot {
         //drivetrain.setOperatorPerspectiveForward(autoStartRot); // This might be causing drifting issues.
         drivetrain.resetPose(autoStartPosition);
         field.setRobotPose(autoStartPosition);
-        SmartDashboard.putData("Field", field);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;
