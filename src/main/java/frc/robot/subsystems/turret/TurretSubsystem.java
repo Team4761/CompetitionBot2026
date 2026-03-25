@@ -13,16 +13,21 @@ public class TurretSubsystem extends SubsystemBase {
     private final SmartKrakenMotor horizontalMotor;
     private final SmartKrakenMotor verticalMotor;
     private final SmartVortexMotor spindexerMotor;
-    private final SmartVortexMotor kickerMotor;
+    private final SmartKrakenMotor kickerMotor;
 
     public TurretSubsystem() {
         this.spindexerMotor = SmartVortexMotor.Builder.newInstance()
             .port(Constants.Turret.SPINDEXER_MOTOR_PORT)
             .build();
-        this.kickerMotor = SmartVortexMotor.Builder.newInstance()
-            .port(Constants.Turret.KICKER_MOTOR_PORT)
-            .build();
 
+        this.kickerMotor = SmartKrakenMotor.Builder.newInstance()
+            .port(Constants.Turret.KICKER_MOTOR_PORT)
+            .PID(0.1, 0.0, 0.0)
+            .outputRange(-1, 1)
+            .angleLimits(-1, -1)
+            .mode(SmartKrakenMotor.MotorMode.WRAPPED)
+            .gearRatio(Constants.Turret.ShootConfig.KICKER_CONVERSION_FACTOR_MtoR)
+            .build();
         this.spitterMotor = SmartKrakenMotor.Builder.newInstance()
             .port(Constants.Turret.SPITTER_MOTOR_PORT)
             .PID(0.1, 0.0, 0.0)
