@@ -24,7 +24,7 @@ import frc.robot.Constants;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
-public class VisionSubsystem extends SubsystemBase {
+public class VisionSubsystemBAD extends SubsystemBase {
     private static final double GRAVITY_METERS_PER_SEC_SQ = 9.80665;
     private static final double LAUNCH_LEAD_TIME_SECONDS = 0.08;
     private static final double MAX_YAW_ACCEL_RAD_PER_SEC_SQ = 20.0;
@@ -45,7 +45,7 @@ public class VisionSubsystem extends SubsystemBase {
     private boolean hasPreviousOmega = false;
     private double latestYawAccelRadPerSecSq = 0.0;
 
-    public VisionSubsystem(CommandSwerveDrivetrain drivetrain) {
+    public VisionSubsystemBAD(CommandSwerveDrivetrain drivetrain) {
         this.drivetrain = drivetrain;
     }
 
