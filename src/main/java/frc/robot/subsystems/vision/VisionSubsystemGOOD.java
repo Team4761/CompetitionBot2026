@@ -1,7 +1,7 @@
 package frc.robot.subsystems.vision;
 
 import java.util.List;
-
+//make photon vision contstants in constants[TODO][FIXME] [HELP]
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -13,7 +13,9 @@ import org.photonvision.targeting.TargetCorner;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class VisionSubsystemGOOD {
@@ -21,6 +23,8 @@ public class VisionSubsystemGOOD {
     private AprilTagFieldLayout layout;
 
     private Pose2d visionPose;
+    private final Field2d visionField = new Field2d();//dont know how to use but is definitly helpful
+   private final Field2d generalField = new Field2d();
 
     PhotonCamera camera = new PhotonCamera("Camera");
     private PhotonPipelineResult result = null;
@@ -28,7 +32,7 @@ public class VisionSubsystemGOOD {
     private PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(
         AprilTagFieldLayout.loadField(AprilTagFields.k2026RebuiltWelded), //load the april tags
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,//idk
-        PhotonVisionConstants.ROBOT_TO_CAMERA //make camera awarE of rest of robot
+        Constants.Vision.CAMARA_POS //make camera awarE of rest of robot
     );
 
 
@@ -61,7 +65,7 @@ public class VisionSubsystemGOOD {
         // Sets trust value for vision measurements
         // charizardsSkateboard.setVisionMeasurementStdDevs(curStdDevs);
         // charizardsSkateboard.addVisionMeasurement(pose2d, timestampSeconds);
-        m_drivetrain.setVisionMeasurementStdDevs(kSingleTagStdDevs);
+        //drivetrain.setVisionMeasurementStdDevs(kSingleTagStdDevs);
         /*
         double xUpperLimitOfTrustBox = m_drivetrain.getState().Pose.getX() + RadiusOfToleranceSquare;
         double xLowerLimitOfTrustBox = m_drivetrain.getState().Pose.getX() - RadiusOfToleranceSquare;
@@ -79,14 +83,14 @@ public class VisionSubsystemGOOD {
         m_drivetrain.addVisionMeasurement(pose2d, timestampSeconds);
         } */
 
-     m_drivetrain.addVisionMeasurement(pose2d, Utils.getCurrentTimeSeconds());
+     drivetrain.addVisionMeasurement(pose2d, Utils.getCurrentTimeSeconds());
    }
 
-   @Override
+   
    public void periodic() {
      // Get camera results
-     leftResult = cameraLeft.getLatestResult();
-     forwardResult = cameraForward.getLatestResult();
+     result = camera.getLatestResult();
+     
      // backLeftResult = backLeftCamera.getLatestResult();
      // backRightResult = backRightCamera.getLatestResult(); //NEEDS CHANGING BEFORE WE RETIRE FOR MICHALS SAFTEY NEXT YEAR
      // Central Camera
@@ -95,9 +99,9 @@ public class VisionSubsystemGOOD {
      try {
        // Only accepts camera results if they see more than 1 april tag, or if it sees 1 april tag and the poseAmbiguity is low
        // COMMENT OUT THE LINE BELOW THIS AND IT'S CLOSING BRACKETS IF THIS DOESN'T WORK
-       if ((leftResult.getTargets().size() == 1 && leftResult.getBestTarget().poseAmbiguity < PhotonVisionConstants.AMBIGUITY_RATIO_CUTOFF) 
-       || leftResult.getTargets().size() > 1) {
-         leftEstimatedRobotPose = leftPoseEstimator.update(leftResult).get();
+       if ((result.getTargets().size() == 1 && result.getBestTarget().poseAmbiguity < PhotonVisionConstants.AMBIGUITY_RATIO_CUTOFF) 
+    ||   result.getTargets().size() > 1) {
+         leftEstimatedRobotPose = poseEstimator.update(result).get();
          //leftEstimatedRobotPose = leftPoseEstimator.estimateCoprocMultiTagPose(leftResult).get();
          //updateEstimationStdDevs(leftPoseEstimator.update(leftResult), cameraLeft.getAllUnreadResults().get(0).getTargets());
          addVisionPose2d(leftEstimatedRobotPose.estimatedPose.toPose2d(), Utils.getCurrentTimeSeconds());
@@ -110,27 +114,16 @@ public class VisionSubsystemGOOD {
      try {
        // Only accepts camera results if they see more than 1 april tag, or if it sees 1 april tag and the poseAmbiguity is low
        // COMMENT OUT THE LINE BELOW THIS AND IT'S CLOSING BRACKETS IF THIS DOESN'T WORK
-       if ((forwardResult.getTargets().size() == 1 && forwardResult.getBestTarget().poseAmbiguity 
-       < PhotonVisionConstants.AMBIGUITY_RATIO_CUTOFF)
-       || forwardResult.getTargets().size() > 1) {
-         forwardEstimatedRobotPose = forwardPoseEstimator.update(forwardResult).get();
-         //forwardEstimatedRobotPose = forwardPoseEstimator.estimateCoprocMultiTagPose(leftResult).get();
-         //updateEstimationStdDevs(forwardPoseEstimator.update(forwardResult), 
-         //cameraForward.getAllUnreadResults().get(0).getTargets());
-         addVisionPose2d(forwardEstimatedRobotPose.estimatedPose.toPose2d(), Utils.getCurrentTimeSeconds());
-         visionField.setRobotPose(forwardEstimatedRobotPose.estimatedPose.toPose2d());
-       }
-       SmartDashboard.putBoolean("forwardLatestRobotPose Update", true);
      } catch (Exception e) {
        forwardEstimatedRobotPose = null;
        SmartDashboard.putBoolean("forwardLatestRobotPose Update", false);
      }
      SmartDashboard.putData("Vision Pose Estimation", visionField);
-     generalField.setRobotPose(m_drivetrain.getState().Pose);
+     generalField.setRobotPose(drivetrain.getState().Pose);
      SmartDashboard.putData("Robot Pose", generalField);
      
      try {
-       SmartDashboard.putNumber("Angle To Hub", Math.toDegrees(calculateAngleToHub()));
+       SmartDashboard.putNumber("Angle To Hub", Math.toDegrees(calculateAngleToHub()));//use function we already hav instead of this
        SmartDashboard.putNumber("Angle of Robot", getEstimatedPose().getRotation().getDegrees());
        SmartDashboard.putNumber("Pose X", getEstimatedPose().getX());
        SmartDashboard.putNumber("Pose Y", getEstimatedPose().getY());
@@ -148,11 +141,11 @@ public class VisionSubsystemGOOD {
    }
 
    public double getGenericAngle() {
-     return pointAtGeneralController.calculate(m_drivetrain.getState().Pose.getRotation().getDegrees(), 90);
+     return pointAtGeneralController.calculate(drivetrain.getState().Pose.getRotation().getDegrees(), 90);
    }
 
    public Pose2d getEstimatedPose() {
-     return m_drivetrain.getState().Pose;
+     return drivetrain.getState().Pose;
    }
 
     //cahnge to be using odometry instead of viosion to simplify the snap to command move to odometry subsystem

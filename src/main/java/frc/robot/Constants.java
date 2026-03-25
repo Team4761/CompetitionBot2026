@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -53,6 +54,7 @@ public class Constants {
         public static final double CAMERA_OFFSET_FROM_TURRET_X = Units.inchesToMeters(9.5); // Units: meters
         public static final double CAMERA_OFFSET_FROM_TURRET_Y = Units.inchesToMeters(0.0); // Units: meters
         public static final Function<Double, Double> CAMERA_OFFSET_FROM_TURRET_Z = (theta) -> Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5); // Units: meters
+        //public static final Transform3d CAMARA_POS = new Transform3d(Units.inchesToMeters(front/back pos of camera), Units.inchesToMeters(left/rigt pos of camera), Units.inchesToMeters(up/down pos of camera), roattion of camera)
     }
 
     public class Shooter {
