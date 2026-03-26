@@ -7,7 +7,7 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.basecommands.DoNothingCommand;
+import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.IntakeSubsystem;
