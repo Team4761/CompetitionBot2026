@@ -7,6 +7,12 @@
         {
           "type": "named",
           "data": {
+            "name": "DoNothingComand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "ExtedIntakeCommand"
           }
         },
@@ -19,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Depot Path"
+            "pathName": "RIGHT Depot path"
           }
         },
         {
