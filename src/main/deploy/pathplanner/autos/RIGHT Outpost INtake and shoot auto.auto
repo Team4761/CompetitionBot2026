@@ -13,43 +13,31 @@
         {
           "type": "named",
           "data": {
-            "name": "ExtendIntakeComandCAUGHT"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCommand"
+            "name": "ExtedIntakeCommand"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LEFT Depot Path"
+            "pathName": "RIGHT outpost path"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "shootCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCommand"
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "pick up more balls"
+            "pathName": "Outpost to shoot pos path"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DoNothingComand"
+            "name": "Shoot8"
           }
         }
       ]
