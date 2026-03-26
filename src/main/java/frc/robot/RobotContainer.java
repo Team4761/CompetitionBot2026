@@ -61,6 +61,7 @@ import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
@@ -109,6 +110,7 @@ public class RobotContainer {
         ppAutoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("PathPlanner Auto Chooser", ppAutoChooser);
         NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
+        NamedCommands.registerCommand("ExtendIntakeComandCAUGHT", new ExtendCommand(intake));
         
     }
     private void configureBindings() {
