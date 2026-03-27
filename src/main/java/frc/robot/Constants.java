@@ -85,7 +85,7 @@ public class Constants {
         public static final double MAX_SPEED_MEASURED_MpS = 13.5; // Units: m/s
 
         public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken 
-        public static final int KICKER_MOTOR_PORT = -1; // Type: kraken
+        public static final int KICKER_MOTOR_PORT = 44; // Type: kraken
         public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken 
         public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken 
 
@@ -94,7 +94,7 @@ public class Constants {
         public class ShootConfig {
             public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
 
-            public static final double KICKER_SPEED = 0.4; // Units: percent (0-1)
+            public static final double KICKER_SPEED = 0.6; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 7000.0; // Units: rpm (0-6000)
             public static final double SHORT_SPITTER_SPEED = 4300.0; // Units: rpm (0-6000)
             public static final double AUTO_SPITTER_SPEED = 5500.0; // Units: rpm (0-6000)

@@ -17,39 +17,27 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "IntakeCommand"
+            "pathName": "RIGHT outpost path"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "LEFT Depot Path"
+            "pathName": "Outpost to shoot pos path"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pick up more balls"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DoNothingComand"
+            "name": "Shoot8"
           }
         }
       ]

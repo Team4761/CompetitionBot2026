@@ -17,39 +17,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "IntakeCommand"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "LEFT Depot Path"
+            "pathName": "RIGHT outpost path"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pick up more balls"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DoNothingComand"
+            "name": "OuttakeCommand"
           }
         }
       ]

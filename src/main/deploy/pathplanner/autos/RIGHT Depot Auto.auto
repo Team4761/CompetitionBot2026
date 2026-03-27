@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ExtendIntakeComandCAUGHT"
+            "name": "ExtedIntakeCommand"
           }
         },
         {
@@ -25,31 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LEFT Depot Path"
+            "pathName": "RIGHT Depot path"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCommand"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "pick up more balls"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DoNothingComand"
+            "name": "Shoot8"
           }
         }
       ]
