@@ -38,6 +38,7 @@ import frc.robot.autos.NeutralZoneAuto;
 //import frc.robot.autos.OutpostAuto;
 import frc.robot.autos.PoseDriveExampleAuto;
 import frc.robot.autos.Shoot3s;
+import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.autos.DeployIntake;
 //import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
 import frc.robot.commandGroups.TurretLockCommand;
@@ -61,6 +62,8 @@ import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
+import frc.robot.subsystems.intake.ExtendCommand;
+import frc.robot.subsystems.intake.ExtendCommandCAUGHT;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
@@ -106,9 +109,14 @@ public class RobotContainer {
 
 
     private void configPathPlanner() {
+        NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
+        NamedCommands.registerCommand("ExtendIntakeComandCAUGHT", new ExtendCommandCAUGHT(intake));
+        NamedCommands.registerCommand("DoNothingCommand", new DoNothingCommand());
+        NamedCommands.registerCommand("intakeCommand", new IntakeCommand(intake));
+        NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake));
         ppAutoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("PathPlanner Auto Chooser", ppAutoChooser);
-        NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
+        
         
     }
     private void configureBindings() {

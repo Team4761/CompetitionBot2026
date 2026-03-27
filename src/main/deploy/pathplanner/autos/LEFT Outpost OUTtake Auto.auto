@@ -1,0 +1,37 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "DoNothingComand"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtedIntakeCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT outpost path"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OuttakeCommand"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
