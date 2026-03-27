@@ -3,8 +3,8 @@ package frc.robot.autos;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.basecommands.DoNothingCommand;
-import frc.robot.basecommands.drivetrain.DriveCommand;
+import frc.robot.baseCommands.DoNothingCommand;
+import frc.robot.baseCommands.drivetrain.DriveCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
