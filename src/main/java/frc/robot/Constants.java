@@ -50,14 +50,14 @@ public class Constants {
     }
 
     public class Vision {
-        public static final String LEFT_CAMERA_NAME = "Back Right Cam";
-        public static final String RIGHT_CAMERA_NAME = "Back Left Cam";
+        public static final String LEFT_CAMERA_NAME = "Back Left Cam";
+        public static final String RIGHT_CAMERA_NAME = "Back Right Cam";
 
-        public static final Translation3d LEFT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(5.0));
-        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(5.0));
+        public static final Translation3d LEFT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(17.5));
+        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(17.5));
 
-        public static final Rotation3d LEFT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(225.0)); // Units of inputs: degrees
-        public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(315.0)); // Units of inputs: degrees
+        public static final Rotation3d LEFT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(135.0)); // Units of inputs: degrees
+        public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(215.0)); // Units of inputs: degrees
 
         public static final Transform3d LEFT_CAM_TRANSFORM = new Transform3d(LEFT_CAM_TRANSLATION, LEFT_CAM_ROTATION);
         public static final Transform3d RIGHT_CAM_TRANSFORM = new Transform3d(RIGHT_CAM_TRANSLATION, RIGHT_CAM_ROTATION);
