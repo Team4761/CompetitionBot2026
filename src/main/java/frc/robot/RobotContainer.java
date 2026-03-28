@@ -110,6 +110,7 @@ public class RobotContainer {
 
     private void configPathPlanner() {
         NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
+        NamedCommands.registerCommand("ShootWith[SHORT]PowerCommand", new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED));
         NamedCommands.registerCommand("ExtendIntakeComandCAUGHT", new ExtendCommandCAUGHT(intake));
         NamedCommands.registerCommand("DoNothingCommand", new DoNothingCommand());
         NamedCommands.registerCommand("intakeCommand", new IntakeCommand(intake));
@@ -161,10 +162,10 @@ public class RobotContainer {
         controller_operator.leftTrigger().whileTrue(new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED)); // Long shot
         controller_operator.rightTrigger().whileTrue(new INTERMITENTShootCommand(turret, Constants.Turret.ShootConfig.SPITTER_SPEED)); // Short shot
         
-        controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, this.turret.getVerticalAngle()));
-        controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, this.turret.getVerticalAngle()));
+        controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, turret.getVerticalAngle()));
+        controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, turret.getVerticalAngle()));
 
-        controller_operator.rightBumper().whileTrue(new JostleCommand(intake));
+        controller_operator.rightBumper().whileTrue(new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.MED_SPITTER_SPEED));
 
         // Manual Override
         controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret)); // Redundancy factor for shooting

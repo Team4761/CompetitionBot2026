@@ -5,39 +5,33 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "DoNothingComand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ExtedIntakeCommand"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeCommand"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "RIGHT Depot path"
+            "pathName": "CENTER Backup"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot8"
+            "name": "ExtendIntakeComandCAUGHT"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootWith[SHORT]PowerCommand"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "DEPRECATED",
+  "folder": null,
   "choreoAuto": false
 }

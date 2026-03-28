@@ -57,19 +57,6 @@ public class Constants {
         public static final Function<Double, Double> CAMERA_OFFSET_FROM_TURRET_Z = (theta) -> Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5); // Units: meters
     }
 
-    public class Shooter {
-        public class Config {
-            public static final double MAX_SHOOTER_SPEED_RPM = 6000.0; // Units: rpm
-            public static final double DEFAULT_SHOOTER_SPEED_RPM = 5000.0; // Units: rpm
-        }
-
-        public class MotorPorts {
-            public static final int ROLLER = -1; // Type: flex/vortex [FIXME]
-            public static final int KICKER = -1; // Type: flex/vortex [FIXME]
-            public static final int SPITTER = -1; // Type: kraken [FIXME]
-        }
-    }
-
     public class Turret {
         public static final double MAX_SPEED_MEASURED_MpS = 13.5; // Units: m/s
 
@@ -84,9 +71,12 @@ public class Constants {
             public static final double SPINDEXER_SPEED = 0.8; // Units: percent (0-1)
 
             public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
+
             public static final double SPITTER_SPEED = 7000.0; // Units: rpm (0-6000)
+            public static final double MED_SPITTER_SPEED = 5500.0; // Units: rpm (0-6000)
             public static final double SHORT_SPITTER_SPEED = 4300.0; // Units: rpm (0-6000)
             public static final double AUTO_SPITTER_SPEED = 5500.0; // Units: rpm (0-6000)
+
             public static final double INTAKE_SPEED = 0.55; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 
