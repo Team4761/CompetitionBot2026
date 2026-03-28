@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import frc.robot.Constants.Vision;
 import frc.robot.autos.CloseRangeShoot3s;
 import frc.robot.autos.DepotAuto;
 import frc.robot.autos.DriveBackward;
@@ -44,7 +45,6 @@ import frc.robot.autos.Shoot3s;
 import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.autos.DeployIntake;
 //import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
-import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem; 
@@ -54,6 +54,7 @@ import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.turret.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.ElasticRetrieveDataCommand;
 import frc.robot.subsystems.turret.INTERMITENTShootCommand;
+import frc.robot.subsystems.turret.CalculatedHubShotCommand;
 import frc.robot.subsystems.turret.KickerSpinCommand;
 import frc.robot.subsystems.turret.ShootAtAngleCommand;
 import frc.robot.subsystems.turret.ShootAtAngleDRIFTCommand;
@@ -63,15 +64,12 @@ import frc.robot.subsystems.turret.ShootWithPowerCommand;
 import frc.robot.subsystems.turret.SpindexSpinCommand;
 import frc.robot.subsystems.turret.TurretAimChangeCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
-import frc.robot.subsystems.vision.DisenableTrackerCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 import frc.robot.subsystems.intake.ExtendCommand;
 import frc.robot.subsystems.intake.ExtendCommandCAUGHT;
 import frc.robot.subsystems.intake.IntakeCommand;
 
 public class RobotContainer {
-    private static final double INTAKE_EXTEND_SPEED = 1;
-
     private static final IntakeSubsystem intake = new IntakeSubsystem();
     private static final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     private static final VisionSubsystem vision = new VisionSubsystem(drivetrain);
@@ -106,10 +104,8 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         configAutos();
-        configDefaultCommands();
         configPathPlanner();
     }
-
 
     private void configPathPlanner() {
         NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
@@ -189,6 +185,8 @@ public class RobotContainer {
         // Normal bindings
         controller_operator.leftTrigger().whileTrue(new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED)); // Long shot
         controller_operator.rightTrigger().whileTrue(new INTERMITENTShootCommand(turret, Constants.Turret.ShootConfig.SPITTER_SPEED)); // Short shot
+        controller_operator.b().and(controller_operator.leftBumper().negate())
+            .whileTrue(new CalculatedHubShotCommand(turret, drivetrain));
         
         controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, turret.getVerticalAngle()));
         controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, turret.getVerticalAngle()));
@@ -208,17 +206,12 @@ public class RobotContainer {
         controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -1 * Constants.Turret.ShootConfig.KICKER_SPEED));
         controller_operator.leftBumper().and(controller_operator.y()).whileTrue(new SpindexSpinCommand(turret, Constants.Turret.ShootConfig.SPINDEXER_SPEED));
         controller_operator.leftBumper().and(controller_operator.x()).whileTrue(new KickerSpinCommand(turret, Constants.Turret.ShootConfig.KICKER_SPEED));
-        controller_operator.leftBumper().and(controller_operator.back()).whileTrue(new DisenableTrackerCommand(vision));
         controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
 
         //#endregion
        
         drivetrain.registerTelemetry(logger::telemeterize);
-    }
-
-    private void configDefaultCommands() {
-        turret.setDefaultCommand(new TurretLockCommand(turret, vision));
     }
 
     private double shapeTurnInput(double rawTurn) {

@@ -1,6 +1,9 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 
 import java.util.Map;
@@ -22,7 +25,7 @@ public class Constants {
         public static final double TRANSLATION_INPUT_DEADBAND = 0.10;
         public static final double ROTATION_INPUT_DEADBAND = 0.12;
         public static final double TURRET_INPUT_DEADBAND = 0.10;
-        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 6.0;
+        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 12.0;
         public static final double TEST_VORTEX_OUTPUT = 0.20;
         public static final double TEST_KRAKEN_OUTPUT = 0.20;
 
@@ -49,7 +52,17 @@ public class Constants {
     }
 
     public class Vision {
-        public static final String DEFAULT_CAMERA_NAME = "goodCam"; // Type: string
+        public static final String LEFT_CAMERA_NAME = "Back Left Cam";
+        public static final String RIGHT_CAMERA_NAME = "Back Right Cam";
+
+        public static final Translation3d LEFT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(17.5));
+        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(17.5));
+
+        public static final Rotation3d LEFT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(135.0)); // Units of inputs: degrees
+        public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(215.0)); // Units of inputs: degrees
+
+        public static final Transform3d LEFT_CAM_TRANSFORM = new Transform3d(LEFT_CAM_TRANSLATION, LEFT_CAM_ROTATION);
+        public static final Transform3d RIGHT_CAM_TRANSFORM = new Transform3d(RIGHT_CAM_TRANSLATION, RIGHT_CAM_ROTATION);
 
         public static final double ANGLE_DEADBAND = 2.0; // Units: degrees
         public static final double CAMERA_OFFSET_FROM_TURRET_X = Units.inchesToMeters(9.5); // Units: meters
@@ -88,10 +101,7 @@ public class Constants {
         }
 
         public class Horizontal {
-            public static final double ANGLE_TURN_THRESHOLD = 2; // Units: degrees
-            public static final double ANGLE_TURN_PERCENTAGE = 0.9; // Units: percent (0-1)
-            public static final double MAX_TRACK_STEP_DEGREES = 4.0; // Units: degrees
-            public static final double MAX_TRACK_RATE_DEGREES_PER_SEC = 120.0; // Units: degrees/seconds
+            public static final double MAX_TRACK_STEP_DEGREES = 4.0; // Units: degrees per loop
 
             public static final double CONVERSION_FACTOR_MtoT = 185.0 / 28.0; // Motor rotations -> turret rotations
             public static final double CONVERSION_FACTOR_TtoM = 28.0 / 185.0; // Turret rotations -> motor rotations

@@ -8,9 +8,6 @@ import com.ctre.phoenix6.HootAutoReplay;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -19,9 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commandGroups.TurretLockCommand;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
-import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class Robot extends TimedRobot {
     private Command m_autonomousCommand;
@@ -54,7 +49,6 @@ public class Robot extends TimedRobot {
     private MatchPhase currentPhase;
     private Timer phaseTimer;
     private double phaseDuration;
-    private final VisionSubsystem visionSubsystem;
     private final CommandSwerveDrivetrain drivetrain;
     private SendableChooser<String> teamChooser = new SendableChooser<>();
     private SendableChooser<String> positionChooser = new SendableChooser<>();
@@ -68,7 +62,6 @@ public class Robot extends TimedRobot {
 
     public Robot() {
         m_robotContainer = new RobotContainer();
-        visionSubsystem = RobotContainer.getVisionSubsystem();
         drivetrain = RobotContainer.getDrivetrain();
         matchTimer = new Timer();
         currentPhase = MatchPhase.AUTONOMOUS;
@@ -83,7 +76,6 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
         SmartDashboard.putBoolean("Manual Turret Control", false);
-        SmartDashboard.putBoolean(TurretLockCommand.ENABLED_DASHBOARD_KEY, false);
         teamChooser.addOption("BLUE", "BLUE");
         teamChooser.addOption("RED", "RED");
         teamChooser.setDefaultOption("BLUE", "BLUE");
@@ -110,28 +102,26 @@ public class Robot extends TimedRobot {
             "MO: Right Joystick: Control the Turret's Horizontal Aim\n" +
             "MO: Right Trigger: Shoot Wihout Safeties (Hold to Shoot)\n" +
             "MO: B Button: Run the Spindexer Backwards\n" +
-            "MO: A Button: Run the Kicker/Upinator Backwards\n" +
-            "MO: Back Button: Disable Vision Tracking\n"
+            "MO: A Button: Run the Kicker/Upinator Backwards\n"
 
         );
+        SmartDashboard.putData("Field", field);
     }
 
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run(); 
-        field.setRobotPose(drivetrain.getState().Pose);
+        field.setRobotPose(drivetrain.getEstimatedPose());
         // The Original Alexander Maniscalco helped
         SmartDashboard.putNumber("Match Time Left", Math.round((FieldConstants.Match.MATCH_DURATION-matchTimer.get())*10)/10.0);
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", RobotContainer.getTurretSubsystem().getHorizontalMotorAngle());
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", RobotContainer.getTurretSubsystem().getVerticalMotorAngle());
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber("Phase Time Left", Math.round((phaseDuration-phaseTimer.get())*10)/10.0);
-        SmartDashboard.putData("Field", field);
         //below has not been tested please test
         //displays a color showing the apriltag status red is no april tag yellow is apriltag detected green is ready to fire purple is tracking disabled
         //make sure to to right click and click on show as single color veiw
-        SmartDashboard.putString("April Tag Status", (visionSubsystem.seesAprilTag()).toHexString());
         //SmartDashboard.putNumber("Camera Calculation Values", visionSubsytem.getCalcValues());[TODO] (ehh not really just ben needs to finish his part)
     }
 
@@ -175,7 +165,6 @@ public class Robot extends TimedRobot {
         //drivetrain.setOperatorPerspectiveForward(autoStartRot); // This might be causing drifting issues.
         drivetrain.resetPose(autoStartPosition);
         field.setRobotPose(autoStartPosition);
-        SmartDashboard.putData("Field", field);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;
