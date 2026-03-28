@@ -32,7 +32,10 @@ public class VisionSubsystem extends SubsystemBase {
     private static final double FIELD_BORDER_MARGIN_METERS = 0.50;
 
     private static final Matrix<N3, N1> SINGLE_TAG_STD_DEVS = VecBuilder.fill(1.5, 1.5, 6.0);
-    private static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.1, 0.1, 0.1);
+    // Multi-tag solves are useful, but the previous covariance trusted them enough to yank
+    // the drivetrain pose when the solve was slightly wrong. Loosen that trust so corrections
+    // blend in instead of snapping.
+    private static final Matrix<N3, N1> MULTI_TAG_STD_DEVS = VecBuilder.fill(0.35, 0.35, 0.75);
 
     private final CommandSwerveDrivetrain drivetrain;
     private final AprilTagFieldLayout fieldLayout;

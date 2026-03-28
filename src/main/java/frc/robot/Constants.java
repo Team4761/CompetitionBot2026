@@ -25,7 +25,7 @@ public class Constants {
         public static final double TRANSLATION_INPUT_DEADBAND = 0.10;
         public static final double ROTATION_INPUT_DEADBAND = 0.12;
         public static final double TURRET_INPUT_DEADBAND = 0.10;
-        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 3.0;
+        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 9.0;
         public static final double TEST_VORTEX_OUTPUT = 0.20;
         public static final double TEST_KRAKEN_OUTPUT = 0.20;
     }
@@ -54,7 +54,7 @@ public class Constants {
         public static final String RIGHT_CAMERA_NAME = "Back Left Cam";
 
         public static final Translation3d LEFT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(5.0));
-        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(5.0));
+        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(5.0));
 
         public static final Rotation3d LEFT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(225.0)); // Units of inputs: degrees
         public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(315.0)); // Units of inputs: degrees
