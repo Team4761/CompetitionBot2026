@@ -132,7 +132,7 @@ public class RobotContainer {
                 double turnInput = shapeTurnInput(-1 * applyDeadband(controller_drive.getRightX(), Constants.Controller.ROTATION_INPUT_DEADBAND));
                 return drive.withVelocityX(xInput * MaxSpeed)
                     .withVelocityY(yInput * MaxSpeed)
-                    .withRotationalRate(rotationLimiter.calculate(turnInput * MaxAngularRate)); // smoothed turn request
+                    .withRotationalRate(rotationLimiter.calculate(turnInput * Constants.Controller.ROTATION_MULTIPLIER * MaxAngularRate)); // smoothed turn request
             })
         );
 
