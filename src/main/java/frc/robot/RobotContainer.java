@@ -42,7 +42,6 @@ import frc.robot.autos.Shoot3s;
 import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.autos.DeployIntake;
 //import frc.robot.autos.ShootLongGoUnderTrenchIntakeFromMiddle;
-import frc.robot.commandGroups.TurretTrackCommand;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem; 
@@ -99,15 +98,9 @@ public class RobotContainer {
     // Tracks which intake state
     private boolean isIntakeExtended = false;
 
-    // Disables/enables vision tracking for the turret
-    private static boolean isVisionTrackingEnabled = true;
-    public static boolean isVisionTrackingEnabled() { return isVisionTrackingEnabled; }
-    public static void toggleVisionTracking() { isVisionTrackingEnabled = !isVisionTrackingEnabled; }
-
     public RobotContainer() {
         configureBindings();
         configAutos();
-        configBackgroundCommands();
         configPathPlanner();
     }
 
@@ -184,18 +177,12 @@ public class RobotContainer {
         controller_operator.leftBumper().and(controller_operator.a()).whileTrue(new KickerSpinCommand(turret, -1 * Constants.Turret.ShootConfig.KICKER_SPEED));
         controller_operator.leftBumper().and(controller_operator.y()).whileTrue(new SpindexSpinCommand(turret, Constants.Turret.ShootConfig.SPINDEXER_SPEED));
         controller_operator.leftBumper().and(controller_operator.x()).whileTrue(new KickerSpinCommand(turret, Constants.Turret.ShootConfig.KICKER_SPEED));
-        controller_operator.leftBumper().and(controller_operator.back()).onTrue(new InstantCommand(() -> RobotContainer.toggleVisionTracking()));
         controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
 
         //#endregion
        
         drivetrain.registerTelemetry(logger::telemeterize);
-    }
-
-    private void configBackgroundCommands() {
-        RobotModeTriggers.autonomous().onTrue(new TurretTrackCommand(turret, drivetrain));
-        RobotModeTriggers.teleop().onTrue(new TurretTrackCommand(turret, drivetrain));
     }
 
     private double shapeTurnInput(double rawTurn) {

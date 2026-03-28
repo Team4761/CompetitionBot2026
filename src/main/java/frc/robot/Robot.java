@@ -102,8 +102,7 @@ public class Robot extends TimedRobot {
             "MO: Right Joystick: Control the Turret's Horizontal Aim\n" +
             "MO: Right Trigger: Shoot Wihout Safeties (Hold to Shoot)\n" +
             "MO: B Button: Run the Spindexer Backwards\n" +
-            "MO: A Button: Run the Kicker/Upinator Backwards\n" +
-            "MO: Back Button: Disable Vision Tracking\n"
+            "MO: A Button: Run the Kicker/Upinator Backwards\n"
 
         );
         SmartDashboard.putData("Field", field);
