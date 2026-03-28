@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.685939759036144,
-        "y": 4.8982891566265065
+        "x": 2.456457831325301,
+        "y": 4.75622891566265
       },
       "prevControl": {
-        "x": 2.840395147019121,
-        "y": 5.094868741332111
+        "x": 2.610913219308278,
+        "y": 4.9528085003682545
       },
       "nextControl": null,
       "isLocked": false,
@@ -60,7 +60,7 @@
       "minWaypointRelativePos": 0.35,
       "maxWaypointRelativePos": 1.85,
       "constraints": {
-        "maxVelocity": 2.5,
+        "maxVelocity": 3.5,
         "maxAcceleration": 3.0,
         "maxAngularVelocity": 540.0,
         "maxAngularAcceleration": 720.0,
@@ -72,7 +72,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 4.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -89,5 +89,5 @@
     "velocity": 0.0,
     "rotation": -90.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

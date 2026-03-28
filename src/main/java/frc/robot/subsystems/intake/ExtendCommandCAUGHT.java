@@ -36,7 +36,7 @@ public class ExtendCommandCAUGHT extends Command {
                 }
                 break;
             case REALEASE:
-                if (timer.hasElapsed(.3)) {
+                if (timer.hasElapsed(0.3)) {
                     this.intakeSubsystem.runExtenderMotor(0);
                     step = ExtendSequenceStep.COMPLETE;//stop the catch
                 }
@@ -47,7 +47,7 @@ public class ExtendCommandCAUGHT extends Command {
     }
 
     public boolean isFinished() {
-        return timer.hasElapsed(2.0);
+        return timer.hasElapsed(0.5);
     }
 
     public void end(boolean isInterrupted){
