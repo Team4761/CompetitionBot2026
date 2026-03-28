@@ -19,6 +19,7 @@ public class IntakeCommand extends Command{
     @Override
     public void initialize() {
         intakeSubsystem.disableIntakeCoasting();
+        System.out.println("INTAKING WOOOOOHOO");
         intakeSubsystem.turnIntakeMotor(Constants.Turret.ShootConfig.INTAKE_SPEED);
     }
 

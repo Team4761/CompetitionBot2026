@@ -30,13 +30,13 @@ public class ExtendCommandCAUGHT extends Command {
     public void execute() {
         switch (step) {
             case CATCH:
-                if (timer.hasElapsed(0.4)) {
+                if (timer.hasElapsed(0.2)) {
                     this.intakeSubsystem.runExtenderMotor(1);//catch / slow it down
                     step = ExtendSequenceStep.REALEASE;
                 }
                 break;
             case REALEASE:
-                if (timer.hasElapsed(1.3)) {
+                if (timer.hasElapsed(.3)) {
                     this.intakeSubsystem.runExtenderMotor(0);
                     step = ExtendSequenceStep.COMPLETE;//stop the catch
                 }

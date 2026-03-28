@@ -47,10 +47,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "IntakeCommand",
+      "name": "Intake Command",
       "waypointRelativePos": 0,
-      "endWaypointRelativePos": 1.0,
-      "command": null
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "Intake Command"
+        }
+      }
     }
   ],
   "globalConstraints": {

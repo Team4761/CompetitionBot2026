@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.jar.Attributes.Name;
 
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
@@ -15,8 +16,10 @@ import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -110,12 +113,37 @@ public class RobotContainer {
 
     private void configPathPlanner() {
         NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
+        NamedCommands.registerCommand("shootCommand", new ShootCommand(turret).withTimeout(4));
         NamedCommands.registerCommand("ShootWith[SHORT]PowerCommand", new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED));
         NamedCommands.registerCommand("ExtendIntakeComandCAUGHT", new ExtendCommandCAUGHT(intake));
+        NamedCommands.registerCommand("ExtedIntakeCommand", new ExtendCommandCAUGHT(intake));
         NamedCommands.registerCommand("DoNothingCommand", new DoNothingCommand());
+        NamedCommands.registerCommand("DoNothingComand", new DoNothingCommand());
+        NamedCommands.registerCommand("Intake Command", new IntakeCommand(intake));
         NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake));
+        NamedCommands.registerCommand("Stop Intake", new InstantCommand(() -> {intake.enableIntakeCoasting();intake.stopIntakeMotor();}));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake));
-        ppAutoChooser = AutoBuilder.buildAutoChooser();
+
+        ppAutoChooser = new SendableChooser<>();
+        ppAutoChooser.setDefaultOption("None", Commands.none());
+
+        for (String autoName : AutoBuilder.getAllAutoNames()) {
+            try {
+                if (autoName.contains("LEFT")) {
+                    ppAutoChooser.addOption("LEFT" + autoName.substring(4), new PathPlannerAuto(autoName, false));
+                    ppAutoChooser.addOption("RIGHT" + autoName.substring(4), new PathPlannerAuto(autoName, true));
+                } else {
+                    ppAutoChooser.addOption(autoName, new PathPlannerAuto(autoName));
+                }
+            } catch (Exception e) {
+                DriverStation.reportError(
+                    "Skipping invalid PathPlanner auto '" + autoName + "': " + e.getMessage(),
+                    e.getStackTrace()
+                );
+            }
+        }
+
+        //ppAutoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("PathPlanner Auto Chooser", ppAutoChooser);
         
         
