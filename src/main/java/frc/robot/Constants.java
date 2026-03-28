@@ -25,6 +25,8 @@ public class Constants {
         public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 6.0;
         public static final double TEST_VORTEX_OUTPUT = 0.20;
         public static final double TEST_KRAKEN_OUTPUT = 0.20;
+
+        public static final double ROTATION_MULTIPLIER = 2.0;
     }
 
     public class Swerve {
@@ -79,16 +81,16 @@ public class Constants {
         public static final int SPINDEXER_MOTOR_PORT = 43; // Type: flex/vortex
 
         public class ShootConfig {
-            public static final double SPINDEXER_SPEED = 0.4; // Units: percent (0-1)
+            public static final double SPINDEXER_SPEED = 0.8; // Units: percent (0-1)
 
-            public static final double KICKER_SPEED = 0.6; // Units: percent (0-1)
+            public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
             public static final double SPITTER_SPEED = 7000.0; // Units: rpm (0-6000)
             public static final double SHORT_SPITTER_SPEED = 4300.0; // Units: rpm (0-6000)
             public static final double AUTO_SPITTER_SPEED = 5500.0; // Units: rpm (0-6000)
             public static final double INTAKE_SPEED = 0.55; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
 
-            public static final double KICKER_INIT_DELAY = 1; // Units: seconds
+            public static final double KICKER_INIT_DELAY = 0.25; // Units: seconds
             public static final double KICKER_CONVERSION_FACTOR_MtoR = 1.0 / 3.0; // Motor rotations -> kicker rotations
 
             public static final double TURRET_HORIZONTAL_MULTIPLIER = 3.25;
