@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "RIGHT TRENCH Go to Neutral"
@@ -43,7 +37,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 12.0
+            "waitTime": 13.0
           }
         }
       ]

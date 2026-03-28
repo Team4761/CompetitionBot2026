@@ -77,7 +77,7 @@ public class RobotContainer {
     private static final Orchestra orchestra = new Orchestra("output.chrp");
 
     private double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
-    private double MaxAngularRate = RotationsPerSecond.of(0.35).in(RadiansPerSecond); // reduced max angular velocity
+    private double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // reduced max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()

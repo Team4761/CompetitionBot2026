@@ -22,7 +22,7 @@ public class Constants {
         public static final double TRANSLATION_INPUT_DEADBAND = 0.10;
         public static final double ROTATION_INPUT_DEADBAND = 0.12;
         public static final double TURRET_INPUT_DEADBAND = 0.10;
-        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 3.0;
+        public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 6.0;
         public static final double TEST_VORTEX_OUTPUT = 0.20;
         public static final double TEST_KRAKEN_OUTPUT = 0.20;
     }
