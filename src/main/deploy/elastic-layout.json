@@ -186,7 +186,7 @@
           },
           {
             "title": "Auto Chooser",
-            "x": 768.0,
+            "x": 1024.0,
             "y": 128.0,
             "width": 256.0,
             "height": 128.0,
@@ -253,6 +253,19 @@
               "robot_color": 4294198070,
               "trajectory_color": 4294967295,
               "show_robot_outside_widget": true
+            }
+          },
+          {
+            "title": "PathPlanner Auto Chooser",
+            "x": 768.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/PathPlanner Auto Chooser",
+              "period": 0.06,
+              "sort_options": false
             }
           }
         ]
