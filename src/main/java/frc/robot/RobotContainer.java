@@ -113,7 +113,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ShootWith[SHORT]PowerCommand", new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED));
         NamedCommands.registerCommand("ExtendIntakeComandCAUGHT", new ExtendCommandCAUGHT(intake));
         NamedCommands.registerCommand("DoNothingCommand", new DoNothingCommand());
-        NamedCommands.registerCommand("intakeCommand", new IntakeCommand(intake));
+        NamedCommands.registerCommand("IntakeCommand", new IntakeCommand(intake));
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake));
         ppAutoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("PathPlanner Auto Chooser", ppAutoChooser);
