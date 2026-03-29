@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5670370370370366,
-        "y": 7.4
+        "x": 2.5,
+        "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.639559523809524,
-        "y": 7.393059523809524
+        "x": 2.5,
+        "y": 5.0
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "End Center"
     },
     {
       "anchor": {
-        "x": 7.647120481927709,
-        "y": 7.19310843373494
+        "x": 3.5670370370370366,
+        "y": 7.4
       },
       "prevControl": {
-        "x": 7.556678886486113,
-        "y": 7.696997322623829
+        "x": 2.5670370370370357,
+        "y": 7.4
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "End get out"
+      "linkedName": "Alliance Side Forward Trench"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.43402489626556207,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -46,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.2,
-    "rotation": -90.0
+    "velocity": 2.5,
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Auto Paths",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 180.0
+    "velocity": 0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

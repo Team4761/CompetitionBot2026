@@ -163,8 +163,8 @@ public class Robot extends TimedRobot {
         }
         autoStartPosition = new Pose2d(autoStartX, autoStartY,autoStartRot);
         //drivetrain.setOperatorPerspectiveForward(autoStartRot); // This might be causing drifting issues.
-        drivetrain.resetPose(autoStartPosition);
-        field.setRobotPose(autoStartPosition);
+        //drivetrain.resetPose(autoStartPosition);
+        //field.setRobotPose(autoStartPosition);
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
         currentPhase = MatchPhase.AUTONOMOUS;

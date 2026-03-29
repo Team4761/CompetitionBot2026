@@ -55,8 +55,8 @@ public class Constants {
         public static final String LEFT_CAMERA_NAME = "Back Left Cam";
         public static final String RIGHT_CAMERA_NAME = "Back Right Cam";
 
-        public static final Translation3d LEFT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(11.0), Units.inchesToMeters(17.5));
-        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-11.0), Units.inchesToMeters(-11.0), Units.inchesToMeters(17.5));
+        public static final Translation3d LEFT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-12.0), Units.inchesToMeters(12.0), Units.inchesToMeters(17.5));
+        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-12.0), Units.inchesToMeters(-12.0), Units.inchesToMeters(17.5));
 
         public static final Rotation3d LEFT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(135.0)); // Units of inputs: degrees
         public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(215.0)); // Units of inputs: degrees
@@ -88,7 +88,7 @@ public class Constants {
             public static final double SPITTER_SPEED = 7000.0; // Units: rpm (0-6000)
             public static final double MED_SPITTER_SPEED = 5500.0; // Units: rpm (0-6000)
             public static final double SHORT_SPITTER_SPEED = 4300.0; // Units: rpm (0-6000)
-            public static final double AUTO_SPITTER_SPEED = 5500.0; // Units: rpm (0-6000)
+            public static final double AUTO_SPITTER_SPEED = 4800.0; // Units: rpm (0-6000)
 
             public static final double INTAKE_SPEED = 0.55; // Units: percent (0-1)
             public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)

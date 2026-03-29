@@ -47,7 +47,7 @@ public class ExtendCommandCAUGHT extends Command {
     }
 
     public boolean isFinished() {
-        return timer.hasElapsed(0.5);
+        return timer.hasElapsed(0.32);
     }
 
     public void end(boolean isInterrupted){

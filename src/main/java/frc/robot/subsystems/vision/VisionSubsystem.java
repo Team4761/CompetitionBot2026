@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -48,6 +49,17 @@ public class VisionSubsystem extends SubsystemBase {
     private boolean enabled = true;
     private int acceptedMeasurementCount = 0;
     private int rejectedMeasurementCount = 0;
+    private int autonomousAcceptedMeasurementCount = 0;
+    private int teleopAcceptedMeasurementCount = 0;
+    private int autonomousRejectedMeasurementCount = 0;
+    private int teleopRejectedMeasurementCount = 0;
+    private int noTargetsRejectedCount = 0;
+    private int ambiguityRejectedCount = 0;
+    private int noEstimateRejectedCount = 0;
+    private int offFieldRejectedCount = 0;
+    private int invalidStdDevsRejectedCount = 0;
+    private String lastRejectedReason = "none";
+    private String lastRejectedCamera = "none";
 
     public VisionSubsystem(CommandSwerveDrivetrain drivetrain) {
         this(drivetrain, defaultCameraConfigs());
@@ -83,14 +95,14 @@ public class VisionSubsystem extends SubsystemBase {
             for (CameraContext cameraContext : cameras) {
                 for (PhotonPipelineResult result : cameraContext.camera.getAllUnreadResults()) {
                     if (!result.hasTargets()) {
-                        rejectedMeasurementCount++;
+                        recordRejectedMeasurement(cameraContext.config.name(), "No targets");
                         continue;
                     }
 
                     if (result.getTargets().size() == 1) {
                         double ambiguity = result.getBestTarget().getPoseAmbiguity();
                         if (ambiguity < 0.0 || ambiguity >= SINGLE_TAG_AMBIGUITY_CUTOFF) {
-                            rejectedMeasurementCount++;
+                            recordRejectedMeasurement(cameraContext.config.name(), "High ambiguity");
                             continue;
                         }
                     }
@@ -100,14 +112,14 @@ public class VisionSubsystem extends SubsystemBase {
                         estimate = cameraContext.poseEstimator.estimateClosestToReferencePose(result, referencePose);
                     }
                     if (estimate.isEmpty()) {
-                        rejectedMeasurementCount++;
+                        recordRejectedMeasurement(cameraContext.config.name(), "No estimate");
                         continue;
                     }
 
                     EstimatedRobotPose estimatedRobotPose = estimate.get();
                     Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
                     if (!isPoseOnField(estimatedPose)) {
-                        rejectedMeasurementCount++;
+                        recordRejectedMeasurement(cameraContext.config.name(), "Off field");
                         continue;
                     }
 
@@ -120,7 +132,7 @@ public class VisionSubsystem extends SubsystemBase {
                         }
                     }
                     if (hasInvalidStdDevs) {
-                        rejectedMeasurementCount++;
+                        recordRejectedMeasurement(cameraContext.config.name(), "Invalid std devs");
                         continue;
                     }
 
@@ -134,7 +146,7 @@ public class VisionSubsystem extends SubsystemBase {
 
                     addVisionPose2d(measurement.pose(), measurement.timestampSeconds(), measurement.stdDevs());
                     latestMeasurement = Optional.of(measurement);
-                    acceptedMeasurementCount++;
+                    recordAcceptedMeasurement();
                 }
             }
         }
@@ -181,6 +193,47 @@ public class VisionSubsystem extends SubsystemBase {
 
     public void addVisionPose2d(Pose2d pose2d, double timestampSeconds, Matrix<N3, N1> visionStdDevs) {
         drivetrain.addVisionMeasurement(pose2d, timestampSeconds, visionStdDevs);
+    }
+
+    private void recordAcceptedMeasurement() {
+        acceptedMeasurementCount++;
+        if (DriverStation.isAutonomous()) {
+            autonomousAcceptedMeasurementCount++;
+        } else if (DriverStation.isTeleop()) {
+            teleopAcceptedMeasurementCount++;
+        }
+    }
+
+    private void recordRejectedMeasurement(String cameraName, String reason) {
+        rejectedMeasurementCount++;
+        lastRejectedCamera = cameraName;
+        lastRejectedReason = reason;
+
+        if (DriverStation.isAutonomous()) {
+            autonomousRejectedMeasurementCount++;
+        } else if (DriverStation.isTeleop()) {
+            teleopRejectedMeasurementCount++;
+        }
+
+        switch (reason) {
+            case "No targets":
+                noTargetsRejectedCount++;
+                break;
+            case "High ambiguity":
+                ambiguityRejectedCount++;
+                break;
+            case "No estimate":
+                noEstimateRejectedCount++;
+                break;
+            case "Off field":
+                offFieldRejectedCount++;
+                break;
+            case "Invalid std devs":
+                invalidStdDevsRejectedCount++;
+                break;
+            default:
+                break;
+        }
     }
 
     public void CameraTeamColorSwitcher(boolean isBlue) {
@@ -234,6 +287,17 @@ public class VisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Vision Camera Count", cameras.size());
         SmartDashboard.putNumber("Vision Accepted Measurements", acceptedMeasurementCount);
         SmartDashboard.putNumber("Vision Rejected Measurements", rejectedMeasurementCount);
+        SmartDashboard.putNumber("Vision Auto Accepted Measurements", autonomousAcceptedMeasurementCount);
+        SmartDashboard.putNumber("Vision Teleop Accepted Measurements", teleopAcceptedMeasurementCount);
+        SmartDashboard.putNumber("Vision Auto Rejected Measurements", autonomousRejectedMeasurementCount);
+        SmartDashboard.putNumber("Vision Teleop Rejected Measurements", teleopRejectedMeasurementCount);
+        SmartDashboard.putNumber("Vision Rejected No Targets", noTargetsRejectedCount);
+        SmartDashboard.putNumber("Vision Rejected High Ambiguity", ambiguityRejectedCount);
+        SmartDashboard.putNumber("Vision Rejected No Estimate", noEstimateRejectedCount);
+        SmartDashboard.putNumber("Vision Rejected Off Field", offFieldRejectedCount);
+        SmartDashboard.putNumber("Vision Rejected Invalid Std Devs", invalidStdDevsRejectedCount);
+        SmartDashboard.putString("Vision Last Reject Reason", lastRejectedReason);
+        SmartDashboard.putString("Vision Last Reject Camera", lastRejectedCamera);
         SmartDashboard.putBoolean("Vision Has Measurement", latestMeasurement.isPresent());
         SmartDashboard.putNumber("Vision Estimated Pose X", currentPose.getX());
         SmartDashboard.putNumber("Vision Estimated Pose Y", currentPose.getY());

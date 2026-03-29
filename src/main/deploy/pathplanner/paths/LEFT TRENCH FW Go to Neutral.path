@@ -12,7 +12,7 @@
         "y": 7.393059523809524
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Alliance Side Forward Trench"
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 7.19310843373494
       },
       "prevControl": {
-        "x": 7.556678886486113,
-        "y": 7.696997322623829
+        "x": 7.585641388075476,
+        "y": 7.535634813768811
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.43402489626556207,
-      "rotationDegrees": 180.0
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
@@ -52,8 +52,8 @@
   "reversed": false,
   "folder": "Auto Paths",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": 180.0
+    "velocity": 2.5,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

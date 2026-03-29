@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CENTER Backup"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ExtendIntakeComandCAUGHT"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootFor4sWith[SHORT]PowerCommand"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT TRENCH from CENTER"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT TRENCH FW Go to Neutral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT TRENCH Intake Neutral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LEFT TRENCH Exit Neutral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootWith[SHORT]PowerCommand"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 12.0
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
