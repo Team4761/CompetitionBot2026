@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 4.9
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.0173101890901095,
+        "y": 4.650600005305404
+      },
+      "isLocked": false,
+      "linkedName": "Shooting Point"
+    },
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 4.636024096385543
+      },
+      "prevControl": {
+        "x": 3.003613489931887,
+        "y": 4.885997980402478
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Jiggle Shooting Point"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "reversed": false,
+  "folder": "Auto Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -29.999999999999996
+  },
+  "useDefaultConstraints": true
+}
