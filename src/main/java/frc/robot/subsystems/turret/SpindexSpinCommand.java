@@ -21,7 +21,7 @@ public class SpindexSpinCommand extends Command{
 
     @Override
     public void initialize() {
-        this.turretSubsystem.setSpindexerMotorSpeed(this.spinSpeed);
+        this.turretSubsystem.spindexerMotor.setRawSpeedPercent(this.spinSpeed);
     }
 
     @Override
@@ -36,6 +36,6 @@ public class SpindexSpinCommand extends Command{
 
     @Override
     public void end(boolean isInterrupted) {
-        turretSubsystem.stopSpindexer();
+        turretSubsystem.spindexerMotor.stopTurning();
     }
 }
