@@ -75,7 +75,7 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         configurePathPlannerAutos();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putData("PathPlanner Auto Chooser", autoChooser);
     }
 
     private void configurePathPlannerAutos() {

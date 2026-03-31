@@ -6,8 +6,8 @@ import frc.robot.util.SmartKrakenMotor;
 
 public class IntakeSubsystem extends SubsystemBase{
     // Make the code aware there should be 2 motors
-    private SmartKrakenMotor intakeExtenderMotor;
-    private SmartKrakenMotor intakeMotor;
+    public final SmartKrakenMotor intakeExtenderMotor;
+    public final SmartKrakenMotor intakeMotor;
 
     // Tell the code what those motor are/should be like and were to find them
     public IntakeSubsystem() {

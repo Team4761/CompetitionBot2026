@@ -10,11 +10,11 @@ import frc.robot.util.SmartVortexMotor;
 
 public class TurretSubsystem extends SubsystemBase {
 
-    private final SmartKrakenMotor spitterMotor;
-    private final SmartKrakenMotor horizontalMotor;
-    private final SmartKrakenMotor verticalMotor;
-    private final SmartVortexMotor spindexerMotor;
-    private final SmartKrakenMotor kickerMotor;
+    public final SmartKrakenMotor spitterMotor;
+    public final SmartKrakenMotor horizontalMotor;
+    public final SmartKrakenMotor verticalMotor;
+    public final SmartVortexMotor spindexerMotor;
+    public final SmartKrakenMotor kickerMotor;
 
     private final PIDController horizontalPIDController;
 
