@@ -19,7 +19,7 @@ public class OuttakeCommand extends Command{
 
     @Override
     public void initialize() {
-        intakeSubsystem.turnIntakeMotor(-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
+        intakeSubsystem.intakeMotor.setRawSpeedPercent(-1.0 * Constants.Turret.ShootConfig.INTAKE_SPEED);
         
         //intakeSubsystem.turnIntakeMotorRPM(speed);
         //System.out.println(speed);
@@ -38,6 +38,6 @@ public class OuttakeCommand extends Command{
 
     @Override
     public void end(boolean isInterrupted) {
-        intakeSubsystem.stopIntakeMotor();
+        intakeSubsystem.intakeMotor.stopTurning();
     }
 }

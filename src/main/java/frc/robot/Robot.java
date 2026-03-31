@@ -183,11 +183,11 @@ public class Robot extends TimedRobot {
         );
         SmartDashboard.putNumber(
             "TURRET HORIZONTAL ANGLE",
-            robotContainer.getTurretSubsystem().getHorizontalMotorAngle()
+            robotContainer.getTurretSubsystem().horizontalMotor.getAngle()
         );
         SmartDashboard.putNumber(
             "TURRET VERTICAL ANGLE",
-            robotContainer.getTurretSubsystem().getVerticalMotorAngle()
+            robotContainer.getTurretSubsystem().verticalMotor.getAngle()
         );
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber(

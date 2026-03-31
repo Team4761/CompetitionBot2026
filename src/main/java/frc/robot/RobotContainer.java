@@ -65,8 +65,10 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController controller_drive = new CommandXboxController(0);
-    private final CommandXboxController controller_operator = new CommandXboxController(1);
+    private final CommandXboxController controller_drive =
+        new CommandXboxController(Constants.Controller.DRIVER_PORT);
+    private final CommandXboxController controller_operator =
+        new CommandXboxController(Constants.Controller.OPERATOR_PORT);
     private final SlewRateLimiter rotationLimiter =
         new SlewRateLimiter(Constants.Controller.ROTATION_SLEW_RATE_RAD_PER_SEC_SQ);
 
@@ -94,8 +96,8 @@ public class RobotContainer {
         NamedCommands.registerCommand(
             "Stop Intake",
             new InstantCommand(() -> {
-                intake.enableIntakeCoasting();
-                intake.stopIntakeMotor();
+                intake.intakeMotor.enableCoasting();
+                intake.intakeMotor.stopTurning();
             })
         );
         NamedCommands.registerCommand("OuttakeCommand", new OuttakeCommand(intake));
@@ -180,8 +182,8 @@ public class RobotContainer {
             new INTERMITENTShootCommand(turret, Constants.Turret.ShootConfig.SPITTER_SPEED)
         );
 
-        controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, turret.getVerticalAngle()));
-        controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, turret.getVerticalAngle()));
+        controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, turret.verticalMotor.getAngle()));
+        controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, turret.verticalMotor.getAngle()));
         controller_operator.rightBumper().whileTrue(
             new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.MED_SPITTER_SPEED)
         );

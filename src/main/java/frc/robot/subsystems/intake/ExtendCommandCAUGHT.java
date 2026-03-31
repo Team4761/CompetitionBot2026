@@ -23,21 +23,21 @@ public class ExtendCommandCAUGHT extends Command {
         timer.restart();
         step = ExtendSequenceStep.CATCH;
         System.out.println("TURNING");
-        this.intakeSubsystem.enableExtenderCoasting();
-        this.intakeSubsystem.turnExtenderMotorAngle(30);//Start the intake falling
+        this.intakeSubsystem.intakeExtenderMotor.enableCoasting();
+        this.intakeSubsystem.intakeExtenderMotor.turn(30);//Start the intake falling
     }
 //The premis is to start the intake falling via gravity then catch it bu running the motor in the opposite dirction
     public void execute() {
         switch (step) {
             case CATCH:
                 if (timer.hasElapsed(0.2)) {
-                    this.intakeSubsystem.runExtenderMotor(1);//catch / slow it down
+                    this.intakeSubsystem.intakeExtenderMotor.setRawSpeedPercent(1);//catch / slow it down
                     step = ExtendSequenceStep.REALEASE;
                 }
                 break;
             case REALEASE:
                 if (timer.hasElapsed(0.3)) {
-                    this.intakeSubsystem.runExtenderMotor(0);
+                    this.intakeSubsystem.intakeExtenderMotor.setRawSpeedPercent(0);
                     step = ExtendSequenceStep.COMPLETE;//stop the catch
                 }
                 break;
@@ -52,7 +52,7 @@ public class ExtendCommandCAUGHT extends Command {
 
     public void end(boolean isInterrupted){
         timer.stop();
-        intakeSubsystem.stopExtenderMotor();
+        intakeSubsystem.intakeExtenderMotor.stopTurning();
     }
 
 }
