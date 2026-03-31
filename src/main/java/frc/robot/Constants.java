@@ -9,177 +9,173 @@ import edu.wpi.first.math.util.Units;
 import java.util.Map;
 import java.util.function.Function;
 
-public final class Constants {
-    private Constants() {}
+public class Constants {
+    // Controller
+    public static final int CONTROLLER_PORT = 0; // Port on the Driverstation
 
-    public static final class Robot {
-        public static final double ROBOT_WIDTH = Units.inchesToMeters(27.0);
-        public static final double ROBOT_LENGTH = Units.inchesToMeters(27.0);
-        public static final double ROBOT_HEIGHT_WITHOUT_TURRET = Units.inchesToMeters(19.375);
+    public class Robot {
+        public static final double ROBOT_WIDTH = Units.inchesToMeters(27.0); // Units: meters
+        public static final double ROBOT_LENGTH = Units.inchesToMeters(27.0); // Units: meters
+        public static final double ROBOT_HEIGHT_WITHOUT_TURRET = Units.inchesToMeters(19.375); // Units: meters
 
-        public static final Function<Double, Double> ROBOT_HEIGHT_WITH_TURRET =
-            theta -> ROBOT_HEIGHT_WITHOUT_TURRET
-                + Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5);
-
-        private Robot() {}
+        public static final Function<Double, Double> ROBOT_HEIGHT_WITH_TURRET = (theta) -> ROBOT_HEIGHT_WITHOUT_TURRET + Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5); // Units: meters
     }
 
-    public static final class Controller {
-        public static final int DRIVER_PORT = 0;
-        public static final int OPERATOR_PORT = 1;
-
+    public class Controller {
         public static final double TRANSLATION_INPUT_DEADBAND = 0.10;
         public static final double ROTATION_INPUT_DEADBAND = 0.12;
         public static final double TURRET_INPUT_DEADBAND = 0.10;
         public static final double ROTATION_SLEW_RATE_RAD_PER_SEC_SQ = 12.0;
-        public static final double ROTATION_MULTIPLIER = 2.0;
-
         public static final double TEST_VORTEX_OUTPUT = 0.20;
         public static final double TEST_KRAKEN_OUTPUT = 0.20;
 
-        private Controller() {}
+        public static final double ROTATION_MULTIPLIER = 2.0;
     }
 
-    public static final class Swerve {
-        public static final double MAX_DRIVE_SPEED = 0.5;
+    public class Swerve {
+        public static final double MAX_DRIVE_SPEED = 0.5; // Meters per second
 
-        private Swerve() {}
-
-        public static final class Auto {
+        public class Auto {
             public static final double TRANSLATION_KP = 2.5;
             public static final double ROTATION_KP = 4.0;
 
-            public static final double MAX_TRANSLATION_SPEED_MPS = 2.0;
-            public static final double MAX_ROTATION_SPEED_RAD_PER_SEC =
-                Units.degreesToRadians(180.0);
+            public static final double MAX_TRANSLATION_SPEED_MPS = 2.0; // Units: meters per second
+            public static final double MAX_ROTATION_SPEED_RAD_PER_SEC = Units.degreesToRadians(180.0);
 
             public static final double POSITION_TOLERANCE_METERS = 0.03;
             public static final double ANGLE_TOLERANCE_DEGREES = 2.0;
-
-            private Auto() {}
         }
     }
 
-    public static final class Gyro {
-        public static final int PIGEON_ID = 0;
-
-        private Gyro() {}
+    public class Gyro {
+        public static final int PIGEON_ID = 0; // Type: pigeon2 
     }
 
-    public static final class Vision {
+    public class Vision {
         public static final String LEFT_CAMERA_NAME = "Back Left Cam";
         public static final String RIGHT_CAMERA_NAME = "Back Right Cam";
 
-        public static final Translation3d LEFT_CAM_TRANSLATION =
-            new Translation3d(
-                Units.inchesToMeters(-12.0),
-                Units.inchesToMeters(12.0),
-                Units.inchesToMeters(17.5)
-            );
-        public static final Translation3d RIGHT_CAM_TRANSLATION =
-            new Translation3d(
-                Units.inchesToMeters(-12.0),
-                Units.inchesToMeters(-12.0),
-                Units.inchesToMeters(17.5)
-            );
+        public static final Translation3d LEFT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-12.0), Units.inchesToMeters(12.0), Units.inchesToMeters(17.5));
+        public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-12.0), Units.inchesToMeters(-12.0), Units.inchesToMeters(17.5));
 
-        public static final Rotation3d LEFT_CAM_ROTATION =
-            new Rotation3d(0.0, 0.0, Math.toRadians(135.0));
-        public static final Rotation3d RIGHT_CAM_ROTATION =
-            new Rotation3d(0.0, 0.0, Math.toRadians(215.0));
+        public static final Rotation3d LEFT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(135.0)); // Units of inputs: degrees
+        public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0.0, 0.0, Math.toRadians(215.0)); // Units of inputs: degrees
 
-        public static final Transform3d LEFT_CAM_TRANSFORM =
-            new Transform3d(LEFT_CAM_TRANSLATION, LEFT_CAM_ROTATION);
-        public static final Transform3d RIGHT_CAM_TRANSFORM =
-            new Transform3d(RIGHT_CAM_TRANSLATION, RIGHT_CAM_ROTATION);
+        public static final Transform3d LEFT_CAM_TRANSFORM = new Transform3d(LEFT_CAM_TRANSLATION, LEFT_CAM_ROTATION);
+        public static final Transform3d RIGHT_CAM_TRANSFORM = new Transform3d(RIGHT_CAM_TRANSLATION, RIGHT_CAM_ROTATION);
 
-        public static final double ANGLE_DEADBAND = 2.0;
-
-        private Vision() {}
+        public static final double ANGLE_DEADBAND = 2.0; // Units: degrees
+        public static final double CAMERA_OFFSET_FROM_TURRET_X = Units.inchesToMeters(9.5); // Units: meters
+        public static final double CAMERA_OFFSET_FROM_TURRET_Y = Units.inchesToMeters(0.0); // Units: meters
+        public static final Function<Double, Double> CAMERA_OFFSET_FROM_TURRET_Z = (theta) -> Units.inchesToMeters(Math.sin(Math.toRadians(theta)) * 4.5); // Units: meters
     }
 
-    public static final class Turret {
-        public static final double MAX_SPEED_MEASURED_MpS = 13.5;
+    public class Turret {
+        public static final double MAX_SPEED_MEASURED_MpS = 13.5; // Units: m/s
 
-        public static final int SPITTER_MOTOR_PORT = 46;
-        public static final int KICKER_MOTOR_PORT = 44;
-        public static final int HORIZONTAL_MOTOR_PORT = 25;
-        public static final int VERTICAL_MOTOR_PORT = 45;
-        public static final int SPINDEXER_MOTOR_PORT = 43;
+        public static final int SPITTER_MOTOR_PORT = 46; // Type: kraken 
+        public static final int KICKER_MOTOR_PORT = 44; // Type: kraken
+        public static final int HORIZONTAL_MOTOR_PORT = 25; // Type: kraken 
+        public static final int VERTICAL_MOTOR_PORT = 45; // Type: kraken 
 
-        private Turret() {}
+        public static final int SPINDEXER_MOTOR_PORT = 43; // Type: flex/vortex
 
-        public static final class ShootConfig {
-            public static final double SPINDEXER_SPEED = 0.8;
-            public static final double KICKER_SPEED = 0.8;
+        public class ShootConfig {
+            public static final double SPINDEXER_SPEED = 0.8; // Units: percent (0-1)
 
-            public static final double SPITTER_SPEED = 7000.0;
-            public static final double MED_SPITTER_SPEED = 5500.0;
-            public static final double SHORT_SPITTER_SPEED = 4300.0;
-            public static final double AUTO_SPITTER_SPEED = 4800.0;
+            public static final double KICKER_SPEED = 0.8; // Units: percent (0-1)
 
-            public static final double INTAKE_SPEED = 0.55;
-            public static final double INTAKE_SPEED_RPM = 20.0;
+            public static final double SPITTER_SPEED = 7000.0; // Units: rpm (0-6000)
+            public static final double MED_SPITTER_SPEED = 5500.0; // Units: rpm (0-6000)
+            public static final double SHORT_SPITTER_SPEED = 4300.0; // Units: rpm (0-6000)
+            public static final double AUTO_SPITTER_SPEED = 4800.0; // Units: rpm (0-6000)
 
-            public static final double KICKER_INIT_DELAY = 0.25;
-            public static final double KICKER_MOTOR_ROTATIONS_PER_ROTATION = 3.0;
+            public static final double INTAKE_SPEED = 0.55; // Units: percent (0-1)
+            public static final double INTAKE_SPEED_RPM = 20; // Unites: RPM (max is around 5700)
+
+            public static final double KICKER_INIT_DELAY = 0.25; // Units: seconds
+            public static final double KICKER_CONVERSION_FACTOR_MtoR = 1.0 / 3.0; // Motor rotations -> kicker rotations
 
             public static final double TURRET_HORIZONTAL_MULTIPLIER = 3.25;
             public static final double TURRET_VERTICAL_MULTIPLIER = 1.95;
-
-            private ShootConfig() {}
         }
 
-        public static final class Horizontal {
-            public static final double MAX_TRACK_STEP_DEGREES = 4.0;
+        public class Horizontal {
+            public static final double MAX_TRACK_STEP_DEGREES = 4.0; // Units: degrees per loop
 
-            public static final double MOTOR_ROTATIONS_PER_TURRET_ROTATION = 185.0 / 28.0;
-            public static final double TURRET_ROTATIONS_PER_MOTOR_ROTATION = 28.0 / 185.0;
+            public static final double CONVERSION_FACTOR_MtoT = 185.0 / 28.0; // Motor rotations -> turret rotations
+            public static final double CONVERSION_FACTOR_TtoM = 28.0 / 185.0; // Turret rotations -> motor rotations
 
-            public static final double ANGLE_LIM_LEFT = -80.0;
-            public static final double ANGLE_LIM_RIGHT = 80.0;
-
-            private Horizontal() {}
+            public static final double ANGLE_LIM_LEFT = -80.0; // Units: degrees
+            public static final double ANGLE_LIM_RIGHT = 80.0; // Units: degrees
         }
 
-        public static final class Vertical {
-            public static final double MOTOR_ROTATIONS_PER_HOOD_ROTATION = 325.0 / 18.0;
-            public static final double HOOD_ROTATIONS_PER_MOTOR_ROTATION = 18.0 / 325.0;
+        public class Vertical {
+            public static final double CONVERSION_FACTOR_HtoM = 325.0 / 18.0; // Hood rotations -> motor rotations
+            public static final double CONVERSION_FACTOR_MtoH = 18.0 / 325.0; // Motor rotations -> hood rotations
 
-            public static final double MIN_HOOD_ANGLE_DEGREES = -31.0;
-            public static final double MAX_HOOD_ANGLE_DEGREES = 0.0;
+            public static final double MIN_HOOD_ANGLE_DEGREES = -31.0; // Units: degrees from bottom stop
+            public static final double MAX_HOOD_ANGLE_DEGREES = 0.0; // Units: safe degrees from bottom stop
 
-            public static final double MIN_LAUNCH_ANGLE_DEGREES = 22.0;
+            public static final double MIN_LAUNCH_ANGLE_DEGREES = 22.0; // Units: degrees from horizontal at bottom stop
             public static final double MAX_LAUNCH_ANGLE_DEGREES =
-                MIN_LAUNCH_ANGLE_DEGREES + MAX_HOOD_ANGLE_DEGREES;
-
-            private Vertical() {}
+                MIN_LAUNCH_ANGLE_DEGREES + MAX_HOOD_ANGLE_DEGREES; // Units: degrees from horizontal
         }
 
-        public static final class Offset {
-            public static final double X = 0.0;
-            public static final double Y = -6.5;
-
-            private Offset() {}
+        public class Offset {
+            public static final double X = 0.0; // Units: meters
+            public static final double Y = -6.5; // Units: meters
         }
     }
 
-    public static final class Intake {
-        public static final int INTAKE_EXTENDER_MOTOR_PORT = 55;
-        public static final int MAIN_INTAKE_MOTOR_PORT = 57;
+    public class Intake {
+        public static final int INTAKE_EXTENDER_MOTOR_PORT = 55; // Type: kraken
+        public static final int MAIN_INTAKE_MOTOR_PORT = 57; // Type: kraken
 
-        public static final double MOTOR_ROTATIONS_PER_EXTENDER_ROTATION = 13.1875;
-        public static final double EXTENDER_ROTATIONS_PER_MOTOR_ROTATION = 1.0 / 13.1875;
+        public static final double CONVERSION_FACTOR_MtoE = 13.1875; // Motor rotations -> extender rotations
+        public static final double CONVERSION_FACTOR_EtoM = 1 / 13.1875; // extender rotations -> Motor rotations
 
-        public static final double MIN_EXTENSION_ANGLE = -105.0;
-        public static final double MAX_EXTENSION_ANGLE = 0.0;
+        public static final double MIN_EXTENSION_ANGLE = -105.0; // Units: degrees
+        public static final double MAX_EXTENSION_ANGLE = 0.0; // Units: degrees
 
-        public static final double RETRACTION_SPEED = 1.0;
-        public static final double SECONDS_IT_TAKES_TO_RETRACT_AT_FULL_SPEED = 5.0;
+        public static final double RETRACTION_SPEED = 1.0; // Units: percent (0-1)
 
-        private Intake() {}
+        public static final double SECONDS_IT_TAKES_TO_RETRACT_AT_FULL_SPEED = 5.0; // temp value [FIXME]
     }
 
+    public class RelativeHubLocation {
+        // Assuming +x is away from driver station, and +y is to the right
+        // Units: in.
+        public static final Map<Integer, Translation2d> BLUE_APRIL_POS = Map.of(
+            18, new Translation2d(0.0, 23.5),
+            27, new Translation2d(-17.5, 23.5),
+            26, new Translation2d(-23.5, 0.0),
+            25, new Translation2d(-23.5, -17.5),
+            24, new Translation2d(-17.5, -23.5),
+            21, new Translation2d(0.0, -23.5),
+            19, new Translation2d(23.5, 0.0),
+            20, new Translation2d(23.5, -17.5)
+        );
+
+        // Units: in.
+        public static final Map<Integer, Translation2d> RED_APRIL_POS = Map.of(
+            5, new Translation2d(0.0, 23.5),
+            8, new Translation2d(-17.5, 23.5),
+            10, new Translation2d(-23.5, 17.5),
+            9, new Translation2d(-23.5, 0.0),
+            11, new Translation2d(-17.5, -23.5),
+            2, new Translation2d(0.0, -23.5),
+            3, new Translation2d(23.5, 17.5),
+            4, new Translation2d(23.5, 0.0)
+        );
+
+        public static Map<Integer, Translation2d> hubAprilTagPositions() {
+            return "BLUE".equals(Field.ALLIANCE_COLOR) ? BLUE_APRIL_POS : RED_APRIL_POS;
+        }
+
+        public static final double Z_POS = 48.6; // Units: in.
+        public static final double CENTER_OFFSET_MARGIN = 20.85; // Units: in.
+    }
     public class Field {
         public static String ALLIANCE_COLOR = "BLUE"; // Type: enum("BLUE", "RED")
         public static String STARTING_POSITION = "CENTER"; // Type: enum("LEFT", "CENTER", "RIGHT")

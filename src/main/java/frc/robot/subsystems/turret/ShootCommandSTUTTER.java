@@ -29,15 +29,15 @@ public class ShootCommandSTUTTER extends Command {
     public void initialize() {
         feedersStarted = false;
         feederDelayTimer.restart();
-        this.turretSubsystem.spitterMotor.setRawSpeed(Constants.Turret.ShootConfig.SPITTER_SPEED);
+        this.turretSubsystem.setSpitterMotorSpeedRPM(Constants.Turret.ShootConfig.SPITTER_SPEED);
     }
 
     @Override
     public void execute() {
         // Delay feeding without stalling the scheduler thread.
         if (!feedersStarted && feederDelayTimer.hasElapsed(Constants.Turret.ShootConfig.KICKER_INIT_DELAY)) {
-            this.turretSubsystem.spindexerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
-            this.turretSubsystem.kickerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.KICKER_SPEED);
+            this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
+            this.turretSubsystem.setKickerMotorSpeed(Constants.Turret.ShootConfig.KICKER_SPEED);
             feedersStarted = true;
         }
 
@@ -49,11 +49,11 @@ public class ShootCommandSTUTTER extends Command {
         if (currentTime < onTime) {
             // ON stage
             // Set speed back to spindexer
-            this.turretSubsystem.spindexerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
+            this.turretSubsystem.setSpindexerMotorSpeed(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
         } else {
             // OFF stage
             // Pause spindexer to allow flywheel to catch up
-            this.turretSubsystem.spindexerMotor.stopTurning();
+            this.turretSubsystem.stopSpindexer();
         }
     }
 
@@ -65,8 +65,8 @@ public class ShootCommandSTUTTER extends Command {
     @Override
     public void end(boolean isInterrupted){
         feederDelayTimer.stop();
-        this.turretSubsystem.spitterMotor.stopTurning();
-        this.turretSubsystem.spindexerMotor.stopTurning();
-        this.turretSubsystem.kickerMotor.stopTurning();
+        this.turretSubsystem.stopSpitter();
+        this.turretSubsystem.stopSpindexer();
+        this.turretSubsystem.stopKicker();
     }
 }

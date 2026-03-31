@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 public class ElasticRetrieveDataCommand extends InstantCommand{
     public ElasticRetrieveDataCommand(TurretSubsystem sub) {
         super(() -> {
-            SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", sub.horizontalMotor.getAngle());
-            SmartDashboard.putNumber("TURRET VERTICAL ANGLE", sub.verticalMotor.getAngle());
+            SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", sub.getHorizontalMotorAngle());
+            SmartDashboard.putNumber("TURRET VERTICAL ANGLE", sub.getVerticalMotorAngle());
         });
     }
 }

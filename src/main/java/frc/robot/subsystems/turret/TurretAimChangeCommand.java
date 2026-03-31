@@ -31,8 +31,8 @@ public class TurretAimChangeCommand extends Command{
 
     @Override
     public void execute() {
-        this.turretSubsystem.verticalMotor.turn(supplierY.getAsDouble() * Constants.Turret.ShootConfig.TURRET_VERTICAL_MULTIPLIER);
-        this.turretSubsystem.horizontalMotor.turn(supplierX.getAsDouble() * Constants.Turret.ShootConfig.TURRET_HORIZONTAL_MULTIPLIER);
+        this.turretSubsystem.turnVerticalMotor(supplierY.getAsDouble() * Constants.Turret.ShootConfig.TURRET_VERTICAL_MULTIPLIER);
+        this.turretSubsystem.turnHorizontalMotor(supplierX.getAsDouble() * Constants.Turret.ShootConfig.TURRET_HORIZONTAL_MULTIPLIER);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TurretAimChangeCommand extends Command{
 
     @Override
     public void end(boolean isInterrupted) {
-        turretSubsystem.horizontalMotor.stopTurning();
-        turretSubsystem.verticalMotor.stopTurning();
+        turretSubsystem.stopHorizontal();
+        turretSubsystem.stopVertical();
     }
 }
