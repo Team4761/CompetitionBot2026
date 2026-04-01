@@ -22,7 +22,7 @@ public class SpitterSpinCommand extends Command{
 
     @Override
     public void initialize() {
-        this.turretSubsystem.setSpitterMotorSpeedRPM(this.spinRPM);
+        this.turretSubsystem.spitterMotor.setRawSpeed(this.spinRPM);
     }
 
     @Override
@@ -37,6 +37,6 @@ public class SpitterSpinCommand extends Command{
 
     @Override
     public void end(boolean isInterrupted) {
-        turretSubsystem.stopSpitter();
+        turretSubsystem.spitterMotor.stopTurning();
     }
 }

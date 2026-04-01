@@ -21,7 +21,7 @@ public class KickerSpinCommand extends Command{
 
     @Override
     public void initialize() {
-        this.turretSubsystem.setKickerMotorSpeed(this.spinSpeed);
+        this.turretSubsystem.kickerMotor.setRawSpeedPercent(this.spinSpeed);
     }
 
     @Override
@@ -36,6 +36,6 @@ public class KickerSpinCommand extends Command{
 
     @Override
     public void end(boolean isInterrupted) {
-        turretSubsystem.stopKicker();
+        turretSubsystem.kickerMotor.stopTurning();
     }
 }

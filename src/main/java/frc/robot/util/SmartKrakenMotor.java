@@ -25,8 +25,6 @@ public class SmartKrakenMotor {
     private MotorMode mode;
     private boolean coastingEnabled = false;
 
-    private double currentAngle = 0.0;
-
     private static final Logger LOGGER = Logger.getLogger(SmartKrakenMotor.class.getName());
 
     public SmartKrakenMotor(Builder builder) {
@@ -56,7 +54,7 @@ public class SmartKrakenMotor {
     }
 
     public void setSpeedPercent(double speedPercent) {
-        this.setRawSpeedPercent(speedPercent * this.gearRatio);
+        this.setRawSpeedPercent(speedPercent);
     }
 
     public void setSpeed(double speedRPM) {
@@ -64,15 +62,14 @@ public class SmartKrakenMotor {
     }
 
     public boolean turn(double degrees) {
-        double targetAngle = this.currentAngle + degrees;
+        double targetAngle = this.getAngle() + degrees;
         if (this.mode == MotorMode.WRAPPED) {
             targetAngle %= 360.0;
         }
 
         if ((this.minAngle == -1 && this.maxAngle == -1)
             || (targetAngle >= this.minAngle && targetAngle <= this.maxAngle)) {
-            this.currentAngle = targetAngle;
-            this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 360));
+            this.motor.setControl(this.positionRequest.withPosition(this.toMotorRotations(targetAngle)));
             return true;
         }
         
@@ -90,8 +87,7 @@ public class SmartKrakenMotor {
 
         if ((this.minAngle == -1 && this.maxAngle == -1) ||
             (targetAngle >= this.minAngle && targetAngle <= this.maxAngle)) {
-            this.currentAngle = targetAngle;
-            this.motor.setControl(this.positionRequest.withPosition(this.currentAngle / 360));
+            this.motor.setControl(this.positionRequest.withPosition(this.toMotorRotations(targetAngle)));
             return true;
         }
         
@@ -103,11 +99,11 @@ public class SmartKrakenMotor {
     }
 
     public double getAngle() {
-        return this.motor.getPosition().getValueAsDouble();
+        return this.toMechanismDegrees(this.motor.getPosition().getValueAsDouble());
     }
 
     public double getSpeedRPM() {
-        return this.motor.getVelocity().getValueAsDouble() * 60.0;
+        return (this.motor.getVelocity().getValueAsDouble() * 60.0) / this.gearRatio;
     }
 
     public void stopTurning() {
@@ -126,10 +122,17 @@ public class SmartKrakenMotor {
 
     public void disableCoasting() {
         this.coastingEnabled = false;
-        this.currentAngle = this.motor.getPosition().getValueAsDouble() * 360.0;
         this.motor.setControl(
             this.positionRequest.withPosition(this.motor.getPosition().getValueAsDouble())
         );
+    }
+
+    private double toMotorRotations(double mechanismDegrees) {
+        return (mechanismDegrees / 360.0) * this.gearRatio;
+    }
+
+    private double toMechanismDegrees(double motorRotations) {
+        return (motorRotations * 360.0) / this.gearRatio;
     }
 
     private static double clampDutyCycle(double output) {
