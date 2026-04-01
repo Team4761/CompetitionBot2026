@@ -2,7 +2,10 @@ package frc.robot.commandGroups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
-import frc.robot.subsystems.turret.*;
+import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.subsystems.turret.commands.KickerSpinCommand;
+import frc.robot.subsystems.turret.commands.SpindexSpinCommand;
+import frc.robot.subsystems.turret.commands.SpitterSpinCommand;
 
 public class FireFromSpindexer extends SequentialCommandGroup {
     public FireFromSpindexer(TurretSubsystem turret) {

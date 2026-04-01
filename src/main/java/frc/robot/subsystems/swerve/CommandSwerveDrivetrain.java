@@ -392,9 +392,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     private Translation2d getAllianceHubCenter() {
-        Alliance alliance = DriverStation.getAlliance().orElseGet(() ->
-            "RED".equals(Constants.Field.ALLIANCE_COLOR) ? Alliance.Red : Alliance.Blue
-        );
+        Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
         double hubX = alliance == Alliance.Red
             ? FieldConstants.Field.FIELD_LENGTH - FieldConstants.Hub.HUB_TO_ALLIANCE_WALL
             : FieldConstants.Hub.HUB_TO_ALLIANCE_WALL;

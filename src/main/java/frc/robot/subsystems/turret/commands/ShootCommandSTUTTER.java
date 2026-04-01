@@ -1,28 +1,25 @@
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems.turret.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
 /*
  * Generalized shoot command. It shoots in an arc.
  */
-public class INTERMITENTShootCommand extends Command {
+public class ShootCommandSTUTTER extends Command {
     private final TurretSubsystem turretSubsystem;
     private final Timer feederDelayTimer = new Timer();
     private boolean feedersStarted;
-    private boolean didResetThisCycle;
-    private boolean didReverseThisCycle;
-    private Double rpm; 
 
     /**
      * @param sub The turret subsystem holding the shooter components
      * @param spitterSpeed Speed for the main flywheel/shooter
      * @param kickerSpeed Speed for the feed mechanism (kicker)
      */
-    public INTERMITENTShootCommand(TurretSubsystem sub, Double rpm) {
+    public ShootCommandSTUTTER(TurretSubsystem sub) {
         this.turretSubsystem = sub;
-        this.rpm = rpm;
         
         // IMPORTANT: Intentionally NOT use addRequirements(sub) here.
         // If require the TurretSubsystem, will interrupt the TurretManualAimCommand,
@@ -32,10 +29,8 @@ public class INTERMITENTShootCommand extends Command {
     @Override
     public void initialize() {
         feedersStarted = false;
-        didResetThisCycle = false;
-        didReverseThisCycle = false;
         feederDelayTimer.restart();
-        this.turretSubsystem.spitterMotor.setRawSpeed(this.rpm);
+        this.turretSubsystem.spitterMotor.setRawSpeed(Constants.Turret.ShootConfig.SPITTER_SPEED);
     }
 
     @Override
@@ -47,16 +42,19 @@ public class INTERMITENTShootCommand extends Command {
             feedersStarted = true;
         }
 
-        if (feederDelayTimer.get() % 5.0 < 0.3 && !this.didReverseThisCycle) {
-            this.didResetThisCycle = false;
-            this.didReverseThisCycle = true;
-            this.turretSubsystem.spindexerMotor.setRawSpeedPercent(-1 * Constants.Turret.ShootConfig.SPINDEXER_SPEED);
-            this.turretSubsystem.kickerMotor.setRawSpeedPercent(-1 * Constants.Turret.ShootConfig.KICKER_SPEED);
-        } else if (feederDelayTimer.get() % 5.0 >= 0.4 && !this.didResetThisCycle) {
-            this.didResetThisCycle = true;
-            this.didReverseThisCycle = false;
+        double onTime = 0.2; // Time to run spindexer before pausing to allow spinup of flywheel
+        double offTime = 0.1; // Time to pause spindexer to allow flywheel to catch up
+        double cycleTime = onTime + offTime;
+        double currentTime = feederDelayTimer.get() % cycleTime;
+
+        if (currentTime < onTime) {
+            // ON stage
+            // Set speed back to spindexer
             this.turretSubsystem.spindexerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
-            this.turretSubsystem.kickerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.KICKER_SPEED);
+        } else {
+            // OFF stage
+            // Pause spindexer to allow flywheel to catch up
+            this.turretSubsystem.spindexerMotor.stopTurning();
         }
     }
 

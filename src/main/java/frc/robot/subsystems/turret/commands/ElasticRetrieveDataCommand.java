@@ -1,7 +1,8 @@
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems.turret.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
 /**
  * This command is a command for the Elastic Dashboard: it retrieves the horizontal & vertical encoder values for the turret

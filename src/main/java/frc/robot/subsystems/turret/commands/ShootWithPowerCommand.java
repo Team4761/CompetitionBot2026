@@ -1,14 +1,16 @@
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems.turret.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
 /*
  * Generalized shoot command. It shoots in an arc.
  */
-public class ShootCommand extends Command {
+public class ShootWithPowerCommand extends Command {
     private final TurretSubsystem turretSubsystem;
+    private final double rpm;
     private final Timer feederDelayTimer = new Timer();
     private boolean feedersStarted;
 
@@ -17,8 +19,9 @@ public class ShootCommand extends Command {
      * @param spitterSpeed Speed for the main flywheel/shooter
      * @param kickerSpeed Speed for the feed mechanism (kicker)
      */
-    public ShootCommand(TurretSubsystem sub) {
+    public ShootWithPowerCommand(TurretSubsystem sub, double rpm) {
         this.turretSubsystem = sub;
+        this.rpm = rpm;
         
         // IMPORTANT: Intentionally NOT use addRequirements(sub) here.
         // If require the TurretSubsystem, will interrupt the TurretManualAimCommand,
@@ -29,7 +32,7 @@ public class ShootCommand extends Command {
     public void initialize() {
         feedersStarted = false;
         feederDelayTimer.restart();
-        this.turretSubsystem.spitterMotor.setRawSpeed(Constants.Turret.ShootConfig.SPITTER_SPEED);
+        this.turretSubsystem.spitterMotor.setRawSpeed(this.rpm);
     }
 
     @Override

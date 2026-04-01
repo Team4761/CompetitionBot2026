@@ -1,6 +1,7 @@
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems.turret.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
 /*
  * Spins the Spindexer; a "spinning basket" of sorts in the robot, feeding FUEL into the shooter.

@@ -1,13 +1,14 @@
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems.turret.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
 /*
  * Generalized shoot command. It shoots in an arc.
  */
-public class ShootCommandSTUTTER extends Command {
+public class ShootCommand extends Command {
     private final TurretSubsystem turretSubsystem;
     private final Timer feederDelayTimer = new Timer();
     private boolean feedersStarted;
@@ -17,7 +18,7 @@ public class ShootCommandSTUTTER extends Command {
      * @param spitterSpeed Speed for the main flywheel/shooter
      * @param kickerSpeed Speed for the feed mechanism (kicker)
      */
-    public ShootCommandSTUTTER(TurretSubsystem sub) {
+    public ShootCommand(TurretSubsystem sub) {
         this.turretSubsystem = sub;
         
         // IMPORTANT: Intentionally NOT use addRequirements(sub) here.
@@ -39,21 +40,6 @@ public class ShootCommandSTUTTER extends Command {
             this.turretSubsystem.spindexerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
             this.turretSubsystem.kickerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.KICKER_SPEED);
             feedersStarted = true;
-        }
-
-        double onTime = 0.2; // Time to run spindexer before pausing to allow spinup of flywheel
-        double offTime = 0.1; // Time to pause spindexer to allow flywheel to catch up
-        double cycleTime = onTime + offTime;
-        double currentTime = feederDelayTimer.get() % cycleTime;
-
-        if (currentTime < onTime) {
-            // ON stage
-            // Set speed back to spindexer
-            this.turretSubsystem.spindexerMotor.setRawSpeedPercent(Constants.Turret.ShootConfig.SPINDEXER_SPEED);
-        } else {
-            // OFF stage
-            // Pause spindexer to allow flywheel to catch up
-            this.turretSubsystem.spindexerMotor.stopTurning();
         }
     }
 

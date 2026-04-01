@@ -1,6 +1,7 @@
-package frc.robot.subsystems.turret;
+package frc.robot.subsystems.turret.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.turret.TurretSubsystem;
 
 /**
  * Spins the Spitter; the last wheel before the FUEL is ejected out of the shooter.

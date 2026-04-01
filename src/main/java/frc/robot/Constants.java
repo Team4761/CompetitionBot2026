@@ -181,7 +181,6 @@ public final class Constants {
     }
 
     public class Field {
-        public static String ALLIANCE_COLOR = "BLUE"; // Type: enum("BLUE", "RED")
         public static String STARTING_POSITION = "CENTER"; // Type: enum("LEFT", "CENTER", "RIGHT")
 
     }

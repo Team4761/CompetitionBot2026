@@ -1,7 +1,8 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.intake.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.intake.IntakeSubsystem;
 
 public class ExtendCommandCAUGHT extends Command {
     private enum ExtendSequenceStep {

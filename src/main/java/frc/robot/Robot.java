@@ -27,7 +27,6 @@ public class Robot extends TimedRobot {
     private final Timer matchTimer;
     private final Timer phaseTimer;
     private final CommandSwerveDrivetrain drivetrain;
-    private final SendableChooser<String> teamChooser = new SendableChooser<>();
     private final SendableChooser<String> positionChooser = new SendableChooser<>();
     private final Field2d field = new Field2d();
 
@@ -82,7 +81,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        setAllianceColor();
         Constants.Field.STARTING_POSITION = positionChooser.getSelected();
         autoStartPosition = calculateAutoStartPosition();
         phaseDuration = FieldConstants.Match.AUTONOMOUS_DURATION;
@@ -142,14 +140,10 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
         SmartDashboard.putBoolean("Manual Turret Control", false);
-        teamChooser.addOption("BLUE", "BLUE");
-        teamChooser.addOption("RED", "RED");
-        teamChooser.setDefaultOption("BLUE", "BLUE");
         positionChooser.addOption("LEFT", "LEFT");
         positionChooser.addOption("CENTER", "CENTER");
         positionChooser.addOption("RIGHT", "RIGHT");
         positionChooser.setDefaultOption("CENTER", "CENTER");
-        SmartDashboard.putData("Team", teamChooser);
         SmartDashboard.putData("Position", positionChooser);
         SmartDashboard.putString(
             "Driver Controller Bindings",
@@ -196,22 +190,13 @@ public class Robot extends TimedRobot {
         );
     }
 
-    private void setAllianceColor() {
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            Constants.Field.ALLIANCE_COLOR =
-                alliance.get() == DriverStation.Alliance.Red ? "RED" : "BLUE";
-        } else {
-            Constants.Field.ALLIANCE_COLOR = teamChooser.getSelected();
-        }
-    }
-
     private Pose2d calculateAutoStartPosition() {
         double autoStartX;
         double autoStartY;
         Rotation2d autoStartRot;
+        DriverStation.Alliance alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
 
-        if (Constants.Field.ALLIANCE_COLOR.equals("BLUE")) {
+        if (alliance == DriverStation.Alliance.Blue) {
             autoStartX = FieldConstants.Field.ALLIANCE_ZONE_LENGTH - Constants.Robot.ROBOT_WIDTH / 2.0;
             autoStartRot = new Rotation2d(0);
         } else {
