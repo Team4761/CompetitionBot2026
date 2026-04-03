@@ -113,7 +113,7 @@ public final class Constants {
             public static final double SPINDEXER_SPEED = 0.8;
             public static final double KICKER_SPEED = 0.8;
 
-            public static final double SPITTER_SPEED = 7000.0;
+            public static final double SPITTER_SPEED = 4000.0;
             public static final double MED_SPITTER_SPEED = 5500.0;
             public static final double SHORT_SPITTER_SPEED = 4300.0;
             public static final double AUTO_SPITTER_SPEED = 4800.0;

@@ -32,6 +32,7 @@ import frc.robot.subsystems.intake.commands.ExtendCommandCAUGHT;
 import frc.robot.subsystems.intake.commands.IntakeCommand;
 import frc.robot.subsystems.intake.commands.OuttakeCommand;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
+import frc.robot.subsystems.swerve.commands.SnapToHubCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
 import frc.robot.subsystems.turret.commands.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.commands.INTERMITENTShootCommand;
@@ -172,6 +173,7 @@ public class RobotContainer {
         controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
+        controller_drive.a().onTrue(new SnapToHubCommand(drivetrain).getCommand());
     }
 
     private void configureOperatorBindings() {
