@@ -1427,6 +1427,120 @@
           }
         ]
       }
+    },
+    {
+      "name": "Elastic Tuning",
+      "grid_layout": {
+        "layouts": [],
+        "containers": [
+          {
+            "title": "Distance From Hub (m)",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Distance From Hub",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Elastic Shooter Tuning Enabled",
+            "x": 0.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Toggle Switch",
+            "properties": {
+              "topic": "/SmartDashboard/Elastic Shooter Tuning Enabled",
+              "period": 0.06,
+              "data_type": "boolean"
+            }
+          },
+          {
+            "title": "Manual Turret Control",
+            "x": 256.0,
+            "y": 128.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Manual Turret Control",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "Elastic Test Shooter RPM",
+            "x": 0.0,
+            "y": 256.0,
+            "width": 512.0,
+            "height": 256.0,
+            "type": "Number Slider",
+            "properties": {
+              "topic": "/SmartDashboard/Elastic Test Shooter RPM",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 3000.0,
+              "max_value": 6500.0,
+              "divisions": 35,
+              "update_continuously": false
+            }
+          },
+          {
+            "title": "Shooter RPM Setpoint",
+            "x": 512.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Elastic Test Shooter RPM",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          },
+          {
+            "title": "Elastic Test Hood Launch Angle",
+            "x": 0.0,
+            "y": 512.0,
+            "width": 512.0,
+            "height": 256.0,
+            "type": "Number Slider",
+            "properties": {
+              "topic": "/SmartDashboard/Elastic Test Hood Launch Angle",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 22.0,
+              "max_value": 53.0,
+              "divisions": 31,
+              "update_continuously": false
+            }
+          },
+          {
+            "title": "Hood Angle Setpoint",
+            "x": 512.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Elastic Test Hood Launch Angle",
+              "period": 0.06,
+              "data_type": "double",
+              "show_submit_button": false
+            }
+          }
+        ]
+      }
     }
   ]
 }

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.turret.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -10,7 +12,7 @@ import frc.robot.subsystems.turret.TurretSubsystem;
  */
 public class ShootWithPowerCommand extends Command {
     private final TurretSubsystem turretSubsystem;
-    private final double rpm;
+    private final DoubleSupplier rpmSupplier;
     private final Timer feederDelayTimer = new Timer();
     private boolean feedersStarted;
 
@@ -20,8 +22,12 @@ public class ShootWithPowerCommand extends Command {
      * @param kickerSpeed Speed for the feed mechanism (kicker)
      */
     public ShootWithPowerCommand(TurretSubsystem sub, double rpm) {
+        this(sub, () -> rpm);
+    }
+
+    public ShootWithPowerCommand(TurretSubsystem sub, DoubleSupplier rpmSupplier) {
         this.turretSubsystem = sub;
-        this.rpm = rpm;
+        this.rpmSupplier = rpmSupplier;
         
         // IMPORTANT: Intentionally NOT use addRequirements(sub) here.
         // If require the TurretSubsystem, will interrupt the TurretManualAimCommand,
@@ -32,7 +38,7 @@ public class ShootWithPowerCommand extends Command {
     public void initialize() {
         feedersStarted = false;
         feederDelayTimer.restart();
-        this.turretSubsystem.spitterMotor.setRawSpeed(this.rpm);
+        this.turretSubsystem.spitterMotor.setRawSpeed(this.rpmSupplier.getAsDouble());
     }
 
     @Override

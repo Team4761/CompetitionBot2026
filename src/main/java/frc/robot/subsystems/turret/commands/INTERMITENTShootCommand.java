@@ -1,5 +1,7 @@
 package frc.robot.subsystems.turret.commands;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -14,7 +16,7 @@ public class INTERMITENTShootCommand extends Command {
     private boolean feedersStarted;
     private boolean didResetThisCycle;
     private boolean didReverseThisCycle;
-    private Double rpm; 
+    private final DoubleSupplier rpmSupplier;
 
     /**
      * @param sub The turret subsystem holding the shooter components
@@ -22,8 +24,12 @@ public class INTERMITENTShootCommand extends Command {
      * @param kickerSpeed Speed for the feed mechanism (kicker)
      */
     public INTERMITENTShootCommand(TurretSubsystem sub, Double rpm) {
+        this(sub, () -> rpm);
+    }
+
+    public INTERMITENTShootCommand(TurretSubsystem sub, DoubleSupplier rpmSupplier) {
         this.turretSubsystem = sub;
-        this.rpm = rpm;
+        this.rpmSupplier = rpmSupplier;
         
         // IMPORTANT: Intentionally NOT use addRequirements(sub) here.
         // If require the TurretSubsystem, will interrupt the TurretManualAimCommand,
@@ -36,7 +42,7 @@ public class INTERMITENTShootCommand extends Command {
         didResetThisCycle = false;
         didReverseThisCycle = false;
         feederDelayTimer.restart();
-        this.turretSubsystem.spitterMotor.setRawSpeed(this.rpm);
+        this.turretSubsystem.spitterMotor.setRawSpeed(this.rpmSupplier.getAsDouble());
     }
 
     @Override

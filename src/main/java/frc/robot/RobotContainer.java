@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.DoubleSupplier;
+
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
@@ -178,19 +180,21 @@ public class RobotContainer {
 
     private void configureOperatorBindings() {
         controller_operator.leftTrigger().whileTrue(
-            new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED)
+            new ShootWithPowerCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED))
         );
         controller_operator.rightTrigger().whileTrue(
-            new INTERMITENTShootCommand(turret, Constants.Turret.ShootConfig.SPITTER_SPEED)
+            new INTERMITENTShootCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.SPITTER_SPEED))
         );
 
         controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, turret.verticalMotor.getAngle()));
         controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, turret.verticalMotor.getAngle()));
         controller_operator.rightBumper().whileTrue(
-            new ShootWithPowerCommand(turret, Constants.Turret.ShootConfig.MED_SPITTER_SPEED)
+            new ShootWithPowerCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.MED_SPITTER_SPEED))
         );
 
-        controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(new ShootCommand(turret));
+        controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(
+            new ShootWithPowerCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.SPITTER_SPEED))
+        );
         controller_operator.leftBumper().whileTrue(new TurretAimChangeCommand(
             turret,
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
@@ -220,6 +224,25 @@ public class RobotContainer {
 
     private double applyDeadband(double rawInput, double deadband) {
         return MathUtil.applyDeadband(rawInput, deadband);
+    }
+
+    private DoubleSupplier getElasticShootRpmSupplier(double defaultRpm) {
+        return () -> isElasticShooterTuningEnabled() ? getElasticShooterTuningRpm() : defaultRpm;
+    }
+
+    private boolean isElasticShooterTuningEnabled() {
+        return SmartDashboard.getBoolean(Constants.Dashboard.ELASTIC_SHOOTER_TUNING_ENABLED, false);
+    }
+
+    private double getElasticShooterTuningRpm() {
+        return MathUtil.clamp(
+            SmartDashboard.getNumber(
+                Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM,
+                Constants.Turret.ShootConfig.SPITTER_SPEED
+            ),
+            Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM_MIN,
+            Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM_MAX
+        );
     }
 
     public Command getAutonomousCommand() {

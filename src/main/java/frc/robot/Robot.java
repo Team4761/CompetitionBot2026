@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.HootAutoReplay;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -140,6 +141,16 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
         SmartDashboard.putBoolean("Manual Turret Control", false);
+        SmartDashboard.putNumber(Constants.Dashboard.DISTANCE_FROM_HUB_METERS, 0.0);
+        SmartDashboard.putBoolean(Constants.Dashboard.ELASTIC_SHOOTER_TUNING_ENABLED, false);
+        SmartDashboard.putNumber(
+            Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM,
+            Constants.Turret.ShootConfig.SPITTER_SPEED
+        );
+        SmartDashboard.putNumber(
+            Constants.Dashboard.ELASTIC_TEST_HOOD_ANGLE_DEGREES,
+            Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES
+        );
         positionChooser.addOption("LEFT", "LEFT");
         positionChooser.addOption("CENTER", "CENTER");
         positionChooser.addOption("RIGHT", "RIGHT");
@@ -165,12 +176,14 @@ public class Robot extends TimedRobot {
                 + "MO: Right Trigger: Shoot Wihout Safeties (Hold to Shoot)\n"
                 + "MO: B Button: Run the Spindexer Backwards\n"
                 + "MO: A Button: Run the Kicker/Upinator Backwards\n"
+                + "Elastic Tuning: Enable the Elastic Tuning tab override to use its RPM and hood angle\n"
         );
         SmartDashboard.putData("Field", field);
     }
 
     private void updateDashboard() {
         field.setRobotPose(drivetrain.getEstimatedPose());
+        SmartDashboard.putNumber(Constants.Dashboard.DISTANCE_FROM_HUB_METERS, drivetrain.getDistanceToHubMeters());
         SmartDashboard.putNumber(
             "Match Time Left",
             Math.round((FieldConstants.Match.MATCH_DURATION - matchTimer.get()) * 10) / 10.0
@@ -188,6 +201,32 @@ public class Robot extends TimedRobot {
             "Phase Time Left",
             Math.round((phaseDuration - phaseTimer.get()) * 10) / 10.0
         );
+
+        double elasticShooterRpm = MathUtil.clamp(
+            SmartDashboard.getNumber(
+                Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM,
+                Constants.Turret.ShootConfig.SPITTER_SPEED
+            ),
+            Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM_MIN,
+            Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM_MAX
+        );
+        SmartDashboard.putNumber(Constants.Dashboard.ELASTIC_TEST_SHOOTER_RPM, elasticShooterRpm);
+
+        double elasticHoodAngleDegrees = MathUtil.clamp(
+            SmartDashboard.getNumber(
+                Constants.Dashboard.ELASTIC_TEST_HOOD_ANGLE_DEGREES,
+                Constants.Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES
+            ),
+            Constants.Dashboard.ELASTIC_TEST_HOOD_ANGLE_MIN,
+            Constants.Dashboard.ELASTIC_TEST_HOOD_ANGLE_MAX
+        );
+        SmartDashboard.putNumber(Constants.Dashboard.ELASTIC_TEST_HOOD_ANGLE_DEGREES, elasticHoodAngleDegrees);
+
+        if (DriverStation.isEnabled()
+            && SmartDashboard.getBoolean(Constants.Dashboard.ELASTIC_SHOOTER_TUNING_ENABLED, false)
+            && !SmartDashboard.getBoolean("Manual Turret Control", false)) {
+            robotContainer.getTurretSubsystem().setLaunchAngleDegrees(elasticHoodAngleDegrees);
+        }
     }
 
     private Pose2d calculateAutoStartPosition() {

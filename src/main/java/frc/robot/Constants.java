@@ -40,6 +40,20 @@ public final class Constants {
         private Controller() {}
     }
 
+    public static final class Dashboard {
+        public static final String DISTANCE_FROM_HUB_METERS = "Distance From Hub";
+        public static final String ELASTIC_SHOOTER_TUNING_ENABLED = "Elastic Shooter Tuning Enabled";
+        public static final String ELASTIC_TEST_SHOOTER_RPM = "Elastic Test Shooter RPM";
+        public static final String ELASTIC_TEST_HOOD_ANGLE_DEGREES = "Elastic Test Hood Launch Angle";
+
+        public static final double ELASTIC_TEST_SHOOTER_RPM_MIN = 3000.0;
+        public static final double ELASTIC_TEST_SHOOTER_RPM_MAX = 6500.0;
+        public static final double ELASTIC_TEST_HOOD_ANGLE_MIN = Turret.Vertical.MIN_LAUNCH_ANGLE_DEGREES;
+        public static final double ELASTIC_TEST_HOOD_ANGLE_MAX = Turret.Vertical.MAX_LAUNCH_ANGLE_DEGREES;
+
+        private Dashboard() {}
+    }
+
     public static final class Swerve {
         public static final double MAX_DRIVE_SPEED = 0.5;
 
@@ -151,7 +165,7 @@ public final class Constants {
 
             public static final double MIN_LAUNCH_ANGLE_DEGREES = 22.0;
             public static final double MAX_LAUNCH_ANGLE_DEGREES =
-                MIN_LAUNCH_ANGLE_DEGREES + MAX_HOOD_ANGLE_DEGREES;
+                MIN_LAUNCH_ANGLE_DEGREES + (MAX_HOOD_ANGLE_DEGREES - MIN_HOOD_ANGLE_DEGREES);
 
             private Vertical() {}
         }
