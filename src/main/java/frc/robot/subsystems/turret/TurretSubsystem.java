@@ -61,7 +61,11 @@ public class TurretSubsystem extends SubsystemBase {
         this.horizontalPIDController = new PIDController(0.5, 0.0, 0.001);
     }
     public void setLaunchAngleDegrees(double launchAngleDegrees) {
-        verticalMotor.set(toHoodDegreesFromBaselineLaunchAngle(launchAngleDegrees));
+        verticalMotor.set(getHoodAngleForLaunchAngleDegrees(launchAngleDegrees));
+    }
+
+    public double getHoodAngleForLaunchAngleDegrees(double launchAngleDegrees) {
+        return toHoodDegreesFromBaselineLaunchAngle(launchAngleDegrees);
     }
 
     public void stepHorizontalMotor(double targetDegrees) {

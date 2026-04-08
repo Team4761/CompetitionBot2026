@@ -69,7 +69,7 @@ public class FieldConstants {
     }
 
     public class Hub {
-        public static final double HUB_TO_ALLIANCE_WALL = Units.inchesToMeters(158.06); // Units: meters (AndyMark)
+        public static final double HUB_TO_ALLIANCE_WALL = Units.inchesToMeters(181.56); // Units: meters (AndyMark)
         public static final double HUB_SIZE = Units.inchesToMeters(47.0); // Units: meters (length & width)
         public static final double HUB_HEIGHT = Units.inchesToMeters(72); // Units: meters
         public static final double HUB_OPENING_WIDTH = Units.inchesToMeters(41.7); // Units: meters

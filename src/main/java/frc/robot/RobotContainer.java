@@ -36,6 +36,7 @@ import frc.robot.subsystems.intake.commands.OuttakeCommand;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 import frc.robot.subsystems.swerve.commands.SnapToHubCommand;
 import frc.robot.subsystems.turret.TurretSubsystem;
+import frc.robot.subsystems.turret.commands.AUTOShootCommand;
 import frc.robot.subsystems.turret.commands.ElasticManualOverrideCommand;
 import frc.robot.subsystems.turret.commands.INTERMITENTShootCommand;
 import frc.robot.subsystems.turret.commands.KickerSpinCommand;
@@ -175,7 +176,22 @@ public class RobotContainer {
         controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
         controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
         controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
-        controller_drive.a().onTrue(new SnapToHubCommand(drivetrain).getCommand());
+        controller_drive.a()
+            .whileTrue(
+                new SnapToHubCommand(
+                    drivetrain,
+                    () -> -1 * applyDeadband(
+                        controller_drive.getLeftY(),
+                        Constants.Controller.TRANSLATION_INPUT_DEADBAND
+                    ) * MaxSpeed,
+                    () -> -1 * applyDeadband(
+                        controller_drive.getLeftX(),
+                        Constants.Controller.TRANSLATION_INPUT_DEADBAND
+                    ) * MaxSpeed,
+                    MaxAngularRate
+                )
+            )
+            .onFalse(drivetrain.runOnce(() -> rotationLimiter.reset(0.0)));
     }
 
     private void configureOperatorBindings() {
@@ -183,7 +199,7 @@ public class RobotContainer {
             new ShootWithPowerCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED))
         );
         controller_operator.rightTrigger().whileTrue(
-            new INTERMITENTShootCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.SPITTER_SPEED))
+            new AUTOShootCommand(turret, () -> drivetrain.getDistanceToHubMeters())
         );
 
         controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, turret.verticalMotor.getAngle()));

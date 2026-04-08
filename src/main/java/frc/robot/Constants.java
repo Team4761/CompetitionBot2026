@@ -135,7 +135,7 @@ public final class Constants {
             public static final double INTAKE_SPEED = 0.55;
             public static final double INTAKE_SPEED_RPM = 20.0;
 
-            public static final double KICKER_INIT_DELAY = 0.25;
+            public static final double KICKER_INIT_DELAY = 0.5;
             public static final double KICKER_MOTOR_ROTATIONS_PER_ROTATION = 3.0;
 
             public static final double TURRET_HORIZONTAL_MULTIPLIER = 3.25;
