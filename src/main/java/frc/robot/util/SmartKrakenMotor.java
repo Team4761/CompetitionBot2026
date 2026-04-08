@@ -85,10 +85,9 @@ public class SmartKrakenMotor {
             targetAngle %= 360.0;
         }
 
-        double convertedAngle = this.toMotorRotations(targetAngle);
         if ((this.minAngle == -1 && this.maxAngle == -1) ||
-            (convertedAngle >= this.minAngle && convertedAngle <= this.maxAngle)) {
-            this.motor.setControl(this.positionRequest.withPosition(convertedAngle));
+            (degrees >= this.minAngle && degrees <= this.maxAngle)) {
+            this.motor.setControl(this.positionRequest.withPosition(this.toMotorRotations(targetAngle)));
             return true;
         }
         

@@ -53,7 +53,7 @@ public class AUTOShootCommand extends SequentialCommandGroup {
     public AUTOShootCommand(TurretSubsystem sub, DoubleSupplier distSupplier) {
         super(
             new PrintCommand(Double.toString(calculateAngle(distSupplier.getAsDouble()))),
-            new InstantCommand(() -> sub.verticalMotor.set(calculateAngle(distSupplier.getAsDouble())), sub),
+            new InstantCommand(() -> sub.setLaunchAngleDegrees(calculateAngle(distSupplier.getAsDouble())), sub),
             new ShootWithPowerCommand(sub, () -> getPower(distSupplier.getAsDouble()))
         );
     }
