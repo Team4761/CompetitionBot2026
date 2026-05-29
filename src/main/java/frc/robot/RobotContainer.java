@@ -207,7 +207,6 @@ public class RobotContainer {
         controller_operator.rightBumper().whileTrue(
             new ShootWithPowerCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.MED_SPITTER_SPEED))
         );
-
         controller_operator.leftBumper().and(controller_operator.rightTrigger()).whileTrue(
             new ShootWithPowerCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.SPITTER_SPEED))
         );
@@ -216,7 +215,6 @@ public class RobotContainer {
             () -> applyDeadband(controller_operator.getRightX(), Constants.Controller.TURRET_INPUT_DEADBAND),
             () -> applyDeadband(controller_operator.getLeftY(), Constants.Controller.TURRET_INPUT_DEADBAND)
         ));
-
         controller_operator.leftBumper().and(controller_operator.b()).whileTrue(
             new SpindexSpinCommand(turret, -1 * Constants.Turret.ShootConfig.SPINDEXER_SPEED)
         );
