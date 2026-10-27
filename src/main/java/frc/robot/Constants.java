@@ -194,6 +194,16 @@ public final class Constants {
         private Intake() {}
     }
 
+    public static final class Arm {
+        public static final int SHOULDER_MOTOR_PORT = -1;
+        public static final int ELBOW_MOTOR_PORT = -1;
+        
+        public static final int MIN_SHOULDER_ANGLE = 0;
+        public static final int MAX_SHOULDER_ANGLE = 135;
+
+        public static final int MIN_ELBOW_ANGLE = 0;
+        public static final int MAX_ELBOW_ANGLE = 160;
+    }
     public class Field {
         public static String STARTING_POSITION = "CENTER"; // Type: enum("LEFT", "CENTER", "RIGHT")
 
