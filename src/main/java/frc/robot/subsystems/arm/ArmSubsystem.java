@@ -29,4 +29,11 @@ public class ArmSubsystem extends SubsystemBase {
         .build();
     }
     
+    public void setElbowAngleDegrees(double elbowAngleDegrees) {
+        elbowMotor.set(elbowAngleDegrees);
+    }
+
+    public void setShoulderAngleDegrees(double shoulderAngleDegrees) {
+        shoulderMotor.set(shoulderAngleDegrees);
+    }    
 }
