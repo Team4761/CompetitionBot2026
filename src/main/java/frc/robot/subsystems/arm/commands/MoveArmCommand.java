@@ -6,12 +6,13 @@ import frc.robot.subsystems.arm.ArmSubsystem;
 public class MoveArmCommand extends Command {
     
     private ArmSubsystem sub;
-    private double shoulderAngleDegrees;
-    private double elbowAngleDegrees;
-    public MoveArmCommand(ArmSubsystem sub, double shoulderAngleDegrees, double elbowAngleDegrees) {
+    private double targetShoulderAngleDegrees;
+    private double targetElbowAngleDegrees;
+
+    public MoveArmCommand(ArmSubsystem sub, double targetShoulderAngleDegrees, double targetElbowAngleDegrees) {
         this.sub = sub;
-        this.shoulderAngleDegrees = shoulderAngleDegrees;
-        this.elbowAngleDegrees = elbowAngleDegrees;
+        this.targetShoulderAngleDegrees = targetShoulderAngleDegrees;
+        this.targetElbowAngleDegrees = targetElbowAngleDegrees;
     }
 
     @Override
@@ -19,15 +20,18 @@ public class MoveArmCommand extends Command {
 
     @Override
     public void execute() {
-        sub.setShoulderAngleDegrees(shoulderAngleDegrees);
-        sub.setElbowAngleDegrees(elbowAngleDegrees);
+        sub.setShoulderAngleDegrees(this.targetShoulderAngleDegrees);
+        sub.setElbowAngleDegrees(this.targetElbowAngleDegrees);
     }
-
-    @Override
-    public void end(boolean isInterrupted) {}
 
     @Override
     public boolean isFinished() {
         return false;
+    }
+
+    @Override
+    public void end(boolean isInterrupted) {
+        sub.elbowMotor.stopTurning();
+        sub.shoulderMotor.stopTurning();
     }
 }
