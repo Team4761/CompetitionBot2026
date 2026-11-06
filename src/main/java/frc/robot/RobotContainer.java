@@ -19,6 +19,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -83,6 +86,8 @@ public class RobotContainer {
         configurePathPlannerAutos();
         SmartDashboard.putData("PathPlanner Auto Chooser", autoChooser);
     }
+
+
 
     private void configurePathPlannerAutos() {
         NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));

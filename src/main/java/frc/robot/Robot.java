@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +34,10 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> positionChooser = new SendableChooser<>();
     private final Field2d field = new Field2d();
 
+    private final Mechanism2d turretMech = new Mechanism2d(0, 0);
+    private final MechanismRoot2d turretRoot = turretMech.getRoot("Turret", 0, 0.5);
+    
+    private MechanismLigament2d m_hood;
     private enum MatchPhase {
         AUTONOMOUS,
         TRANSITION,
@@ -62,12 +69,14 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         configureDashboard();
+        createMechanism2d();
     }
 
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         CommandScheduler.getInstance().run();
+        updateMechanisms();
         updateDashboard();
     }
 
@@ -137,6 +146,16 @@ public class Robot extends TimedRobot {
     @Override
     public void simulationPeriodic() {}
 
+    private void createMechanism2d() {
+        m_hood = turretRoot.append(new MechanismLigament2d("Hood", 1, 10));
+        SmartDashboard.putData("Mech2d", turretMech);
+
+    }
+
+    private void updateMechanisms() {
+        m_hood.setAngle(m_hood.getAngle()+1);
+    }
+    
     private void configureDashboard() {
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
