@@ -1,0 +1,202 @@
+package frc.robot.util;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import frc.robot.Robot;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+
+import java.util.List;
+import java.util.logging.Logger;
+
+public class SmartVirtualKrakenMotor {
+    public enum MotorMode {
+        CONTINUOUS,
+        WRAPPED
+    }
+
+    private final TalonFXConfiguration config = new TalonFXConfiguration();
+    private final PositionDutyCycle positionRequest = new PositionDutyCycle(0);
+    private final DutyCycleOut dutyCycleRequest = new DutyCycleOut(0);
+    private final TalonFX motor;
+    private final double gearRatio;
+    private double minAngle;
+    private double maxAngle;
+    private MotorMode mode;
+    private boolean coastingEnabled = false;
+    private DCMotorSim motorSim;
+    private static final Logger LOGGER = Logger.getLogger(SmartKrakenMotor.class.getName());
+
+    public SmartVirtualKrakenMotor(Builder builder) {
+        this.motor = new TalonFX(builder.port);
+        this.config.Slot0.kP = builder.p;
+        this.config.Slot0.kI = builder.i;
+        this.config.Slot0.kD = builder.d;
+        this.config.MotorOutput.PeakForwardDutyCycle = builder.maxOutput;
+        this.config.MotorOutput.PeakReverseDutyCycle = builder.minOutput;
+        this.motor.getConfigurator().apply(this.config);
+
+        this.motor.setPosition(0.0);
+
+        this.minAngle = builder.minAngle;
+        this.maxAngle = builder.maxAngle;
+        this.mode = builder.mode;
+        this.gearRatio = builder.gearRatio;
+        this.motorSim = builder.motorSim;
+    }
+
+    public void setRawSpeedPercent(double speedPercent) {
+        // Duty cycle is percent output: -1.0 full reverse, 0.0 stop, 1.0 full forward.
+        if (Robot.isSimulation()) {
+            double simVolt = clampDutyCycle(speedPercent) * 12.0;
+            motorSim.setInputVoltage(simVolt);
+            
+        } else {
+            this.motor.setControl(this.dutyCycleRequest.withOutput(clampDutyCycle(speedPercent)));
+        }
+    }
+
+    public void setRawSpeed(double speedRPM) {
+        this.motor.setControl(new VelocityDutyCycle(speedRPM / 60.0));
+    }
+
+    public void setSpeedPercent(double speedPercent) {
+        this.setRawSpeedPercent(speedPercent);
+    }
+
+    public void setSpeed(double speedRPM) {
+        this.setRawSpeed(speedRPM * this.gearRatio);
+    }
+
+    public boolean turn(double degrees) {
+        double targetAngle = this.getAngle() + degrees;
+        if (this.mode == MotorMode.WRAPPED) {
+            targetAngle %= 360.0;
+        }
+
+        if ((this.minAngle == -1 && this.maxAngle == -1)
+            || (targetAngle >= this.minAngle && targetAngle <= this.maxAngle)) {
+            this.motor.setControl(this.positionRequest.withPosition(this.toMotorRotations(targetAngle)));
+            return true;
+        }
+        
+        else {
+            LOGGER.warning(String.format("Tried turning to angle: [%.2f] which is past angle limits min: [%.2f] max: [%.2f]", targetAngle, this.minAngle, this.maxAngle));
+            return false;
+        }
+    }
+
+    public boolean set(double degrees) {
+        double targetAngle = degrees;
+        if (this.mode == MotorMode.WRAPPED) {
+            targetAngle %= 360.0;
+        }
+
+        if ((this.minAngle == -1 && this.maxAngle == -1) ||
+            (degrees >= this.minAngle && degrees <= this.maxAngle)) {
+            this.motor.setControl(this.positionRequest.withPosition(this.toMotorRotations(targetAngle)));
+            return true;
+        }
+        
+        else {
+            LOGGER.warning(String.format("Tried setting angle to: [%.2f] which is past angle limits min: [%.2f] max: [%.2f]",
+                                            targetAngle, this.minAngle, this.maxAngle));
+            return false;
+        }
+    }
+
+    public double getAngle() {
+        return this.toMechanismDegrees(this.motor.getPosition().getValueAsDouble());
+    }
+
+    public double getSpeedRPM() {
+        return (this.motor.getVelocity().getValueAsDouble() * 60.0) / this.gearRatio;
+    }
+
+    public void stopTurning() {
+        this.motor.setControl(this.dutyCycleRequest.withOutput(0.0));
+        if (!this.coastingEnabled) {
+            this.motor.setControl(
+                this.positionRequest.withPosition(this.motor.getPosition().getValueAsDouble())
+            );
+        }
+    }
+
+    public void enableCoasting() {
+        this.coastingEnabled = true;
+        this.motor.setControl(this.dutyCycleRequest.withOutput(0.0));
+    }
+
+    public void disableCoasting() {
+        this.coastingEnabled = false;
+        this.motor.setControl(
+            this.positionRequest.withPosition(this.motor.getPosition().getValueAsDouble())
+        );
+    }
+
+    public double[] stepMotorSim(double ms) {
+        motorSim.update(ms/1000);
+        //                          position                                  velocity
+        return new double[] {motorSim.getAngularPositionRad(), motorSim.getAngularVelocityRadPerSec()};
+    }
+
+    private double toMotorRotations(double mechanismDegrees) {
+        return (mechanismDegrees / 360.0) * this.gearRatio;
+    }
+
+    private double toMechanismDegrees(double motorRotations) {
+        return (motorRotations * 360.0) / this.gearRatio;
+    }
+
+    private static double clampDutyCycle(double output) {
+        return Math.max(-1.0, Math.min(1.0, output));
+    }
+
+    public static class Builder {
+        private int port;
+        private double p;
+        private double i;
+        private double d;
+        private double minOutput;
+        private double maxOutput;
+        private double minAngle;
+        private double maxAngle;
+        private MotorMode mode;
+        private double gearRatio = 1.0;
+        private DCMotorSim motorSim;
+        
+        public static Builder newInstance() { return new Builder(); }
+        
+        public Builder() {}
+
+        public Builder port(int port) { this.port = port; return this; }
+        public Builder PID(double p, double i, double d) { this.p = p; this.i = i; this.d = d; return this; }
+        public Builder outputRange(double minOutput, double maxOutput) {
+            // TalonFX duty cycle limits are valid only in the [-1.0, 1.0] range.
+            this.minOutput = clampDutyCycle(minOutput);
+            this.maxOutput = clampDutyCycle(maxOutput);
+            return this;
+        }
+        public Builder angleLimits(double minAngle, double maxAngle) { this.minAngle = minAngle; this.maxAngle = maxAngle; return this; }
+        public Builder mode(MotorMode mode) { this.mode = mode; return this; }
+        public Builder gearRatio(double gearRatio) { this.gearRatio = gearRatio; return this; }
+        public Builder motorSim(double inertia) {
+            motorSim = new DCMotorSim(
+                LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60(0), inertia, this.gearRatio),
+                DCMotor.getKrakenX60(0)
+            );
+            return this;
+        }
+        
+        public SmartVirtualKrakenMotor build() { return new SmartVirtualKrakenMotor(this); }
+    }
+}

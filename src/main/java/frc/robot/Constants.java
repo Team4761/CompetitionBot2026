@@ -203,6 +203,8 @@ public final class Constants {
 
         public static final int MIN_ELBOW_ANGLE = 0;
         public static final int MAX_ELBOW_ANGLE = 159;
+        
+        public static final int STICK_TO_DEGREES = 60;
     }
     
     public class Field {

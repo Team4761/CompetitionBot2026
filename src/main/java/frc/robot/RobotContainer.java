@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.function.DoubleSupplier;
 
+import javax.xml.stream.events.EndDocument;
+
 import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveModule.SteerRequestType;
@@ -27,10 +29,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.baseCommands.DoNothingCommand;
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.arm.ArmSubsystem;
+import frc.robot.subsystems.arm.commands.MoveArmCommand;
 import frc.robot.subsystems.gyro.GyroSubsystem;
 import frc.robot.subsystems.intake.IntakeSubsystem;
 import frc.robot.subsystems.intake.commands.ExtendCommandCAUGHT;
@@ -52,12 +58,13 @@ import frc.robot.subsystems.turret.commands.TurretAimChangeCommand;
 import frc.robot.subsystems.vision.VisionSubsystem;
 
 public class RobotContainer {
-    private final IntakeSubsystem intake = new IntakeSubsystem();
+    //private final IntakeSubsystem intake = new IntakeSubsystem();
     private final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    private final VisionSubsystem vision = new VisionSubsystem(drivetrain);
-    private final TurretSubsystem turret = new TurretSubsystem();
+    //private final VisionSubsystem vision = new VisionSubsystem(drivetrain);
+    //private final TurretSubsystem turret = new TurretSubsystem();
     private final GyroSubsystem gyro = new GyroSubsystem();
-    private final Orchestra orchestra = new Orchestra("output.chrp");
+    private final ArmSubsystem arm = new ArmSubsystem();
+    //private final Orchestra orchestra = new Orchestra("output.chrp");
 
     private final double MaxSpeed = 0.55 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // practice-safe top speed cap
     private final double MaxAngularRate = RotationsPerSecond.of(0.5).in(RadiansPerSecond); // reduced max angular velocity
@@ -83,12 +90,12 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
-        configurePathPlannerAutos();
+        //configurePathPlannerAutos();
         SmartDashboard.putData("PathPlanner Auto Chooser", autoChooser);
     }
 
 
-
+    /* 
     private void configurePathPlannerAutos() {
         NamedCommands.registerCommand("Shoot8", new ShootCommand(turret).withTimeout(4));
         NamedCommands.registerCommand("shootCommand", new ShootCommand(turret).withTimeout(4));
@@ -129,6 +136,7 @@ public class RobotContainer {
             }
         }
     }
+    */
 
     private void configureBindings() {
         configureDefaultDrive();
@@ -179,8 +187,8 @@ public class RobotContainer {
 
     private void configureDriverBindings() {
         controller_drive.back().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
-        controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
-        controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
+        //controller_drive.rightTrigger().whileTrue(new IntakeCommand(intake));
+        //controller_drive.leftTrigger().whileTrue(new OuttakeCommand(intake));
         controller_drive.a()
             .whileTrue(
                 new SnapToHubCommand(
@@ -200,13 +208,29 @@ public class RobotContainer {
     }
 
     private void configureOperatorBindings() {
+        System.out.println("I AM ARMED");
+        Trigger isY = new Trigger(() -> (Math.abs(controller_operator.getLeftY()) > 0.1));
+        arm.setDefaultCommand(
+        new MoveArmCommand(arm, 
+            () -> controller_operator.getLeftX(),
+            () -> controller_operator.getLeftY())
+        );
+        /*
+         *             Commands.run(
+                () -> new MoveArmCommand(arm,
+                    () -> -controller_operator.getLeftY(), 
+                    () -> -controller_operator.getLeftX()
+                ),
+                arm // Passes the subsystem requirement
+            )
+         */
+        /*
         controller_operator.leftTrigger().whileTrue(
             new ShootWithPowerCommand(turret, getElasticShootRpmSupplier(Constants.Turret.ShootConfig.SHORT_SPITTER_SPEED))
         );
         controller_operator.rightTrigger().whileTrue(
             new AUTOShootCommand(turret, () -> drivetrain.getDistanceToHubMeters())
         );
-
         controller_operator.x().whileTrue(new ShootAtAngleDRIFTCommand(turret, turret.verticalMotor.getAngle()));
         controller_operator.y().whileTrue(new ShootAtAngleSTUTTERCommand(turret, turret.verticalMotor.getAngle()));
         controller_operator.rightBumper().whileTrue(
@@ -234,7 +258,8 @@ public class RobotContainer {
         );
         controller_operator.leftBumper().onTrue(new ElasticManualOverrideCommand(() -> true));
         controller_operator.leftBumper().onFalse(new ElasticManualOverrideCommand(() -> false));
-    }
+        */
+        }
 
     private double shapeTurnInput(double rawTurn) {
         double deadbanded = MathUtil.applyDeadband(rawTurn, Constants.Controller.ROTATION_INPUT_DEADBAND);
@@ -270,8 +295,8 @@ public class RobotContainer {
     }
 
     public GyroSubsystem getGyroSubsystem() { return gyro; }
-    public IntakeSubsystem getIntakeSubsystem() { return intake; }
-    public VisionSubsystem getVisionSubsystem() { return vision; }
-    public TurretSubsystem getTurretSubsystem() { return turret; }
+    //public IntakeSubsystem getIntakeSubsystem() { return intake; }
+    //public VisionSubsystem getVisionSubsystem() { return vision; }
+    //public TurretSubsystem getTurretSubsystem() { return turret; }
     public CommandSwerveDrivetrain getDrivetrain() { return drivetrain; }
 }

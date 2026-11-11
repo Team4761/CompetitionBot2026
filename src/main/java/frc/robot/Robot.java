@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.arm.ArmSubsystem;
 import frc.robot.subsystems.swerve.CommandSwerveDrivetrain;
 
 public class Robot extends TimedRobot {
@@ -34,6 +35,7 @@ public class Robot extends TimedRobot {
     private final SendableChooser<String> positionChooser = new SendableChooser<>();
     private final Field2d field = new Field2d();
 
+    private final ArmSubsystem armSubsystem = new ArmSubsystem();
     private final Mechanism2d turretMech = new Mechanism2d(0, 0);
     private final MechanismRoot2d turretRoot = turretMech.getRoot("Turret", 0, 0.5);
     
@@ -153,9 +155,11 @@ public class Robot extends TimedRobot {
     }
 
     private void updateMechanisms() {
-        m_hood.setAngle(m_hood.getAngle()+1);
+        //System.out.println(armSubsystem.elbowMotor.getAngle());
+        m_hood.setAngle(matchTimer.get());
+        System.out.println(matchTimer.get());
     }
-    
+
     private void configureDashboard() {
         SmartDashboard.putNumber("TURRET HORIZONTAL ANGLE", 0.0);
         SmartDashboard.putNumber("TURRET VERTICAL ANGLE", 0.0);
@@ -207,6 +211,7 @@ public class Robot extends TimedRobot {
             "Match Time Left",
             Math.round((FieldConstants.Match.MATCH_DURATION - matchTimer.get()) * 10) / 10.0
         );
+        /* 
         SmartDashboard.putNumber(
             "TURRET HORIZONTAL ANGLE",
             robotContainer.getTurretSubsystem().horizontalMotor.getAngle()
@@ -215,6 +220,7 @@ public class Robot extends TimedRobot {
             "TURRET VERTICAL ANGLE",
             robotContainer.getTurretSubsystem().verticalMotor.getAngle()
         );
+        */
         SmartDashboard.putString("Current Match Phase", currentPhase.toString());
         SmartDashboard.putNumber(
             "Phase Time Left",
@@ -244,7 +250,7 @@ public class Robot extends TimedRobot {
         if (DriverStation.isEnabled()
             && SmartDashboard.getBoolean(Constants.Dashboard.ELASTIC_SHOOTER_TUNING_ENABLED, false)
             && !SmartDashboard.getBoolean("Manual Turret Control", false)) {
-            robotContainer.getTurretSubsystem().setLaunchAngleDegrees(elasticHoodAngleDegrees);
+            //robotContainer.getTurretSubsystem().setLaunchAngleDegrees(elasticHoodAngleDegrees);
         }
     }
 
