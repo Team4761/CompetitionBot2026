@@ -157,7 +157,7 @@ public class Robot extends TimedRobot {
     private void updateMechanisms() {
         //System.out.println(armSubsystem.elbowMotor.getAngle());
         m_hood.setAngle(matchTimer.get());
-        System.out.println(matchTimer.get());
+        //System.out.println(matchTimer.get());
     }
 
     private void configureDashboard() {
